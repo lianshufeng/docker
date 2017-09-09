@@ -1,0 +1,73 @@
+#
+# 安装： docker build -t tomcat ./ 
+# 运行： docker run -d -p 8822:22 -p 8888:8080  tomcat
+# 挂载： docker run -d -p 8822:22 -p 8888:8080 -v /mnt/data/vr:${installPath}/tomcat/webapps/ROOT  tomcat
+#
+
+#安装本地Centos
+FROM scratch
+MAINTAINER The CentOS Project <cloud-ops@centos.org>
+ADD ${CentosName} /
+LABEL name="CentOS Base Image"
+LABEL vendor="CentOS"
+LABEL license=GPLv2
+CMD ["/bin/bash"]
+#安装openssh和unzip工具
+RUN yum install unzip -y
+RUN yum install openssh-server -y
+#生成ssh的登陆证书
+RUN ssh-keygen -q -t rsa -b 2048 -f /etc/ssh/ssh_host_rsa_key -N ''
+RUN ssh-keygen -q -t ecdsa -f /etc/ssh/ssh_host_ecdsa_key -N ''
+RUN ssh-keygen -t dsa -f /etc/ssh/ssh_host_ed25519_key  -N '' 
+RUN ssh-keygen -t dsa -f /etc/ssh/ssh_host_dsa_key -N '' 
+#修改ssh-server的配置
+RUN sed -i "s/#UsePrivilegeSeparation.*/UsePrivilegeSeparation no/g" /etc/ssh/sshd_config
+RUN sed -i "s/UsePAM.*/UsePAM no/g" /etc/ssh/sshd_config
+#修改当前系统的ROOT密码
+RUN echo "root:${passWord}" > /tmp/tmp.pass
+RUN chpasswd < /tmp/tmp.pass
+#外部工具相关
+ADD ${tomcat} /tmp/${tomcat}
+ADD ${jdk} /tmp/${jdk}
+#解压相关项目
+RUN unzip /tmp/${tomcat} -d /tmp
+#tar.gz不需要解压,在Docker里自动为目录
+#RUN tar -xzvf /tmp/${jdk} -C /tmp
+#移动到目标路径
+RUN mv /tmp/${tomcatWork} ${installPath}/tomcat
+RUN mv /tmp/${jdk}/${jdkWork} ${installPath}/jdk
+#删除相关文件
+RUN rm -rf /tmp/${tomcat}
+RUN rm -rf /tmp/${jdk}
+#删除tomcat多余文件
+RUN rm -rf ${installPath}/tomcat/webapps
+RUN mkdir -p ${installPath}/tomcat/webapps/ROOT
+RUN echo "hello world" > ${installPath}/tomcat/webapps/ROOT/index.html
+#设置Tomcat内存
+RUN echo "JAVA_OPTS='${javaOpts}'" > /tmp/javaOpts.txt
+RUN cat /tmp/javaOpts.txt ${installPath}/tomcat/bin/catalina.sh > ${installPath}/tomcat/bin/catalina.sh.new
+RUN mv ${installPath}/tomcat/bin/catalina.sh ${installPath}/tomcat/bin/catalina.sh.bak
+RUN mv ${installPath}/tomcat/bin/catalina.sh.new ${installPath}/tomcat/bin/catalina.sh
+RUN rm -rf /tmp/javaOpts.txt
+#设置环境变量
+RUN echo "" >> /etc/profile
+RUN echo "JAVA_HOME=${installPath}/jdk" >> /etc/profile
+RUN echo "PATH=${installPath}/jdk/bin:$PATH" >> /etc/profile
+RUN echo "CLASSPATH=.:${installPath}/jdk/lib/dt.jar:${installPath}/jdk/lib/tools.jar" >> /etc/profile
+RUN echo "export JAVA_HOME" >> /etc/profile
+RUN echo "export PATH" >> /etc/profile
+RUN echo "export CLASSPATH" >> /etc/profile
+#设置系统时区
+RUN cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
+ENV JAVA_HOME ${installPath}/jdk
+ENV PATH /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:${installPath}/jdk/bin:${installPath}/tomcat/bin
+#设置读写权限
+RUN chmod -R 777 /opt
+#设置进入启动项
+ENTRYPOINT ${installPath}/tomcat/bin/startup.sh & /usr/sbin/sshd -D 
+
+
+
+
+
+
