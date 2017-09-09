@@ -1,5 +1,6 @@
 # Docker
 ## centos + jdk + tomcat 
+## 需要 nodejs 
 
 
 ### 唯一的用处，也是最大的用处：兼容多版本的JDK和Tomcat,自动安装ssh,配置JDK环境,最后生成 DockerFile文件.
