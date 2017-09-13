@@ -1,7 +1,7 @@
 #
-# 安装： docker build -t tomcat ./ 
-# 运行： docker run -d -p 8822:22 -p 8888:8080  tomcat
-# 挂载： docker run -d -p 8822:22 -p 8888:8080 -v /mnt/data/vr:${installPath}/tomcat/webapps/ROOT  tomcat
+# 安装： docker build -t centos7_tomcat  ./ 
+# 运行： docker run -d -p 8822:22 -p 8888:8080  centos7_tomcat 
+# 挂载： docker run -d -p 8822:22 -p 8888:8080 -v /mnt/data/vr:${installPath}/tomcat/webapps/ROOT  centos7_tomcat 
 #
 
 #安装本地Centos
