@@ -21,6 +21,7 @@ var path = require('path'),
 
 var _DockerfilePath =  path.join(__dirname,'images','_Dockerfile');
 var buildPath = path.join(__dirname,'build'),
+    runTimePath = path.join(__dirname,'runtime'),
     imagesPath = path.join(__dirname,'images');
 
 //内容
@@ -74,8 +75,8 @@ var readZipFileName = function(fileName){
 
 //获取依赖包路径 
 var OSImagePath = getComponent( imagesPath ,'centos-');
-var jdkComponent = getComponent( buildPath , 'jdk-');
-var tomcatComponent = getComponent( buildPath , 'apache-tomcat-');
+var jdkComponent = getComponent( runTimePath , 'jdk-');
+var tomcatComponent = getComponent( runTimePath , 'apache-tomcat-');
 
 
 //读取顶级目录
@@ -83,8 +84,7 @@ var tomcatWorkName = readZipFileName(tomcatComponent);
 var jdkWorkName = readTarFileName(jdkComponent)
 
 
-//拷贝系统镜像到编译目录
-copyFile(OSImagePath,path.join(buildPath,path.basename(OSImagePath)));
+
 
 //替换模版
 var m = {
@@ -98,10 +98,21 @@ var m = {
     'javaOpts':config.javaOpts
 }
 
+//build ....
+if ( ! fs.existsSync (buildPath) ) {
+    fs.mkdirSync(buildPath);
+}
+
 //替换内容
 DockerfileContent = replaceContent(DockerfileContent,m);
-
 //写出 Dockerfile 文件
 fs.writeFileSync(path.join(buildPath,'Dockerfile'), DockerfileContent);
+//拷贝系统镜像到编译目录
+copyFile(OSImagePath,path.join(buildPath,path.basename(OSImagePath)));
+//拷贝运行环境
+copyFile(jdkComponent,path.join(buildPath,path.basename(jdkComponent)));
+copyFile(tomcatComponent,path.join(buildPath,path.basename(tomcatComponent)));
+
+
 
 console.log('Make finish .');
