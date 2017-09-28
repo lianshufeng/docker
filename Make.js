@@ -2,7 +2,7 @@
 var config = {
     passWord : 'root',
     installPath : '/opt',
-    javaOpts:'-Xms1024m -Xmx2048m'
+    javaOpts:'-Xms1024m -Xmx2048m -Djava.security.egd=file:/dev/./urandom'
 };
 
 
