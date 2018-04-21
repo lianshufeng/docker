@@ -1,0 +1,24 @@
+{
+  "name": "docker",
+  "version": "1.0.0",
+  "description": "拷贝 apache-tomcat-8.5.20.zip 和 jdk-8u144-linux-x64.tar.gz 到runtime录下(版本可调整,但前缀与扩展名不能改变, apache-tomcat-*.zip 和 jdk-*.tar.gz ).",
+  "main": "Make.js",
+  "dependencies": {
+    "tar": "^4.0.1",
+    "zip-local": "^0.3.4"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lianshufeng/docker.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/lianshufeng/docker/issues"
+  },
+  "homepage": "https://github.com/lianshufeng/docker#readme"
+}

@@ -13,8 +13,8 @@ LABEL vendor="CentOS"
 LABEL license=GPLv2
 CMD ["/bin/bash"]
 #安装openssh和unzip工具
-RUN yum install unzip -y
-RUN yum install openssh-server -y
+RUN rpm --rebuilddb
+RUN yum install unzip openssh-server -y
 #生成ssh的登陆证书
 RUN ssh-keygen -q -t rsa -b 2048 -f /etc/ssh/ssh_host_rsa_key -N ''
 RUN ssh-keygen -q -t ecdsa -f /etc/ssh/ssh_host_ecdsa_key -N ''
