@@ -1,7 +1,8 @@
 #
 # 安装： docker build -t centos7_spring_boot  ./
 # 运行： docker run -d -p 8822:22 -p 8888:8080  centos7_spring_boot
-# 挂载： docker run -d -p 8822:22 -p 8888:8080 -v /mnt/jars:/opt/jars  centos7_spring_boot
+# 例子： docker run -d -p 8822:22 -p 8888:8080 -v /opt/jars:/opt/jars -w /opt/jars/ -e ENTRYPOINT="nohup java -jar Idea.jar" --restart always centos7_spring_boot
+# 备注 : -p 端口映射 ; -v 挂载目录 ; -w 工作空间 ; -e 环境变量 ($ENTRYPOINT 启动命令) ; --restart always 随docker服务启动 
 #
 
 #安装centos [可升级]
@@ -44,7 +45,7 @@ ENV PATH /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/opt/jdk/b
 #设置读写权限
 RUN chmod -R 777 /opt
 #设置进入启动项
-ENTRYPOINT /usr/sbin/sshd -D 
+ENTRYPOINT $($ENTRYPOINT) & /usr/sbin/sshd -D
 
 
 
