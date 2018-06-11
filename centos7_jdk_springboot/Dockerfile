@@ -15,7 +15,7 @@ ARG JAVA_HOME="/opt/jdk"
 
 
 #运行变量 -e
-ENV ROOT_PASSWORD="root"
+ENV ROOT_PASSWORD "root"
 ENV ENTRYPOINT ""
 
 #安装openssh和unzip工具
@@ -52,9 +52,13 @@ RUN set -xe \
 	&& echo "export JAVA_HOME" >> /etc/profile \
 	&& echo "export PATH" >> /etc/profile \
 	&& echo "export CLASSPATH" >> /etc/profile \
+	#刷新环境变量
+	&& source /etc/profile \
 	#设置时区
 	&& cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime 
 
+	
+	
 	
 #设置读写权限
 RUN chmod -R 777 $JAVA_HOME
@@ -65,16 +69,21 @@ EXPOSE 22
 
 #创建修改密码的脚本，通过传递参数修改
 RUN set -xe \
-	&& echo "echo root:"\$1"| chpasswd" > /tmp/pass.sh 
-
+	#修改密码脚本
+	&& echo "#!/bin/bash" > /tmp/pass.sh \
+	&& echo "echo root:"\$1"| chpasswd" >> /tmp/pass.sh \
+	#引导程序
+	&& echo "#!/bin/bash" > /opt/bootstrap.sh \
+	&& echo "source /etc/profile" >> /opt/bootstrap.sh \
+	&& echo "sh /tmp/pass.sh \$ROOT_PASSWORD" >> /opt/bootstrap.sh \
+	&& echo "echo "" > /tmp/pass.sh" >> /opt/bootstrap.sh \
+	&& echo "\$ENTRYPOINT" >> /opt/bootstrap.sh 
+	
+	
+#启动项
+ENTRYPOINT  sh /opt/bootstrap.sh & /usr/sbin/sshd -D
 
 	
-#启动项，第一次启动后重置密码且清空修改密码脚本 
-ENTRYPOINT  set -xe \
-	&& sh /tmp/pass.sh $ROOT_PASSWORD \
-	&& echo "" > /tmp/pass.sh \
-	&& /usr/sbin/sshd -D \
-	&& $($ENTRYPOINT)
 
 
 
