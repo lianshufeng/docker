@@ -35,20 +35,21 @@ RUN set -xe \
 
 	
 #下载 JDK
-RUN wget -O /opt/jdk.tar.gz --no-cookies --no-check-certificate --header "Cookie: oraclelicense=accept-securebackup-cookie" $JDK_URL
-
+RUN wget -O /tmp/jdk.tar.gz --no-cookies --no-check-certificate --header "Cookie: oraclelicense=accept-securebackup-cookie" $JDK_URL
 #解压并设置环境
 RUN set -xe \
-	&& tar -xvzf /opt/jdk.tar.gz -C /opt \
-	&& rm -rf /opt/jdk.tar.gz \
+	&& mkdir /tmp/jdk \
+	&& tar -xvzf /tmp/jdk.tar.gz -C /tmp/jdk \
+	&& rm -rf /tmp/jdk.tar.gz \
 	&& mkdir -p $JAVA_HOME \
 	&& rm -rf $JAVA_HOME \
-	&& mv /opt/$(ls /opt/ | grep jdk) $JAVA_HOME \
+	&& mv /tmp/jdk/$(ls /tmp/jdk/ | grep jdk) $JAVA_HOME \
+	&& rm -rf /tmp/jdk \
 	#环境变量
 	&& echo "" >> /etc/profile \
 	&& echo "JAVA_HOME="$JAVA_HOME >> /etc/profile \
-	&& echo "PATH="$JAVA_HOME"/bin:$PATH" >> /etc/profile \
-	&& echo "CLASSPATH=.:"$JAVA_HOME"/lib/dt.jar:"$JAVA_HOME"/lib/tools.jar" >> /etc/profile \
+	&& echo "PATH="\$JAVA_HOME"/bin:\$PATH" >> /etc/profile \
+	&& echo "CLASSPATH=.:"\$JAVA_HOME"/lib/dt.jar:"\$JAVA_HOME"/lib/tools.jar" >> /etc/profile \
 	&& echo "export JAVA_HOME" >> /etc/profile \
 	&& echo "export PATH" >> /etc/profile \
 	&& echo "export CLASSPATH" >> /etc/profile \
@@ -56,12 +57,9 @@ RUN set -xe \
 	&& source /etc/profile \
 	#设置时区
 	&& cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime 
-
-	
-	
-	
 #设置读写权限
 RUN chmod -R 777 $JAVA_HOME
+
 
 #外部端口22
 EXPOSE 22
