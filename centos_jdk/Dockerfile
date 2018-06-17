@@ -73,9 +73,7 @@ RUN set -xe \
 	#引导程序
 	&& echo "#!/bin/bash" > /opt/bootstrap.sh \
 	&& echo "source /etc/profile" >> /opt/bootstrap.sh \
-	&& echo "sh /tmp/pass.sh" >> /opt/bootstrap.sh \
-	#依次执行
-	&& echo "echo \${ENTRYPOINT}|awk '{run=\$0;system(run)}'" >> /opt/bootstrap.sh 
+	&& echo "sh /tmp/pass.sh" >> /opt/bootstrap.sh 
 	
 	
 #启动项
