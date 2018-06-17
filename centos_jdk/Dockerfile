@@ -1,12 +1,12 @@
 #
-# 安装： docker build -t springboot --build-arg JAVA_HOME="/opt/jdk"  ./ 
-# 运行： docker run -d -p 8822:22 -e ROOT_PASSWORD="root" springboot
-# 例子： docker run -d -p 8822:22 -v /opt/jars:/opt/jars -w /opt/jars/ -e ENTRYPOINT="nohup java -jar Idea.jar" --restart always springboot
-# 备注 : -p 端口映射 ; -v 挂载目录 ; -w 工作空间 ; -e 环境变量 ($ENTRYPOINT 启动命令) ; --restart always 随docker服务启动 
+# 安装： docker build -t jdk --build-arg JAVA_HOME="/opt/jdk"  ./ 
+# 运行： docker run -d -p 8822:22 -e ROOT_PASSWORD="root" jdk
+# 例子： docker run -d -p 8822:22 -v /opt/jars:/opt/jars -w /opt/jars/ jdk
+# 备注 : -p 端口映射 ; -v 挂载目录 ; -w 工作空间 ; -e 环境变量  ; --restart always 随docker服务启动 
 #
 
 
-FROM centos:7.5.1804
+FROM centos:latest
 MAINTAINER lianshufeng <251708339@qq.com>
 
 #构建参数 --build-arg
@@ -43,7 +43,7 @@ RUN set -xe \
 	&& rm -rf /tmp/jdk.tar.gz \
 	&& mkdir -p $JAVA_HOME \
 	&& rm -rf $JAVA_HOME \
-	&& mv /tmp/jdk/$(ls /tmp/jdk/ | grep jdk) $JAVA_HOME \
+	&& mv /tmp/jdk/$(ls /tmp/jdk/) $JAVA_HOME \
 	&& rm -rf /tmp/jdk \
 	&& chmod -R 777 $JAVA_HOME \
 	#环境变量
