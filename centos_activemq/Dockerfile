@@ -1,8 +1,8 @@
 #
 # 安装： docker build -t activemq   ./ 
 # 运行： docker run -d -p 8822:22 -e ROOT_PASSWORD="root" lianshufeng/activemq
-# 例子： docker run -d -p 8822:22 -v /opt/activemq/conf:/opt/activemq/conf  -v /opt/activemq/data:/opt/activemq/data lianshufeng/activemq
-# 备注 : -p 端口映射 ; -v 挂载目录 ; -w 工作空间 ; -e 环境变量 ; --restart always 随docker服务启动 
+# docker run --privileged=true -d -p 8822:22 -p 8161:8161 -p 61616:61616 -p 5672:5672 -p 61613:61613 -p 1882:1882 -p 61614:61614  -v /opt/activemq/conf:/opt/activemq/conf  -v /opt/activemq/data:/opt/activemq/data lianshufeng/activemq
+# 备注 : -p 端口映射 ; -v 挂载目录 ; -w 工作空间 ; -e 环境变量 ; --restart always 随docker服务启动  ; --privileged=true 特权
 #
 
 
@@ -25,7 +25,7 @@ RUN set -xe \
 	&& rm -rf /tmp/mq.tar.gz \
 	&& mkdir -p $ACTIVEMQ_HOME \
 	&& rm -rf $ACTIVEMQ_HOME \
-	&& mv /tmp/mq/$(ls /tmp/mq/ | grep activemq) $ACTIVEMQ_HOME \
+	&& mv /tmp/mq/$(ls /tmp/mq/ ) $ACTIVEMQ_HOME \
 	&& rm -rf /tmp/mq \
 	&& chmod -R 777 $ACTIVEMQ_HOME \
 	#环境变量
