@@ -1,14 +1,26 @@
-# Centos + JDK (SUN) + ssh-server
+# base :  Centos + JDK (SUN) + ssh-server
+
+#### ENV :
+ROOT_PASSWORD : init root's password
 
 
-####  自定义密码 (ROOT_PASSWORD)
-docker run -d -p 8822:22 -e ROOT_PASSWORD="bigroot" lianshufeng/springboot
+#### bootstrap:
+/opt/bootstrap.sh : boot auto run
 
-#### 启动 (ENTRYPOINT) 
-docker run -d -p 8822:22 -v /opt/jars:/opt/jars -w /opt/jars -e ENTRYPOINT="mkdir /opt/logs/ & nohup java -Xmx600m -Xms300m -Duser.timezone=GMT+8 -Dspring.profiles.active=prod -jar eureka.jar > /opt/logs/out.log" --restart always lianshufeng/springboot
 
-#### 升级JDK
+#### update jdk version
 docker build -t springboot --build-arg JDK_URL="http://download.oracle.com/otn-pub/java/jdk/10.0.1+10/fb4372174a714e6b8c52526dc134031e/jdk-10.0.1_linux-x64_bin.tar.gz"  ./ 
 
-#### 启动命令
-ENTRYPOINT 支持多条命令，但不支持环境变量
+
+
+
+### demo
+
+tomcat ( TOMCAT_VM )
+docker run -d -p 8822:22 -p 8080:8080 -e TOMCAT_VM="-Xms300m -Xmx600m" lianshufeng/tomcat
+
+
+springboot ( ENTRYPOINT  boot auto run )
+docker run -d -p 8822:22 -v /opt/jars:/opt/jars -w /opt/jars -e ENTRYPOINT="mkdir /opt/logs/ & nohup java -Xmx600m -Xms300m -Duser.timezone=GMT+8 -Dspring.profiles.active=prod -jar eureka.jar > /opt/logs/out.log" --restart always lianshufeng/springboot
+
+

@@ -5,10 +5,10 @@
 # docker build -t tomcat --build-arg JAVA_HOME="/opt/runtime/jdk"  --build-arg TOMCAT_HOME="/opt/runtime/tomcat"  ./ 
 #
 # run :
-# docker run -d -p 8822:22 -p 8080:8080  tomcat
+# docker run -d -p 8822:22 -p 8080:8080  lianshufeng/tomcat
 #
 # setVM (JAVA_OPTS) :
-# docker run -d -p 8822:22 -p 8080:8080 -e TOMCAT_VM="-Xms300m -Xmx600m" tomcat
+# docker run -d -p 8822:22 -p 8080:8080 -e TOMCAT_VM="-Xms300m -Xmx600m" lianshufeng/tomcat
 #
 
 
@@ -22,7 +22,6 @@ ARG TOMCAT_HOME="/opt/tomcat"
 
 
 #运行变量 -e
-ENV ROOT_PASSWORD "root"
 ENV TOMCAT_VM "-Xms1024m -Xmx2048m -Duser.timezone=GMT+8 -Djava.security.egd=file:/dev/./urandom"
 
 		
