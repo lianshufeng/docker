@@ -2,7 +2,7 @@
 # 安装： docker build -t kafka   ./ 
 # 运行： docker run -d -p 8822:22 -e ROOT_PASSWORD="root" lianshufeng/kafka
 # 例子： docker run -d -p 8822:22 -p 2181:2181 -p 9082:9082 lianshufeng/kafka
-# docker run --privileged=true -d -p 8822:22 -p 2181:2181 -p 9082:9082 lianshufeng/kafka 
+# docker run --privileged=true -d -v /opt/kafka/config:/opt/kafka/config -v /opt/kafka/logs:/opt/kafka/logs -v /opt/kafka/kafka_logs:/tmp/kafka-logs -p 8822:22 -p 2181:2181 -p 9082:9082 lianshufeng/kafka 
 # 备注 : -p 端口映射 ; -v 挂载目录 ; -w 工作空间 ; -e 环境变量 ; --restart always 随docker服务启动 
 #
 
@@ -44,9 +44,19 @@ EXPOSE 22
 EXPOSE 2181
 EXPOSE 9092
 
+RUN cp -rf $KAFKA_HOME/config $KAFKA_HOME/config.backup
+RUN set -xe \
+	#修改tomcat启动命令行
+	&& echo "#!/bin/bash" > /tmp/kafka_conf.sh \	
+	#若配置文件为空则自动恢复配置文件的备份
+	&& echo "if [[ \$(ls \$KAFKA_HOME/config -l |grep '^-'|wc -l) -eq 0 ]] ; then cp -rf  \$KAFKA_HOME/config.backup/. \$KAFKA_HOME/config/; fi" >> /tmp/kafka_conf.sh \
+	&& echo "rm -rf \$KAFKA_HOME/config.backup " >> /tmp/kafka_conf.sh \
+	&& echo "echo "" > /tmp/kafka_conf.sh" >> /tmp/kafka_conf.sh 
+
 
 
 #自动启动脚本
+RUN echo "sh /tmp/kafka_conf.sh" >> /opt/bootstrap.sh
 RUN echo "sh $KAFKA_HOME/bin/zookeeper-server-start.sh $KAFKA_HOME/config/zookeeper.properties &" >> /opt/bootstrap.sh
 RUN echo "sh $KAFKA_HOME/bin/kafka-server-start.sh $KAFKA_HOME/config/server.properties &" >> /opt/bootstrap.sh
 

@@ -2,7 +2,7 @@
 # centos7.5 + ssh-server + jdk1.8(sun) + tomcat8.5
 #
 # build : 
-# docker build -t tomcat --build-arg JAVA_HOME="/opt/runtime/jdk"  --build-arg TOMCAT_HOME="/opt/runtime/tomcat"  ./ 
+# docker build -t tomcat ./
 #
 # run :
 # docker run -d -p 8822:22 -p 8080:8080  lianshufeng/tomcat
@@ -10,6 +10,9 @@
 # setVM (JAVA_OPTS) :
 # docker run -d -p 8822:22 -p 8080:8080 -e TOMCAT_VM="-Xms300m -Xmx600m" lianshufeng/tomcat
 #
+# -v
+# docker run  --privileged=true -d -p 8822:22 -p 8080:8080 -v /opt/tomcat/conf:/opt/tomcat/conf -v /opt/tomcat/webapps:/opt/tomcat/webapps  lianshufeng/tomcat
+# 
 
 
 FROM lianshufeng/jdk
@@ -54,11 +57,22 @@ EXPOSE 22
 #tomcat
 EXPOSE 8080
 
+#备份配置文件
+RUN cp -rf $TOMCAT_HOME/conf $TOMCAT_HOME/conf.backup
+RUN set -xe \
+	#修改tomcat启动命令行
+	&& echo "#!/bin/bash" > /tmp/tomcat_conf.sh \	
+	#若配置文件为空则自动恢复配置文件的备份
+	&& echo "if [[ \$(ls \$TOMCAT_HOME/conf -l |grep '^-'|wc -l) -eq 0 ]] ; then cp -rf  \$TOMCAT_HOME/conf.backup/. \$TOMCAT_HOME/conf/; fi" >> /tmp/tomcat_conf.sh \
+	&& echo "rm -rf \$TOMCAT_HOME/conf.backup " >> /tmp/tomcat_conf.sh \
+	&& echo "echo "" > /tmp/tomcat_conf.sh" >> /tmp/tomcat_conf.sh 
 
+	
 #创建修改密码的脚本，通过传递参数修改
 RUN set -xe \
 	#修改tomcat启动命令行
 	&& echo "#!/bin/bash" > /tmp/tomcat.sh \
+	#修改vm
 	&& echo "echo JAVA_OPTS=\'\$TOMCAT_VM\' > /tmp/tomcat.run" >> /tmp/tomcat.sh \
 	&& echo "cat /tmp/tomcat.run \$TOMCAT_HOME/bin/catalina.sh > \$TOMCAT_HOME/bin/catalina.sh.bak" >> /tmp/tomcat.sh \
 	&& echo "rm -rf /tmp/tomcat.run" >> /tmp/tomcat.sh \
@@ -68,6 +82,7 @@ RUN set -xe \
 	&& echo "echo "" > /tmp/tomcat.sh" >> /tmp/tomcat.sh \
 	
 	#引导程序
+	&& echo "sh /tmp/tomcat_conf.sh" >> /opt/bootstrap.sh \
 	&& echo "sh /tmp/tomcat.sh" >> /opt/bootstrap.sh \
 	&& echo "sh $TOMCAT_HOME/bin/startup.sh" >> /opt/bootstrap.sh 
 	

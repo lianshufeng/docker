@@ -48,7 +48,20 @@ EXPOSE 1883
 EXPOSE 61614
 
 
+
+#备份配置文件
+RUN cp -rf $ACTIVEMQ_HOME/conf $ACTIVEMQ_HOME/conf.backup
+RUN set -xe \
+	#修改tomcat启动命令行
+	&& echo "#!/bin/bash" > /tmp/mq_conf.sh \	
+	#若配置文件为空则自动恢复配置文件的备份
+	&& echo "if [[ \$(ls \$ACTIVEMQ_HOME/conf -l |grep '^-'|wc -l) -eq 0 ]] ; then cp -rf  \$ACTIVEMQ_HOME/conf.backup/. \$ACTIVEMQ_HOME/conf/; fi" >> /tmp/mq_conf.sh \
+	&& echo "rm -rf \$ACTIVEMQ_HOME/conf.backup " >> /tmp/mq_conf.sh \
+	&& echo "echo "" > /tmp/mq_conf.sh" >> /tmp/mq_conf.sh 
+
+
 #自动启动脚本
+RUN echo "sh /tmp/mq_conf.sh" >> /opt/bootstrap.sh
 RUN echo "$ACTIVEMQ_HOME/bin/activemq start" >> /opt/bootstrap.sh
 
 
