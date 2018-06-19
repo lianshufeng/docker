@@ -1,8 +1,8 @@
 #
 # 安装： docker build -t kafka   ./ 
 # 运行： docker run -d -p 8822:22 -e ROOT_PASSWORD="root" lianshufeng/kafka
-# 例子： docker run -d -p 8822:22 -p 2181:2181 -p 9082:9082 lianshufeng/kafka
-# docker run --privileged=true -d -v /opt/kafka/config:/opt/kafka/config -v /opt/kafka/logs:/opt/kafka/logs -v /opt/kafka/kafka_logs:/tmp/kafka-logs -p 8822:22 -p 2181:2181 -p 9082:9082 lianshufeng/kafka 
+# 例子： docker run -d -p 8822:22 -p 2181:2181 -p 9092:9092 lianshufeng/kafka
+# docker run --name kafka --privileged=true -d -p 8822:22 -p 2181:2181 -p 9092:9092 -v /opt/kafka/config:/opt/kafka/config -v /opt/kafka/logs:/opt/kafka/logs -v /opt/kafka/kafka_logs:/tmp/kafka-logs lianshufeng/kafka 
 # 备注 : -p 端口映射 ; -v 挂载目录 ; -w 工作空间 ; -e 环境变量 ; --restart always 随docker服务启动 
 #
 
