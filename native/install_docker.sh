@@ -59,14 +59,19 @@ installFreeMem(){
 }
 
 
-#安装docker
+#设置防火墙
 openFireWall(){
+	#允许防火墙
 	callFun "firewall-cmd --add-port=2376/tcp --permanent"
 	callFun "firewall-cmd --add-port=2377/tcp --permanent"
 	callFun "firewall-cmd --add-port=7946/tcp --permanent"
 	callFun "firewall-cmd --add-port=7946/udp --permanent"
 	callFun "firewall-cmd --add-port=4789/udp --permanent"
 	callFun "firewall-cmd --reload"
+	#禁用SELINUX：
+	setenforce 0
+	echo "SELINUX=disabled" > /etc/selinux/config
+	echo "SELINUXTYPE=targeted" >> /etc/selinux/config
 }
 
 #修改docker镜像加速器
