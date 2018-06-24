@@ -31,6 +31,7 @@ RUN set -xe \
 	&& ssh-keygen -t dsa -f /etc/ssh/ssh_host_ed25519_key  -N '' \
 	&& ssh-keygen -t dsa -f /etc/ssh/ssh_host_dsa_key -N '' \
 	&& sed -i "s/#UsePrivilegeSeparation.*/UsePrivilegeSeparation no/g" /etc/ssh/sshd_config \
+	&& sed -i "s/#UseDNS yes.*/UseDNS no/g" /etc/ssh/sshd_config \
 	&& sed -i "s/UsePAM.*/UsePAM no/g" /etc/ssh/sshd_config 
 
 	
