@@ -1,4 +1,10 @@
 # base :  Centos + JDK (SUN) + ssh-server
+#
+#
+# centos install docker and setting (china): 
+# curl https://raw.githubusercontent.com/lianshufeng/docker/master/native/install_docker.sh -o installDocker.sh && sh installDocker.sh && rm -f installDocker.sh
+#
+
 
 #### ENV :
 ROOT_PASSWORD : init root's password
