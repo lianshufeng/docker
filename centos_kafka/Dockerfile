@@ -5,6 +5,17 @@
 # docker run --name kafka --privileged=true -d -p 8822:22 -p 2181:2181 -p 9092:9092 -v /opt/kafka/config:/opt/kafka/config -v /opt/kafka/logs:/opt/kafka/logs -v /opt/kafka/kafka_logs:/tmp/kafka-logs lianshufeng/kafka 
 # 备注 : -p 端口映射 ; -v 挂载目录 ; -w 工作空间 ; -e 环境变量 ; --restart always 随docker服务启动 
 #
+#
+# 集群方案：(未完成)
+# 创建网卡:
+# docker network create --subnet=172.172.200.0/24 docker-br0
+# 
+#
+# docker run -d -p 8822:22 -e CLUSTER_HOST="127.0.0.1" kafka
+#
+#
+#
+#
 
 
 FROM lianshufeng/jdk
@@ -39,6 +50,34 @@ RUN set -xe \
 	&& source /etc/profile
 
 
+	
+# 集群方案
+ENV CLUSTER_HOST ""
+RUN set -xe \
+	#修改tomcat启动命令行
+	&& echo "#!/bin/bash" > /tmp/kafka_cluster.sh \	
+	#若配置文件为空则自动恢复配置文件的备份
+	&& echo "if [ -z "\$CLUSTER_HOST" ]; then" >> /tmp/kafka_cluster.sh \
+	&& echo "	echo localhost" >> /tmp/kafka_cluster.sh \
+	&& echo "else" >> /tmp/kafka_cluster.sh \
+	
+	
+	&& echo "	CLUSTER_HOST=(\${CLUSTER_HOST//,/ })" >> /tmp/kafka_cluster.sh \
+	&& echo "	i=0" >> /tmp/kafka_cluster.sh \
+	&& echo "	for ip in \${CLUSTER_HOST[@]}" >> /tmp/kafka_cluster.sh \
+	&& echo "	do" >> /tmp/kafka_cluster.sh \
+	&& echo "	let i++" >> /tmp/kafka_cluster.sh \
+	&& echo "	echo 'server.${i}=${ip}:2888:3888' >> \$KAFKA_HOME/config/zookeeper.properties " >> /tmp/kafka_cluster.sh \
+	&& echo "	done " >> /tmp/kafka_cluster.sh \
+	&& echo "	" >> /tmp/kafka_cluster.sh \
+	
+	&& echo "fi" >> /tmp/kafka_cluster.sh 
+	#&& echo "echo "" > /tmp/kafka_cluster.sh" >> /tmp/kafka_cluster.sh
+
+
+	
+	
+	
 #外部端口22
 EXPOSE 22
 EXPOSE 2181
@@ -56,6 +95,7 @@ RUN set -xe \
 
 
 #自动启动脚本
+RUN echo "sh /tmp/kafka_cluster.sh" >> /opt/bootstrap.sh
 RUN echo "sh /tmp/kafka_conf.sh" >> /opt/bootstrap.sh
 RUN echo "sh $KAFKA_HOME/bin/zookeeper-server-start.sh $KAFKA_HOME/config/zookeeper.properties &" >> /opt/bootstrap.sh
 RUN echo "sh $KAFKA_HOME/bin/kafka-server-start.sh $KAFKA_HOME/config/server.properties &" >> /opt/bootstrap.sh
