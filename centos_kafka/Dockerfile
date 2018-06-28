@@ -11,7 +11,9 @@
 # docker network create --subnet=172.172.200.0/24 docker-br0
 # 
 #
-# docker run -d -p 8822:22 -e CLUSTER_HOST="127.0.0.1" kafka
+# docker run --net docker-br0 --ip 172.172.200.2 -d -p 8822:22 -e CLUSTER_HOST="172.172.200.2,172.172.200.3,172.172.200.4" kafka
+# docker run --net docker-br0 --ip 172.172.200.3 -d -p 8823:22 -e CLUSTER_HOST="172.172.200.2,172.172.200.3,172.172.200.4" kafka
+# docker run --net docker-br0 --ip 172.172.200.4 -d -p 8824:22 -e CLUSTER_HOST="172.172.200.2,172.172.200.3,172.172.200.4" kafka
 #
 #
 #
@@ -52,27 +54,10 @@ RUN set -xe \
 
 	
 # 集群方案
+RUN rpm --rebuilddb
+RUN yum install iproute  -y
 ENV CLUSTER_HOST ""
-RUN set -xe \
-	#修改tomcat启动命令行
-	&& echo "#!/bin/bash" > /tmp/kafka_cluster.sh \	
-	#若配置文件为空则自动恢复配置文件的备份
-	&& echo "if [ -z "\$CLUSTER_HOST" ]; then" >> /tmp/kafka_cluster.sh \
-	&& echo "	echo localhost" >> /tmp/kafka_cluster.sh \
-	&& echo "else" >> /tmp/kafka_cluster.sh \
-	
-	
-	&& echo "	CLUSTER_HOST=(\${CLUSTER_HOST//,/ })" >> /tmp/kafka_cluster.sh \
-	&& echo "	i=0" >> /tmp/kafka_cluster.sh \
-	&& echo "	for ip in \${CLUSTER_HOST[@]}" >> /tmp/kafka_cluster.sh \
-	&& echo "	do" >> /tmp/kafka_cluster.sh \
-	&& echo "	let i++" >> /tmp/kafka_cluster.sh \
-	&& echo "	echo 'server.${i}=${ip}:2888:3888' >> \$KAFKA_HOME/config/zookeeper.properties " >> /tmp/kafka_cluster.sh \
-	&& echo "	done " >> /tmp/kafka_cluster.sh \
-	&& echo "	" >> /tmp/kafka_cluster.sh \
-	
-	&& echo "fi" >> /tmp/kafka_cluster.sh 
-	#&& echo "echo "" > /tmp/kafka_cluster.sh" >> /tmp/kafka_cluster.sh
+ADD kafka_cluster.sh /tmp/kafka_cluster.sh
 
 
 	
