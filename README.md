@@ -32,6 +32,7 @@ docker run --name activemq --privileged=true -d -p 8822:22 -p 8161:8161 -p 61616
 
 
 #### kafka 
-docker run --name kafka --privileged=true -d -p 8822:22 -p 2181:2181 -p 9092:9092 -v /opt/kafka/config:/opt/kafka/config -v /opt/kafka/logs:/opt/kafka/logs -v /opt/kafka/kafka_logs:/tmp/kafka-logs lianshufeng/kafka 
-
+docker run --name kafka --privileged=true -d -p 8822:22 -p 2181:2181 -p 9092:9092 -v /opt/kafka/config:/opt/kafka/config -v /opt/kafka/logs:/opt/kafka/logs -v /opt/kafka/kafka_logs:/tmp/kafka-logs lianshufeng/kafka
+##### kafka-cluster
+docker run --net docker-br0 --ip 172.172.200.2 -d -p 8822:22 -e CLUSTER_HOST="172.172.200.2,172.172.200.3,172.172.200.4" lianshufeng/kafka
 
