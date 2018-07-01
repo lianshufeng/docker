@@ -21,7 +21,7 @@ docker network create --subnet=172.172.200.0/24 docker-br0
 
 
 #集群数量
-hostNumber=9
+hostNumber=3
 #外网主机IP
 ADVERTISED_LISTENERS="192.168.208.131"
 
