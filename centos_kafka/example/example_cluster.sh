@@ -11,8 +11,22 @@ docker network create --subnet=172.172.200.0/24 docker-br0
 #-v /opt/kafka2/config:/opt/kafka/config -v /opt/kafka2/logs:/opt/kafka/logs -v /opt/kafka2/kafka_logs:/tmp/kafka-logs -v #/opt/kafka2/zookeeper:/tmp/zookeeper \
 #kafka
 
-#动态生成主机
-hostNumber=3
+
+
+## CLUSTER_HOST
+## 集群的ip地址，用英文逗号间隔
+
+## ADVERTISED_LISTENERS
+## 若不指定，则端口映射后将无法访问
+
+
+#集群数量
+hostNumber=9
+#外网主机IP
+ADVERTISED_LISTENERS="192.168.208.131"
+
+
+
 
 #主机
 CLUSTER_HOST=""
@@ -26,17 +40,21 @@ do
 	#删除容器
 	rName="docker rm -f kafka"$p
 	($rName)
+	#允许通过防火墙
+	firewall="firewall-cmd --add-port="$(($p+9090))"/tcp"
+	($firewall)
 done
 echo $CLUSTER_HOST
 
-
+#构建集群命令
 for((i=1;i<=$hostNumber;i++));
 do 
 	let p=1+i
 	cmd="docker run --name kafka"$p" --privileged=true -d \
 	--net docker-br0 --ip 172.172.200."$p" \
-	-p 882"$p":22 -p 218"$p":2181 -p 909"$p":9092 \
+	-p $(($p+8820)):22 -p $(($p+2180)):2181 -p $(($p+9090)):9092 \
 	-e CLUSTER_HOST="$CLUSTER_HOST" \
+	-e ADVERTISED_LISTENERS="$ADVERTISED_LISTENERS":$(($p+9090)) \
 	-v /opt/kafka"$p"/config:/opt/kafka/config -v /opt/kafka"$p"/logs:/opt/kafka/logs -v /opt/kafka"$p"/kafka_logs:/tmp/kafka-logs -v /opt/kafka"$p"/zookeeper:/tmp/zookeeper \
 	kafka"
 	#echo $cmd

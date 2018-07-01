@@ -25,6 +25,15 @@ else
 	done
 	#### kafka集群
 	sed -i "s/zookeeper.connect=localhost:2181/zookeeper.connect=$zookeeperConnect/g" $KAFKA_HOME/config/server.properties
+	sed -i "s/#listeners=PLAINTEXT:\/\/:9092/listeners=PLAINTEXT:\/\/0.0.0.0:9092/g" $KAFKA_HOME/config/server.properties
+	#### 外网端口，需要指定外网主机和端口
+	if [ -z $ADVERTISED_LISTENERS ]; then
+		echo "localhost"
+	else
+		sed -i "s/#advertised.listeners=PLAINTEXT:\/\/your.host.name:9092/advertised.listeners=PLAINTEXT:\/\/$ADVERTISED_LISTENERS/g" $KAFKA_HOME/config/server.properties
+	fi
+	
+	
 	#### zookeeper集群
 	echo "initLimit=10" >> $KAFKA_HOME/config/zookeeper.properties
 	echo "syncLimit=5" >> $KAFKA_HOME/config/zookeeper.properties

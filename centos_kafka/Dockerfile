@@ -75,6 +75,7 @@ RUN set -xe \
 RUN rpm --rebuilddb
 RUN yum install iproute  -y
 ENV CLUSTER_HOST ""
+ENV ADVERTISED_LISTENERS "127.0.0.1:9092"
 ADD kafka_cluster.sh /tmp/kafka_cluster.sh
 	
 
