@@ -54,15 +54,6 @@ RUN set -xe \
 
 
 	
-# 集群方案
-RUN rpm --rebuilddb
-RUN yum install iproute  -y
-ENV CLUSTER_HOST ""
-ADD kafka_cluster.sh /tmp/kafka_cluster.sh
-
-
-	
-	
 	
 #外部端口22
 EXPOSE 22
@@ -79,10 +70,17 @@ RUN set -xe \
 	&& echo "echo "" > /tmp/kafka_conf.sh" >> /tmp/kafka_conf.sh 
 
 
+	
+# 集群方案
+RUN rpm --rebuilddb
+RUN yum install iproute  -y
+ENV CLUSTER_HOST ""
+ADD kafka_cluster.sh /tmp/kafka_cluster.sh
+	
 
 #自动启动脚本
-RUN echo "sh /tmp/kafka_cluster.sh" >> /opt/bootstrap.sh
 RUN echo "sh /tmp/kafka_conf.sh" >> /opt/bootstrap.sh
+RUN echo "sh /tmp/kafka_cluster.sh" >> /opt/bootstrap.sh
 RUN echo "sh $KAFKA_HOME/bin/zookeeper-server-start.sh $KAFKA_HOME/config/zookeeper.properties &" >> /opt/bootstrap.sh
 RUN echo "sh $KAFKA_HOME/bin/kafka-server-start.sh $KAFKA_HOME/config/server.properties &" >> /opt/bootstrap.sh
 
