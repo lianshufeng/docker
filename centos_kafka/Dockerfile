@@ -6,11 +6,12 @@
 # 备注 : -p 端口映射 ; -v 挂载目录 ; -w 工作空间 ; -e 环境变量 ; --restart always 随docker服务启动 
 #
 #
-# 集群方案：
+# 集群：
+# 
 # 创建网卡:
 # docker network create --subnet=172.172.200.0/24 docker-br0
 # 
-# 例子:
+# 运行例子:
 # docker run --net docker-br0 --ip 172.172.200.2 -d -p 8822:22 -e CLUSTER_HOST="172.172.200.2,172.172.200.3,172.172.200.4" lianshufeng/kafka
 # docker run --net docker-br0 --ip 172.172.200.3 -d -p 8823:22 -e CLUSTER_HOST="172.172.200.2,172.172.200.3,172.172.200.4" lianshufeng/kafka
 # docker run --net docker-br0 --ip 172.172.200.4 -d -p 8824:22 -e CLUSTER_HOST="172.172.200.2,172.172.200.3,172.172.200.4" lianshufeng/kafka
