@@ -73,8 +73,8 @@ RUN set -xe \
 	&& echo "echo "" > /tmp/pass.sh" >> /tmp/pass.sh \
 	#引导程序
 	&& echo "#!/bin/bash" > /opt/bootstrap.sh \
-	&& echo "export LANG=en_US.UTF-8" >> /opt/bootstrap.sh \
 	&& echo "source /etc/profile" >> /opt/bootstrap.sh \
+	&& echo "export LANG=en_US.UTF-8" >> /opt/bootstrap.sh \
 	&& echo "sh /tmp/pass.sh" >> /opt/bootstrap.sh 
 	
 	
