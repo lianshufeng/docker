@@ -68,21 +68,21 @@ docker run -d --name kafka1 \
 -p 2181:2181 -p 9092:9092  \
 -e KAFKA_LISTENERS="$vmHost:9092" \
 -e ZOOKEEPER_HOST="172.172.200.2,172.172.200.3,172.172.200.4" \
-kafka
+lianshufeng/kafka
 
 docker run -d --name kafka2 \
 --net docker-br0 --ip 172.172.200.3 \
 -p 2182:2181 -p 9093:9092  \
 -e KAFKA_LISTENERS="$vmHost:9093" \
 -e ZOOKEEPER_HOST="172.172.200.2,172.172.200.3,172.172.200.4" \
-kafka
+lianshufeng/kafka
 
 docker run -d --name kafka3 \
 --net docker-br0 --ip 172.172.200.4 \
 -p 2183:2181 -p 9094:9092  \
 -e KAFKA_LISTENERS="$vmHost:9094" \
 -e ZOOKEEPER_HOST="172.172.200.2,172.172.200.3,172.172.200.4" \
-kafka
+lianshufeng/kafka
 
 
 
