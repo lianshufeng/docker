@@ -1,65 +1,61 @@
 #!/bin/bash
 
+
+#简单例子
+cd /opt/docker
+docker build -t kafka ./ 
+docker rm -f kafka
+docker run -d --name kafka  -e KAFKA_LISTENERS="192.168.208.131:9092" -p 2181:2181 -p 9092:9092 kafka
+docker exec -it kafka /bin/bash 
+source /etc/profile
+
+
+
+
+#集群例子
+sudo firewall-cmd --add-port=2181/tcp --permanent 
+sudo firewall-cmd --add-port=2182/tcp --permanent 
+sudo firewall-cmd --add-port=2183/tcp --permanent 
+sudo firewall-cmd --add-port=9092/tcp --permanent 
+sudo firewall-cmd --add-port=9093/tcp --permanent 
+sudo firewall-cmd --add-port=9094/tcp --permanent 
+
+firewall-cmd --reload 
 docker network create --subnet=172.172.200.0/24 docker-br0
 
 
+cd /opt/docker
+docker build -t kafka ./ 
+docker rm -f kafka1 kafka2 kafka3
+vmHost=192.168.208.131
 
-#docker run --name kafka2 --privileged=true -d \
-#--net docker-br0 --ip 172.172.200.2 \
-#-p 8822:22 -p 2182:2181 -p 9092:9092 \
-#-e CLUSTER_HOST="172.172.200.2,172.172.200.3,172.172.200.4" \
-#-v /opt/kafka2/config:/opt/kafka/config -v /opt/kafka2/logs:/opt/kafka/logs -v /opt/kafka2/kafka_logs:/tmp/kafka-logs -v #/opt/kafka2/zookeeper:/tmp/zookeeper \
-#kafka
-
-
-
-## CLUSTER_HOST
-## 集群的ip地址，用英文逗号间隔
-
-## ADVERTISED_LISTENERS
-## 若不指定，则端口映射后将无法访问
+docker run -d --name kafka1 \
+--net docker-br0 --ip 172.172.200.2 \
+-p 2181:2181 -p 9092:9092  \
+-e KAFKA_LISTENERS="$vmHost:9092" \
+-e ZOOKEEPER_HOST="172.172.200.2,172.172.200.3,172.172.200.4" \
+kafka
 
 
-#集群数量
-hostNumber=3
-#外网主机IP
-ADVERTISED_LISTENERS="192.168.208.131"
+docker run -d --name kafka2 \
+--net docker-br0 --ip 172.172.200.3 \
+-p 2182:2181 -p 9093:9092  \
+-e KAFKA_LISTENERS="$vmHost:9093" \
+-e ZOOKEEPER_HOST="172.172.200.2,172.172.200.3,172.172.200.4" \
+kafka
 
 
+docker run -d --name kafka3 \
+--net docker-br0 --ip 172.172.200.4 \
+-p 2183:2181 -p 9094:9092  \
+-e KAFKA_LISTENERS="$vmHost:9094" \
+-e ZOOKEEPER_HOST="172.172.200.2,172.172.200.3,172.172.200.4" \
+kafka
 
+docker logs kafka1
+docker exec -it kafka1 /bin/bash 
+source /etc/profile
 
-#主机
-CLUSTER_HOST=""
-for((i=1;i<=$hostNumber;i++));
-do
-	let p=i+1
-	CLUSTER_HOST=$CLUSTER_HOST"172.172.200."$p","
-	#删除挂载目录
-	dirPath="rm -rf /opt/kafka"$p
-	($dirPath)
-	#删除容器
-	rName="docker rm -f kafka"$p
-	($rName)
-	#允许通过防火墙
-	firewall="firewall-cmd --add-port="$(($p+9090))"/tcp"
-	($firewall)
-done
-echo $CLUSTER_HOST
-
-#构建集群命令
-for((i=1;i<=$hostNumber;i++));
-do 
-	let p=1+i
-	cmd="docker run --name kafka"$p" --privileged=true -d \
-	--net docker-br0 --ip 172.172.200."$p" \
-	-p $(($p+8820)):22 -p $(($p+2180)):2181 -p $(($p+9090)):9092 \
-	-e CLUSTER_HOST="$CLUSTER_HOST" \
-	-e ADVERTISED_LISTENERS="$ADVERTISED_LISTENERS":$(($p+9090)) \
-	-v /opt/kafka"$p"/config:/opt/kafka/config -v /opt/kafka"$p"/logs:/opt/kafka/logs -v /opt/kafka"$p"/kafka_logs:/tmp/kafka-logs -v /opt/kafka"$p"/zookeeper:/tmp/zookeeper \
-	kafka"
-	#echo $cmd
-	($cmd)
-done
 
 
 
@@ -67,10 +63,9 @@ done
 
 
 #创建话题
-#kafka-topics.sh --create --zookeeper localhost:2181 --replication-factor 1 --partitions 1 --topic testKJ1
-
+kafka-topics.sh --create --zookeeper localhost:2181 --replication-factor 1 --partitions 1 --topic testxiaofeng
 #生产者客户端命令
-#kafka-console-producer.sh --broker-list localhost:9092 --topic testKJ1
-
+kafka-console-producer.sh --broker-list 192.168.208.131:9092 --topic testxiaofeng
 #消费者客户端命令
-#kafka-console-consumer.sh -zookeeper localhost:2181 --from-beginning --topic testKJ1
+kafka-console-consumer.sh --bootstrap-server 192.168.208.131:9092 --topic testxiaofeng --from-beginning
+

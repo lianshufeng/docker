@@ -19,13 +19,15 @@
 #
 #
 #
+#
+# docker run --name kafka --privileged=true -d -p 8822:22 -p 2181:2181 -p 9092:9092 -v /opt/kafka/config:/opt/kafka/config -v /opt/kafka/logs:/opt/kafka/logs -v /opt/kafka/kafka_logs:/tmp/kafka-logs kafka
 
 
 FROM lianshufeng/jdk
 MAINTAINER lianshufeng <251708339@qq.com>
 
 #构建参数 --build-arg
-ARG KAFKA_URL="http://mirror.bit.edu.cn/apache/kafka/1.1.0/kafka_2.12-1.1.0.tgz"
+ARG KAFKA_URL="http://mirror.bit.edu.cn/apache/kafka/2.0.0/kafka_2.12-2.0.0.tgz"
 ARG KAFKA_HOME="/opt/kafka"
 
 
@@ -74,8 +76,8 @@ RUN set -xe \
 # 集群方案
 RUN rpm --rebuilddb
 RUN yum install iproute  -y
-ENV CLUSTER_HOST ""
-ENV ADVERTISED_LISTENERS "127.0.0.1:9092"
+ENV KAFKA_LISTENERS ""
+ENV ZOOKEEPER_HOST ""
 ADD kafka_cluster.sh /tmp/kafka_cluster.sh
 	
 
@@ -84,7 +86,4 @@ RUN echo "sh /tmp/kafka_conf.sh" >> /opt/bootstrap.sh
 RUN echo "sh /tmp/kafka_cluster.sh" >> /opt/bootstrap.sh
 RUN echo "sh $KAFKA_HOME/bin/zookeeper-server-start.sh $KAFKA_HOME/config/zookeeper.properties &" >> /opt/bootstrap.sh
 RUN echo "sh $KAFKA_HOME/bin/kafka-server-start.sh $KAFKA_HOME/config/server.properties &" >> /opt/bootstrap.sh
-
-
-
 
