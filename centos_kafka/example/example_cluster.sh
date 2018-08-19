@@ -5,7 +5,7 @@
 cd /opt/docker
 docker build -t kafka ./ 
 docker rm -f kafka
-docker run -d --name kafka  -e KAFKA_LISTENERS="192.168.208.131:9092" -p 2181:2181 -p 9092:9092 kafka
+docker run -d --name kafka -v /opt/kafka/config:/opt/kafka/config -v /opt/kafka/logs:/opt/kafka/logs -v /opt/kafka/kafka_logs:/tmp/kafka-logs -e KAFKA_LISTENERS="192.168.208.131:9092" -p 2181:2181 -p 9092:9092 lianshufeng/kafka
 docker exec -it kafka /bin/bash 
 source /etc/profile
 
