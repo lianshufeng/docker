@@ -34,7 +34,7 @@ docker run -d --name kafka1 \
 -p 2181:2181 -p 9092:9092  \
 -e KAFKA_LISTENERS="$vmHost:9092" \
 -e ZOOKEEPER_HOST="172.172.200.2,172.172.200.3,172.172.200.4" \
-kafka
+lianshufeng/kafka
 
 
 docker run -d --name kafka2 \
@@ -42,7 +42,7 @@ docker run -d --name kafka2 \
 -p 2182:2181 -p 9093:9092  \
 -e KAFKA_LISTENERS="$vmHost:9093" \
 -e ZOOKEEPER_HOST="172.172.200.2,172.172.200.3,172.172.200.4" \
-kafka
+lianshufeng/kafka
 
 
 docker run -d --name kafka3 \
@@ -50,7 +50,7 @@ docker run -d --name kafka3 \
 -p 2183:2181 -p 9094:9092  \
 -e KAFKA_LISTENERS="$vmHost:9094" \
 -e ZOOKEEPER_HOST="172.172.200.2,172.172.200.3,172.172.200.4" \
-kafka
+lianshufeng/kafka
 
 docker logs kafka1
 docker exec -it kafka1 /bin/bash 

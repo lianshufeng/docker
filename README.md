@@ -46,7 +46,7 @@ docker run -d --name kafka -v /opt/kafka/config:/opt/kafka/config -v /opt/kafka/
 ```
 - cluster
 ```shell
-#Firewall
+
 sudo firewall-cmd --add-port=2181/tcp --permanent 
 sudo firewall-cmd --add-port=2182/tcp --permanent 
 sudo firewall-cmd --add-port=2183/tcp --permanent 
@@ -55,14 +55,14 @@ sudo firewall-cmd --add-port=9093/tcp --permanent
 sudo firewall-cmd --add-port=9094/tcp --permanent 
 firewall-cmd --reload 
 
-#Network
+
 docker network create --subnet=172.172.200.0/24 docker-br0
 
-#Demo host
+
 docker rm -f kafka1 kafka2 kafka3
 vmHost=192.168.208.131
 
-#Run Cmd
+
 docker run -d --name kafka1 \
 --net docker-br0 --ip 172.172.200.2 \
 -p 2181:2181 -p 9092:9092  \
@@ -87,7 +87,7 @@ lianshufeng/kafka
 
 
 
-#Test topic
+
 kafka-topics.sh --create --zookeeper localhost:2181 --replication-factor 1 --partitions 1 --topic test
 
 kafka-console-producer.sh --broker-list 192.168.208.131:9092 --topic test
