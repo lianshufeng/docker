@@ -10,7 +10,7 @@ FROM centos:latest
 MAINTAINER lianshufeng <251708339@qq.com>
 
 #构建参数 --build-arg
-ARG JDK_URL="http://download.oracle.com/otn-pub/java/jdk/8u181-b13/96a7b8442fe848ef90c96a2fad6ed6d1/jdk-8u181-linux-x64.tar.gz"
+ARG JDK_URL="https://download.java.net/java/GA/jdk11/13/GPL/openjdk-11.0.1_linux-x64_bin.tar.gz"
 ARG JAVA_HOME="/opt/jdk"
 
 
