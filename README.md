@@ -23,7 +23,7 @@ docker build -t springboot --build-arg JDK_URL="http://download.oracle.com/otn-p
 #### mount
 - -- privileged=true
 
-#### springboot ( centos 7.5 + openjdk11 )
+#### springboot ( centos 7.5 + jdk8 )
 ```shell
 docker run --privileged=true -d -p 8822:22 -v /opt/jars:/opt/jars -w /opt/jars -e ENTRYPOINT="mkdir /opt/logs/ & nohup java -Xmx600m -Xms300m -Duser.timezone=GMT+8 -Dspring.profiles.active=prod -jar eureka.jar > /opt/logs/out.log" --restart always lianshufeng/springboot
 ```
