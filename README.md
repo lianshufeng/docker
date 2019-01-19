@@ -58,3 +58,26 @@ sudo firewall-cmd --add-port=2181/tcp --permanent
 sudo firewall-cmd --add-port=9092/tcp --permanent 
 firewall-cmd --reload 
 ```
+
+
+
+
+#### docker-compose.yml  docker-compose down & docker-compose up -d
+````shell
+version: "3"
+
+services:
+  springboot:
+    image: lianshufeng/springboot
+    ports:
+      - "10204:10204"
+    volumes:
+      - "/opt/build/jars/service/neteaseservice:/opt/jar"
+    working_dir: /opt/jar
+    container_name: neteaseservice
+    restart: always
+    environment:
+      - JAVA_HOME="/opt/jdk"
+      - PATH="$PATH:$JAVA_HOME"
+      - ENTRYPOINT=nohup java -Xmx600m -Xms300m -Duser.timezone=GMT+8 -Dspring.profiles.active=dev -jar neteaseservice-0.0.1-SNAPSHOT.jar
+````
