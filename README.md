@@ -55,8 +55,6 @@ firewall-cmd --reload
 
 
 #### docker-compose.yml 
--  docker-compose down
--  docker-compose up -d
 ````shell
 version: "3"
 
@@ -69,7 +67,6 @@ services:
       - "/opt/jar:/opt/jar"
     working_dir: /opt/jar
     container_name: applicationserver
-#   restart: always
     environment:
       - ENTRYPOINT=nohup java -Xmx600m -Xms300m -Duser.timezone=GMT+8 -Dspring.profiles.active=local -jar ApplicationServer-1.0.0-SNAPSHOT.jar
 ````
