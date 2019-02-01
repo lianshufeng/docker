@@ -71,7 +71,5 @@ services:
     container_name: applicationserver
 #   restart: always
     environment:
-      - JAVA_HOME="/opt/jdk"
-      - PATH="$PATH:$JAVA_HOME"
-      - ENTRYPOINT=nohup java -Xmx600m -Xms300m -Duser.timezone=GMT+8 -Dspring.profiles.active=dev -jar ApplicationServer-1.0.0-SNAPSHOT.jar
+      - ENTRYPOINT=nohup java -Xmx600m -Xms300m -Duser.timezone=GMT+8 -Dspring.profiles.active=local -jar ApplicationServer-1.0.0-SNAPSHOT.jar
 ````
