@@ -2,13 +2,7 @@
 - curl https://raw.githubusercontent.com/lianshufeng/docker/master/native/install_docker.sh -o installDocker.sh && sh installDocker.sh && rm -f installDocker.sh
 
 # base :  
-- Centos + JDK (SUN) + ssh-server
-
-# demo :
-
-
-#### ENV :
-- ROOT_PASSWORD : init root's password
+- Centos(7.6) + JDK (oracle - 8u201) 
 
 
 #### bootstrap:
@@ -23,23 +17,23 @@ docker build -t springboot --build-arg JDK_URL="http://download.oracle.com/otn-p
 #### mount
 - -- privileged=true
 
-#### springboot ( centos 7.5 + jdk8 )
+#### springboot ( ENTRYPOINT  boot auto run )
 ```shell
-docker run --privileged=true -d -p 8822:22 -v /opt/jars:/opt/jars -w /opt/jars -e ENTRYPOINT="mkdir /opt/logs/ & nohup java -Xmx600m -Xms300m -Duser.timezone=GMT+8 -Dspring.profiles.active=prod -jar eureka.jar > /opt/logs/out.log" --restart always lianshufeng/springboot
+docker run --privileged=true -d  -v /opt/jars:/opt/jars -w /opt/jars -e ENTRYPOINT="mkdir /opt/logs/ & nohup java -Xmx600m -Xms300m -Duser.timezone=GMT+8 -Dspring.profiles.active=prod -jar eureka.jar > /opt/logs/out.log" --restart always lianshufeng/springboot
 ```
 
-#### tomcat ( apache-tomcat-8.5.35.tar.gz ) 
+#### tomcat ( TOMCAT_VM )
 ```shell
 docker run --privileged=true -d -p 8822:22 -p 8080:8080 -e TOMCAT_VM="-Xms300m -Xmx600m" lianshufeng/tomcat
 ```
 
-#### activemq (apache-activemq-5.15.8-bin.tar.gz)
+#### activemq 
 ```shell
 docker run --name activemq --privileged=true -d -p 8822:22 -p 8161:8161 -p 61616:61616 -p 5672:5672 -p 61613:61613 -p 1883:1883 -p 61614:61614  -v /opt/activemq/conf:/opt/activemq/conf  -v /opt/activemq/data:/opt/activemq/data lianshufeng/activemq
 ```
 
 
-#### kafka  (kafka_2.12-2.1.0.tgz)
+#### kafka 
 - simple
 ```shell
 docker run -d --name kafka -v /opt/kafka/config:/opt/kafka/config -v /opt/kafka/logs:/opt/kafka/logs -v /opt/kafka/kafka_logs:/tmp/kafka-logs -e KAFKA_LISTENERS="192.168.208.131:9092" -p 2181:2181 -p 9092:9092 lianshufeng/kafka
@@ -60,9 +54,9 @@ firewall-cmd --reload
 ```
 
 
-
-
-#### docker-compose.yml  docker-compose down & docker-compose up -d
+#### docker-compose.yml 
+-  docker-compose down
+-  docker-compose up -d
 ````shell
 version: "3"
 
@@ -70,14 +64,14 @@ services:
   springboot:
     image: lianshufeng/springboot
     ports:
-      - "10204:10204"
+      - "8761:8761"
     volumes:
-      - "/opt/build/jars/service/neteaseservice:/opt/jar"
+      - "/opt/jar:/opt/jar"
     working_dir: /opt/jar
-    container_name: neteaseservice
-    restart: always
+    container_name: applicationserver
+#   restart: always
     environment:
       - JAVA_HOME="/opt/jdk"
       - PATH="$PATH:$JAVA_HOME"
-      - ENTRYPOINT=nohup java -Xmx600m -Xms300m -Duser.timezone=GMT+8 -Dspring.profiles.active=dev -jar neteaseservice-0.0.1-SNAPSHOT.jar
+      - ENTRYPOINT=nohup java -Xmx600m -Xms300m -Duser.timezone=GMT+8 -Dspring.profiles.active=dev -jar ApplicationServer-1.0.0-SNAPSHOT.jar
 ````

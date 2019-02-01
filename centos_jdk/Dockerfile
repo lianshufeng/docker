@@ -10,7 +10,7 @@ FROM centos:latest
 MAINTAINER lianshufeng <251708339@qq.com>
 
 #构建参数 --build-arg
-ARG JDK_URL="https://download.oracle.com/otn-pub/java/jdk/8u191-b12/2787e4a523244c269598db4e85c51e0c/jdk-8u191-linux-x64.tar.gz"
+ARG JDK_URL="https://download.oracle.com/otn-pub/java/jdk/8u201-b09/42970487e3af4f5aa5bca3f542482c60/jdk-8u201-linux-x64.tar.gz"
 ARG JAVA_HOME="/opt/jdk"
 
 
@@ -18,21 +18,9 @@ ARG JAVA_HOME="/opt/jdk"
 ENV ROOT_PASSWORD "root"
 ENV ENTRYPOINT ""
 
-#安装openssh和unzip工具
+#安装wget和unzip工具
 RUN rpm --rebuilddb
-RUN yum install unzip openssh-server wget -y
-
-
-#配置ssh的登陆证书
-RUN set -xe \
-	#配置 ssh-server
-	&& ssh-keygen -q -t rsa -b 2048 -f /etc/ssh/ssh_host_rsa_key -N '' \
-	&& ssh-keygen -q -t ecdsa -f /etc/ssh/ssh_host_ecdsa_key -N '' \
-	&& ssh-keygen -t dsa -f /etc/ssh/ssh_host_ed25519_key  -N '' \
-	&& ssh-keygen -t dsa -f /etc/ssh/ssh_host_dsa_key -N '' \
-	&& sed -i "s/#UsePrivilegeSeparation.*/UsePrivilegeSeparation no/g" /etc/ssh/sshd_config \
-	&& sed -i "s/#UseDNS yes.*/UseDNS no/g" /etc/ssh/sshd_config \
-	&& sed -i "s/UsePAM.*/UsePAM no/g" /etc/ssh/sshd_config 
+RUN yum install unzip  wget -y
 
 	
 #下载 JDK
@@ -61,25 +49,17 @@ RUN set -xe \
 	&& cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime 
 
 
-#外部端口22
-EXPOSE 22
-
 
 #创建修改密码的脚本，通过传递参数修改
 RUN set -xe \
-	#修改密码脚本，仅执行一次
-	&& echo "#!/bin/bash" > /tmp/pass.sh \
-	&& echo "echo root:"\$ROOT_PASSWORD"| chpasswd" >> /tmp/pass.sh \
-	&& echo "echo "" > /tmp/pass.sh" >> /tmp/pass.sh \
 	#引导程序
 	&& echo "#!/bin/bash" > /opt/bootstrap.sh \
 	&& echo "source /etc/profile" >> /opt/bootstrap.sh \
-	&& echo "export LANG=en_US.UTF-8" >> /opt/bootstrap.sh \
-	&& echo "sh /tmp/pass.sh" >> /opt/bootstrap.sh 
+	&& echo "export LANG=en_US.UTF-8" >> /opt/bootstrap.sh 
 	
 	
 #启动项
-ENTRYPOINT  sh /opt/bootstrap.sh & /usr/sbin/sshd -D
+ENTRYPOINT  sh /opt/bootstrap.sh 
 
 	
 
