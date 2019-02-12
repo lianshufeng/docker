@@ -84,7 +84,7 @@ RUN set -xe \
 	#引导程序
 	&& echo "sh /tmp/tomcat_conf.sh" >> /opt/bootstrap.sh \
 	&& echo "sh /tmp/tomcat.sh" >> /opt/bootstrap.sh \
-	&& echo "sh $TOMCAT_HOME/bin/startup.sh" >> /opt/bootstrap.sh 
+	&& echo "nohup $TOMCAT_HOME/bin/catalina.sh run" >> /opt/bootstrap.sh 
 	
 	
 
