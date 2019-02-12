@@ -82,9 +82,9 @@ RUN set -xe \
 	&& echo "echo "" > /tmp/tomcat.sh" >> /tmp/tomcat.sh \
 	
 	#引导程序
-	&& echo "sh /tmp/tomcat_conf.sh" >> /opt/bootstrap.sh \
-	&& echo "sh /tmp/tomcat.sh" >> /opt/bootstrap.sh \
-	&& echo "sh $TOMCAT_HOME/bin/startup.sh" >> /opt/bootstrap.sh 
+	&& echo "sh /tmp/tomcat_conf.sh" >> /opt/run.sh \
+	&& echo "sh /tmp/tomcat.sh" >> /opt/run.sh \
+	&& echo "nohup $TOMCAT_HOME/bin/startup.sh" >> /opt/run.sh 
 	
 	
 

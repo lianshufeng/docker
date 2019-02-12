@@ -41,9 +41,12 @@ RUN set -xe \
 	&& echo "#!/bin/bash" > /tmp/pass.sh \
 	&& echo "echo root:"\$ROOT_PASSWORD"| chpasswd" >> /tmp/pass.sh \
 	&& echo "echo "" > /tmp/pass.sh" >> /tmp/pass.sh \
+	#其他的引导项目
+	&& echo "#!/bin/bash" > /opt/run.sh \
+	&& echo "sh /opt/run.sh" >> /opt/bootstrap.sh \
 	#引导程序
 	&& echo "sh /tmp/pass.sh" >> /opt/bootstrap.sh \
-	&& echo "/usr/sbin/sshd -D" >> /opt/bootstrap.sh 
+	&& echo "/usr/sbin/sshd -d" >> /opt/bootstrap.sh 
 	
 
 	
