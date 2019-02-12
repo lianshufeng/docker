@@ -1,8 +1,5 @@
 #
 # 安装： docker build -t jdk --build-arg JAVA_HOME="/opt/jdk"  ./ 
-# 运行： docker run -d -p 8822:22 -e ROOT_PASSWORD="root" jdk
-# 例子： docker run -d -p 8822:22 -v /opt/jars:/opt/jars -w /opt/jars/ jdk
-# 备注 : -p 端口映射 ; -v 挂载目录 ; -w 工作空间 ; -e 环境变量  ; --restart always 随docker服务启动 
 #
 
 
@@ -15,7 +12,6 @@ ARG JAVA_HOME="/opt/jdk"
 
 
 #运行变量 -e
-ENV ROOT_PASSWORD "root"
 ENV ENTRYPOINT ""
 
 #安装wget和unzip工具
