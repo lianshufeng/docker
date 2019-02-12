@@ -19,7 +19,7 @@ FROM lianshufeng/jdk
 MAINTAINER lianshufeng <251708339@qq.com>
 
 #构建参数 --build-arg
-ARG TOMCAT_URL="http://mirror.bit.edu.cn/apache/tomcat/tomcat-9/v9.0.16/bin/apache-tomcat-9.0.16.tar.gz"
+ARG TOMCAT_URL="https://www-eu.apache.org/dist/tomcat/tomcat-9/v9.0.16/bin/apache-tomcat-9.0.16.tar.gz"
 ARG TOMCAT_HOME="/opt/tomcat"
 
 
