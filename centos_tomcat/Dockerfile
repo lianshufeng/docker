@@ -1,5 +1,5 @@
 #
-# centos7.5 + ssh-server + jdk1.8(sun) + tomcat8.5
+# centos7.5 + ssh-server + jdk1.8(sun) + tomcat9.0
 #
 # build : 
 # docker build -t tomcat ./
@@ -19,7 +19,7 @@ FROM lianshufeng/jdk
 MAINTAINER lianshufeng <251708339@qq.com>
 
 #构建参数 --build-arg
-ARG TOMCAT_URL="http://mirror.bit.edu.cn/apache/tomcat/tomcat-8/v8.5.35/bin/apache-tomcat-8.5.35.tar.gz"
+ARG TOMCAT_URL="http://mirror.bit.edu.cn/apache/tomcat/tomcat-9/v9.0.16/bin/apache-tomcat-9.0.16.tar.gz"
 ARG TOMCAT_HOME="/opt/tomcat"
 
 
