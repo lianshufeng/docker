@@ -1,0 +1,17 @@
+version: "3"
+
+services:
+  kafka:
+    image: lianshufeng/kafka
+    ports:
+      - "8822:22"
+      - "9092:9092"
+      - "2181:2181"
+    volumes:
+      - "/opt/kafka/config:/opt/kafka/config"
+      - "/opt/kafka/logs:/opt/kafka/logs"
+      - "/opt/kafka/kafka_logs:/tmp/kafka-logs"
+    container_name: kafka
+    restart: always
+    environment:
+      - KAFKA_LISTENERS=192.168.49.128:9092
