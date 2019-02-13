@@ -61,8 +61,8 @@ RUN set -xe \
 
 
 #自动启动脚本
-RUN echo "sh /tmp/mq_conf.sh" >> /opt/bootstrap.sh
-RUN echo "$ACTIVEMQ_HOME/bin/activemq start" >> /opt/bootstrap.sh
+RUN echo "sh /tmp/mq_conf.sh" >> /opt/run.sh
+RUN echo "$ACTIVEMQ_HOME/bin/activemq start" >> /opt/run.sh
 
 
 
