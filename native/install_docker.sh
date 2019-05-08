@@ -26,7 +26,7 @@ installDocker(){
 	yum install docker -y
 	chkconfig docker on
 	#安装 docker-compose
-	sudo curl -L "https://github.com/docker/compose/releases/download/1.24.0/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+	curl -L https://github.com/docker/compose/releases/download/1.24.0-rc1/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose
 	chmod +x /usr/local/bin/docker-compose
 }
 
@@ -50,15 +50,10 @@ installFreeMem(){
 	freemem 
 	echo "freemem finish"
 	EOF
-	
 	chmod 777 /opt/freemem.sh
-	yum install vixie-cron -y
-	yum install crontabs -y 
-	service crond start
 	if [ `grep -c "/opt/freemem.sh" /etc/crontab` -eq '0' ] ;then
 		echo "*/30 * * * * root /opt/freemem.sh" >> /etc/crontab
 	fi
-	chkconfig crond on
 	sh /opt/freemem.sh
 }
 
@@ -95,11 +90,33 @@ updatePullImagesUrl(){
 
 
 #设置同步时区
-setUpdateTimeService(){
-	ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
+installUpdateTimeService(){
 	yum -y install ntp ntpdate
-	ntpdate cn.pool.ntp.org
-	hwclock --systohc
+	ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
+	tee /opt/updateTime.sh <<-'EOF'
+	#!/bin/sh 
+	#释放缓存
+	function updateTime {
+		ntpdate cn.pool.ntp.org
+		hwclock --systohc
+		echo "OK" >> /var/log/updateTime.log
+	}
+	updateTime 
+	echo "updateTime finish"
+	EOF
+	chmod 777 /opt/updateTime.sh
+	if [ `grep -c "/opt/updateTime.sh" /etc/crontab` -eq '0' ] ;then
+		echo "*/60 * * * * root /opt/updateTime.sh" >> /etc/crontab
+	fi
+	sh /opt/updateTime.sh
+}
+
+
+installCrond(){
+	yum install vixie-cron -y
+	yum install crontabs -y 
+	service crond start
+	chkconfig crond on
 }
 
 #更新docker默认的保存位置
@@ -126,10 +143,9 @@ callFun(){
 }
 
 
-
-
+callFun "installCrond"
 callFun "installFreeMem"
-callFun "setUpdateTimeService"
+callFun "installUpdateTimeService"
 callFun "installDocker" 
 callFun "openFireWall" 
 callFun "stopDocker" 
