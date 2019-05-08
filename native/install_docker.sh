@@ -106,7 +106,7 @@ installUpdateTimeService(){
 	EOF
 	chmod 777 /opt/updateTime.sh
 	if [ `grep -c "/opt/updateTime.sh" /etc/crontab` -eq '0' ] ;then
-		echo "*/60 * * * * root /opt/updateTime.sh" >> /etc/crontab
+		echo "* */12 * * * root /opt/updateTime.sh" >> /etc/crontab
 	fi
 	sh /opt/updateTime.sh
 }
