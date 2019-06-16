@@ -1,5 +1,7 @@
 # install docker (china): 
-- curl https://raw.githubusercontent.com/lianshufeng/docker/master/native/install_docker.sh -o installDocker.sh && sh installDocker.sh && rm -f installDocker.sh
+````shell
+curl -fsSL https://raw.githubusercontent.com/lianshufeng/docker/master/native/install_docker.sh | sh
+````
 
 # base :  
 - Centos(7.6) + JDK (oracle - 8u201) 
