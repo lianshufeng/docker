@@ -113,8 +113,7 @@ installUpdateTimeService(){
 
 
 installCrond(){
-	yum install vixie-cron -y
-	yum install crontabs -y 
+	yum install -y vixie-cron crontabs 
 	service crond start
 	chkconfig crond on
 }
