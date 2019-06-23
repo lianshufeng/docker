@@ -7,7 +7,7 @@ FROM centos:latest
 MAINTAINER lianshufeng <251708339@qq.com>
 
 #构建参数 --build-arg
-ARG JDK_URL="https://download.oracle.com/otn-pub/java/jdk/8u201-b09/42970487e3af4f5aa5bca3f542482c60/jdk-8u201-linux-x64.tar.gz"
+ARG JDK_URL="https://build.dzurl.top/jdk-8u211-linux-x64.tar.gz"
 ARG JAVA_HOME="/opt/jdk"
 
 

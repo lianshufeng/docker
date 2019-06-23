@@ -15,7 +15,7 @@
 # 
 
 
-FROM lianshufeng/jdk_ssh
+FROM lianshufeng/jdk
 MAINTAINER lianshufeng <251708339@qq.com>
 
 #构建参数 --build-arg
