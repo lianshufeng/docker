@@ -10,7 +10,7 @@ FROM lianshufeng/jdk
 MAINTAINER lianshufeng <251708339@qq.com>
 
 #构建参数 --build-arg
-ARG ACTIVEMQ_URL="https://mirrors.tuna.tsinghua.edu.cn/apache//activemq/5.15.9/apache-activemq-5.15.9-bin.tar.gz"
+ARG ACTIVEMQ_URL="https://build.dzurl.top/apache-activemq-5.15.9-bin.tar.gz"
 ARG ACTIVEMQ_HOME="/opt/activemq"
 
 
