@@ -23,7 +23,7 @@
 # docker run --name kafka --privileged=true -d -p 8822:22 -p 2181:2181 -p 9092:9092 -v /opt/kafka/config:/opt/kafka/config -v /opt/kafka/logs:/opt/kafka/logs -v /opt/kafka/kafka_logs:/tmp/kafka-logs kafka
 
 
-FROM lianshufeng/jdk
+FROM lianshufeng/jdk_ssh
 MAINTAINER lianshufeng <251708339@qq.com>
 
 #构建参数 --build-arg
