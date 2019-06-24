@@ -20,6 +20,7 @@ if [ $ZOOKEEPER_HOST != "" ]; then
 		
 	done
 	#### zk 配置
+	echo "quorumListenOnAllIPs=true" >> $KAFKA_HOME/config/zookeeper.properties
 	echo "initLimit=10" >> $KAFKA_HOME/config/zookeeper.properties
 	echo "syncLimit=5" >> $KAFKA_HOME/config/zookeeper.properties
 	#去掉多余的,
