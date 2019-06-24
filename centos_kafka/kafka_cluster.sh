@@ -12,11 +12,14 @@ if [ $ZOOKEEPER_HOST != "" ]; then
 		zookeeperConnect=$zookeeperConnect""$host":2181,"
 		echo "server.$i=$host:2888:3888" >> $KAFKA_HOME/config/zookeeper.properties
 		
-		mkdir /tmp/zookeeper
-		#zookeeper集群 myid
-		echo "$i" > /tmp/zookeeper/myid
-		#kafka集群 broker.id
-		sed -i "s/broker.id=0/broker.id=$i/g" $KAFKA_HOME/config/server.properties
+		ipexist=$( hostname | grep $host )
+		if [[ $ipexist != "" ]] ;then
+			mkdir /tmp/zookeeper
+			#zookeeper集群 myid
+			echo "$i" > /tmp/zookeeper/myid
+			#kafka集群 broker.id
+			sed -i "s/broker.id=0/broker.id=$i/g" $KAFKA_HOME/config/server.properties
+		fi
 		
 	done
 	#### zk 配置
