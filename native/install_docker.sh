@@ -66,6 +66,18 @@ openFireWall(){
 	callFun "firewall-cmd --add-port=7946/tcp --permanent"
 	callFun "firewall-cmd --add-port=7946/udp --permanent"
 	callFun "firewall-cmd --add-port=4789/udp --permanent"
+	
+	#k8s
+	callFun "firewall-cmd --add-port=6443/tcp --permanent"
+	callFun "firewall-cmd --add-port=2379-2380/tcp --permanent"
+	callFun "firewall-cmd --add-port=10250/tcp --permanent"
+	callFun "firewall-cmd --add-port=10251/tcp --permanent"
+	callFun "firewall-cmd --add-port=10252/tcp --permanent"
+	
+	
+	callFun "firewall-cmd --add-port=30000-32767/tcp --permanent"
+	
+	
 	callFun "firewall-cmd --reload"
 	#禁用SELINUX：
 	setenforce 0
