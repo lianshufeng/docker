@@ -27,7 +27,7 @@ FROM lianshufeng/jdk_ssh
 MAINTAINER lianshufeng <251708339@qq.com>
 
 #构建参数 --build-arg
-ARG KAFKA_URL="http://mirror.bit.edu.cn/apache/kafka/2.1.0/kafka_2.12-2.1.0.tgz"
+ARG KAFKA_URL="http://build.dzurl.top/kafka_2.12-2.2.1.tgz"
 ARG KAFKA_HOME="/opt/kafka"
 
 
