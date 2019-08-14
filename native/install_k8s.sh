@@ -100,4 +100,4 @@ set_Firewall
 config_os
 install_docker
 install_k8s
-pull_image
+#pull_image
