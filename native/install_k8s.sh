@@ -7,7 +7,7 @@
 #安装docker
 install_docker(){
 	echo "install docker "
-	curl -fsSL https://raw.githubusercontent.com/lianshufeng/docker/master/native/install_docker.sh | sh
+	curl -fsSL https://raw.githubusercontent.com/lianshufeng/docker/master/native/install_docker_no_compose.sh | sh
 }
 
 
