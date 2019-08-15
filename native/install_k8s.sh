@@ -105,5 +105,6 @@ pull_image(){
 set_Firewall
 config_os
 install_docker
+update_docker
 install_k8s
 #pull_image
