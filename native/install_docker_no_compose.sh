@@ -23,7 +23,7 @@ startDocker(){
 #安装docker
 installDocker(){
 	#安装 docker
-	# yum install docker -y
+	yum install docker -y
 	#卸载
 	yum remove -y docker docker-client docker-client-latest docker-common docker-latest docker-latest-logrotate docker-logrotate docker-engine	
 	#设置稳定库	
