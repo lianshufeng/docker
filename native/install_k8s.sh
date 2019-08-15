@@ -10,6 +10,12 @@ install_docker(){
 	curl -fsSL https://raw.githubusercontent.com/lianshufeng/docker/master/native/install_docker_no_compose.sh | sh
 }
 
+#更新为docker-ce
+update_docker(){
+	echo "install docker "
+	curl -fsSL https://raw.githubusercontent.com/lianshufeng/docker/master/native/update_docker.sh | sh
+}
+
 
 #安装k8s
 install_k8s(){
