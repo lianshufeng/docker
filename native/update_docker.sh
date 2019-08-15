@@ -20,15 +20,13 @@ install_docker_ce(){
 
 #修改docker镜像加速器
 updatePullImagesUrl(){
-	mkdir -p /etc/docker
-	if [ `grep -c "registry-mirrors" /etc/docker/daemon.json` -eq '0' ] ;then
-		tee /etc/docker/daemon.json <<-'EOF'
-		{
+	mkdir -p /etc/docker	
+	tee /etc/docker/daemon.json <<-'EOF'
+	{
 		"registry-mirrors": ["https://yo9l653d.mirror.aliyuncs.com"]
-		}
-		EOF
-		systemctl daemon-reload
-	fi
+	}
+	EOF
+	systemctl daemon-reload
 }
 
 
