@@ -5,9 +5,6 @@
 install_docker_ce(){
 	echo "update docker "
 	
-	#关闭服务
-	systemctl stop docker
-	
 	#卸载
 	yum remove -y docker docker-client docker-client-latest docker-common docker-latest docker-latest-logrotate docker-logrotate docker-engine	
 	#设置稳定库	
@@ -15,9 +12,6 @@ install_docker_ce(){
 	yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
 	#安装docker
 	yum install -y docker-ce docker-ce-cli containerd.io
-	
-	#开启服务
-	systemctl start docker
 	
 }
 
@@ -35,6 +29,16 @@ updatePullImagesUrl(){
 }
 
 
+#更新docker默认的保存位置
+updateDockerStore(){
+	dockerStore=`df -k | awk '{print $2 " " $6}' | sort -n -r | head -1 | awk '{print $2}'`
+	if [ ! -d $dockerStore"/docker" ];then
+		cp -rf /var/lib/docker $dockerStore/docker
+		#备份
+		mv /var/lib/docker /var/lib/docker.bak
+		ln -sf $dockerStore/docker /var/lib/docker
+	fi
+}
 
 
 
@@ -45,10 +49,15 @@ callFun(){
 }
 
 
+#关闭服务
+systemctl stop docker
 callFun "install_docker_ce"
 callFun "updatePullImagesUrl"
+callFun "updateDockerStore"
 
-
-
+#开启服务
+systemctl start docker
+#开机自动启动
+chkconfig docker on
 
 
