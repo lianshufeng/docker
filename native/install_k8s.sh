@@ -12,7 +12,7 @@ install_docker(){
 
 #更新为docker-ce
 update_docker(){
-	echo "install docker "
+	echo "update docker "
 	curl -fsSL https://raw.githubusercontent.com/lianshufeng/docker/master/native/update_docker.sh | sh
 }
 
@@ -68,6 +68,12 @@ config_os(){
 
 	firewall-cmd --add-port=1025/tcp --permanent
 	firewall-cmd --add-port=30000-32767/tcp --permanent
+	
+	
+	firewall-cmd --add-port=8285/udp --permanent
+	firewall-cmd --add-port=8472/udp --permanent
+
+	
 	firewall-cmd --reload
 
 	#禁用SELINUX：
@@ -105,6 +111,6 @@ pull_image(){
 set_Firewall
 config_os
 install_docker
-update_docker
+#update_docker
 install_k8s
 #pull_image
