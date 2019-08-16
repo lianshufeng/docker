@@ -4,7 +4,7 @@
 downloadResources(){
 	url=$1
 	foreUpdate=$2
-	
+		
 	#文件名
 	fileName=${url##*/} 
 	
@@ -36,15 +36,16 @@ downResources(){
 
 #下载依赖资源
 loadResources(){
-	downResources $CacheResources false
-	downResources $UpdateResources true
+
+	if [ "$CacheResources" != "" ];then
+		downResources $CacheResources false
+	fi
+	
+	if [ "$UpdateResources" != "" ];then
+		downResources $UpdateResources true
+	fi
+
 }
-
-
-
-
-
-
 
 
 loadResources
