@@ -9,7 +9,10 @@ install_docker_ce(){
 	yum remove -y docker docker-client docker-client-latest docker-common docker-latest docker-latest-logrotate docker-logrotate docker-engine	
 	#设置稳定库	
 	yum install -y yum-utils device-mapper-persistent-data lvm2
-	yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+	#设置源
+	# yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+	#设置阿里源
+	yum-config-manager --add-repo http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo
 	#安装docker
 	yum install -y docker-ce docker-ce-cli containerd.io
 	
@@ -17,15 +20,13 @@ install_docker_ce(){
 
 #修改docker镜像加速器
 updatePullImagesUrl(){
-	mkdir -p /etc/docker
-	if [ `grep -c "registry-mirrors" /etc/docker/daemon.json` -eq '0' ] ;then
-		tee /etc/docker/daemon.json <<-'EOF'
-		{
+	mkdir -p /etc/docker	
+	tee /etc/docker/daemon.json <<-'EOF'
+	{
 		"registry-mirrors": ["https://yo9l653d.mirror.aliyuncs.com"]
-		}
-		EOF
-		systemctl daemon-reload
-	fi
+	}
+	EOF
+	systemctl daemon-reload
 }
 
 
