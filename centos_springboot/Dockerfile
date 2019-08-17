@@ -9,9 +9,6 @@
 FROM lianshufeng/jdk
 MAINTAINER lianshufeng <251708339@qq.com>
 
-#安装依赖的curl
-RUN yum install -y curl
-
 
 #运行变量, 外部执行的命令行
 ENV ENTRYPOINT ""

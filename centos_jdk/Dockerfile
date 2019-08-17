@@ -16,7 +16,7 @@ ENV ENTRYPOINT ""
 
 #安装wget和unzip工具
 RUN rpm --rebuilddb
-RUN yum install unzip  wget fontconfig -y
+RUN yum install unzip  wget curl fontconfig -y
 
 	
 #下载 JDK
