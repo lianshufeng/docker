@@ -136,12 +136,14 @@ installCrond(){
 #更新docker默认的保存位置
 updateDockerStore(){
 	dockerStore=`df -k | awk '{print $2 " " $6}' | sort -n -r | head -1 | awk '{print $2}'`
-	if [ ! -d $dockerStore"/docker" ];then
-		cp -rf /var/lib/docker $dockerStore/docker
-		#备份
-		mv /var/lib/docker /var/lib/docker.bak
-		ln -sf $dockerStore/docker /var/lib/docker
+	if [ -d $dockerStore"/docker" ];then
+		mv $dockerStore/docker $dockerStore/docker.bak
+		rm -rf $dockerStore/docker
 	fi
+	#备份
+	cp -rf /var/lib/docker $dockerStore/docker
+	mv /var/lib/docker /var/lib/docker.bak
+	ln -sf $dockerStore/docker /var/lib/docker
 }
 
 #打印docker日志
