@@ -24,7 +24,14 @@ startDocker(){
 installDocker(){
 	#安装 docker
 	yum install docker -y
-	#卸载与更新
+	#设置自动启动
+	chkconfig docker on
+}
+
+
+#更新docker
+updateDocker(){
+#卸载与更新
 	yum remove -y docker docker-client docker-client-latest docker-common docker-latest docker-latest-logrotate docker-logrotate docker-engine	
 	#设置稳定库	
 	yum install -y yum-utils device-mapper-persistent-data lvm2
@@ -34,10 +41,10 @@ installDocker(){
 	yum-config-manager --add-repo http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo
 	#安装docker
 	yum install -y docker-ce docker-ce-cli containerd.io
-	
 	#设置自动启动
 	chkconfig docker on
 }
+
 
 #安装释放内存
 installFreeMem(){
@@ -155,11 +162,21 @@ callFun "installFreeMem"
 callFun "installUpdateTimeService"
 callFun "installDocker" 
 callFun "openFireWall" 
-callFun "stopDocker" 
+callFun "stopDocker"
 callFun "updatePullImagesUrl"
 callFun "updateDockerStore"
 callFun "startDocker"
 callFun "printInfo"
+
+
+
+#更新docker的流程
+callFun "stopDocker"
+callFun "updateDocker" 
+callFun "updatePullImagesUrl"
+callFun "updateDockerStore"
+callFun "startDocker"
+
 
 
 
