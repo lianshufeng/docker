@@ -22,8 +22,8 @@ startDocker(){
 
 #安装docker
 installDocker(){
-	#安装 docker
-	yum install docker -y
+	#更新 docker
+	curl -fsSL https://raw.githubusercontent.com/lianshufeng/docker/master/native/setup_docker_ce.sh | sh
 	#设置自动启动
 	chkconfig docker on
 }
