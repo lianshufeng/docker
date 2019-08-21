@@ -2,7 +2,7 @@ version: "3"
 
 services:
   springboot:
-    image: springboot
+    image: lianshufeng/springboot
     ports:
       - "8080:8080"
     volumes:
