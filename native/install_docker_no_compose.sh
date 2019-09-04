@@ -148,6 +148,14 @@ updateDockerStore(){
 
 }
 
+#更新docker主机的ip
+updateDockerHostIp(){
+	 hostname -I | awk '{print $1}' > /etc/docker_host_ip
+}
+
+
+
+
 #打印docker日志
 printInfo(){
 	docker info
@@ -170,6 +178,7 @@ callFun "stopDocker"
 callFun "updatePullImagesUrl"
 callFun "updateDockerStore"
 callFun "startDocker"
+callFun "updateDockerHostIp"
 callFun "printInfo"
 
 
