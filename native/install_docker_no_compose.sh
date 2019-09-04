@@ -150,7 +150,8 @@ updateDockerStore(){
 
 #更新docker主机的ip
 updateDockerHostIp(){
-	 hostname -I | awk '{print $1}' > /etc/docker_host_ip
+	yum install -y hostname
+	hostname -I | awk '{print $1}' > /etc/docker_host_ip
 }
 
 
