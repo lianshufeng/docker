@@ -70,5 +70,7 @@ services:
     working_dir: /opt/jar
     container_name: applicationserver
     environment:
+#      - CacheResources=http://192.168.0.28:8080/BuildAppliaction.json,http://192.168.0.28:8080/application-prod.yml
+#      - UpdateResources=http://192.168.0.28:8080/BuildHelper-0.0.1-SNAPSHOT.jar
       - ENTRYPOINT=nohup java -Xmx600m -Xms300m -Duser.timezone=GMT+8 -Dspring.profiles.active=local -jar ApplicationServer-1.0.0-SNAPSHOT.jar
 ````
