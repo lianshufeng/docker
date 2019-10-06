@@ -21,7 +21,7 @@ startDocker(){
 
 
 #安装docker
-installDocker(){
+installDocker_bakup(){
 	#安装 docker
 	yum install docker -y
 	#设置自动启动
@@ -30,7 +30,7 @@ installDocker(){
 
 
 #更新docker
-updateDocker(){
+installDocker(){
 #卸载与更新
 	yum remove -y docker docker-client docker-client-latest docker-common docker-latest docker-latest-logrotate docker-logrotate docker-engine	
 	#设置稳定库	
@@ -39,6 +39,8 @@ updateDocker(){
 	# yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
 	#设置阿里源
 	yum-config-manager --add-repo http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo
+	#允许边缘库
+	sudo yum-config-manager --enable docker-ce-edge
 	#安装docker
 	yum install -y docker-ce docker-ce-cli containerd.io
 	#设置自动启动
@@ -170,32 +172,33 @@ callFun(){
 }
 
 
+#安装调度器-释放内存与时间同步
 callFun "installCrond"
 callFun "installFreeMem"
 callFun "installUpdateTimeService"
-callFun "installDocker" 
-callFun "openFireWall" 
+
+#安装dockert
+callFun "installDocker"
+callFun "startDocker"
 callFun "stopDocker"
+
+#防火墙
+callFun "openFireWall"
+
+#更新docker配置
 callFun "updatePullImagesUrl"
 callFun "updateDockerStore"
-callFun "startDocker"
+
+
+#设置主机内网ip
 callFun "updateDockerHostIp"
+
+#启动docker并打印
+callFun "startDocker"
 callFun "printInfo"
 
 
 
-#更新docker的流程
-callFun "stopDocker"
-callFun "updateDocker" 
-callFun "updatePullImagesUrl"
-callFun "startDocker"
-#更换docker仓库的位置
-callFun "stopDocker"
-callFun "updateDockerStore"
-callFun "startDocker"
-
-
-callFun "printInfo"
 
 
 
