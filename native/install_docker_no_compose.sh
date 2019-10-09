@@ -10,13 +10,13 @@
 
 #停止docker服务
 stopDocker(){
-	systemctl stop docker
+	service  docker stop
 }
 
 
 #开启docker服务
 startDocker(){
-	systemctl start docker
+	service  docker start
 }
 
 
@@ -40,7 +40,7 @@ installDocker(){
 	#设置阿里源
 	yum-config-manager --add-repo http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo
 	#允许边缘库
-	sudo yum-config-manager --enable docker-ce-edge
+	yum-config-manager --enable docker-ce-edge
 	#安装docker
 	yum install -y docker-ce docker-ce-cli containerd.io
 	#设置自动启动
@@ -179,8 +179,11 @@ callFun "installUpdateTimeService"
 
 #安装dockert
 callFun "installDocker"
+
 callFun "startDocker"
+
 callFun "stopDocker"
+
 
 #防火墙
 callFun "openFireWall"
