@@ -1,5 +1,5 @@
 #
-# 安装： docker build -t jdk --build-arg JAVA_HOME="/opt/jdk"  ./ 
+# 安装： docker build -t lianshufeng/jdk --build-arg JAVA_HOME="/opt/jdk"  ./ 
 #
 
 
@@ -7,7 +7,7 @@ FROM centos:latest
 MAINTAINER lianshufeng <251708339@qq.com>
 
 #构建参数 --build-arg
-ARG JDK_URL="http://build.dzurl.top/jdk-8u221-linux-x64.tar.gz"
+ARG JDK_URL="http://build.dzurl.top/jdk-8u231-linux-x64.tar.gz"
 ARG JAVA_HOME="/opt/jdk"
 
 
@@ -15,7 +15,7 @@ ARG JAVA_HOME="/opt/jdk"
 ENV ENTRYPOINT ""
 
 #安装wget和unzip工具
-RUN rpm --rebuilddb
+#RUN rpm --rebuilddb ,centos8 不需要
 RUN yum install unzip  wget curl fontconfig -y
 
 	

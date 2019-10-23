@@ -2,7 +2,7 @@
 # centos7.5 + ssh-server + jdk1.8(sun) + tomcat9.0
 #
 # build : 
-# docker build -t tomcat ./
+# docker build -t lianshufeng/tomcat ./
 #
 # run :
 # docker run -d -p 8822:22 -p 8080:8080  lianshufeng/tomcat
@@ -19,7 +19,7 @@ FROM lianshufeng/jdk_ssh
 MAINTAINER lianshufeng <251708339@qq.com>
 
 #构建参数 --build-arg
-ARG TOMCAT_URL="http://build.dzurl.top/apache-tomcat-9.0.21.tar.gz"
+ARG TOMCAT_URL="http://build.dzurl.top/apache-tomcat-9.0.27.tar.gz"
 ARG TOMCAT_HOME="/opt/tomcat"
 
 
