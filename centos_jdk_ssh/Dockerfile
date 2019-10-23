@@ -15,7 +15,7 @@ ENV ROOT_PASSWORD "root"
 ENV ENTRYPOINT ""
 
 #安装openssh和unzip工具
-RUN rpm --rebuilddb
+#RUN rpm --rebuilddb
 RUN yum install openssh-server -y
 
 
