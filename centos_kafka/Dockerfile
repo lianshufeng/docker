@@ -74,7 +74,7 @@ RUN set -xe \
 
 	
 # 集群方案
-RUN rpm --rebuilddb
+#RUN rpm --rebuilddb centos8不用
 RUN yum install iproute  -y
 ENV KAFKA_LISTENERS ""
 ENV ZOOKEEPER_HOST ""
