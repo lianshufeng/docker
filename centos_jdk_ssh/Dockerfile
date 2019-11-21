@@ -46,7 +46,7 @@ RUN set -xe \
 	&& echo "sh /opt/run.sh" >> /opt/bootstrap.sh \
 	#引导程序
 	&& echo "sh /tmp/pass.sh" >> /opt/bootstrap.sh \
-	&& echo "/usr/sbin/sshd -d" >> /opt/bootstrap.sh 
+	&& echo "/usr/sbin/sshd -D" >> /opt/bootstrap.sh 
 	
 
 	
