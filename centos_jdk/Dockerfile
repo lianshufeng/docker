@@ -3,11 +3,15 @@
 #
 
 
-FROM centos:8
+
+
+
+FROM centos:8.1.1911
 MAINTAINER lianshufeng <251708339@qq.com>
 
+
 #构建参数 --build-arg
-ARG JDK_URL="http://build.dzurl.top/jdk-8u231-linux-x64.tar.gz"
+ARG JDK_URL="http://build.dzurl.top/jdk-8u241-linux-x64.tar.gz"
 ARG JAVA_HOME="/opt/jdk"
 
 
