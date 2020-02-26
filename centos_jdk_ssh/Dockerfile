@@ -16,7 +16,7 @@ ENV ENTRYPOINT ""
 
 #安装openssh和unzip工具
 #RUN rpm --rebuilddb
-RUN yum install openssh-server -y
+RUN yum install --nogpgcheck -y openssh-server
 
 
 #配置ssh的登陆证书

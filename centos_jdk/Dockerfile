@@ -6,7 +6,7 @@
 
 
 
-FROM centos:8.1.1911
+FROM centos:8
 MAINTAINER lianshufeng <251708339@qq.com>
 
 
