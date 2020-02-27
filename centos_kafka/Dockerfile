@@ -65,6 +65,7 @@ ADD kafka_cluster.sh /tmp/kafka_cluster.sh
 RUN echo "sh /tmp/kafka_conf.sh" >> /opt/run.sh
 RUN echo "sh /tmp/kafka_cluster.sh" >> /opt/run.sh
 RUN echo "rm -rf /tmp/zookeeper/version-2" >> /opt/run.sh #删除zk之前的节点，避免第二次启动报错
+RUN echo "rm -rf /tmp/kafka-logs/meta.properties" >> /opt/run.sh #删除kafka的集群节点，避免第二次启动报错,2.13-2.4.0 发现的
 RUN echo "sh $KAFKA_HOME/bin/zookeeper-server-start.sh $KAFKA_HOME/config/zookeeper.properties &" >> /opt/run.sh
 RUN echo "sh $KAFKA_HOME/bin/kafka-server-start.sh $KAFKA_HOME/config/server.properties &" >> /opt/run.sh
 
