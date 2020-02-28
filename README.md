@@ -4,7 +4,7 @@ curl -fsSL https://raw.githubusercontent.com/lianshufeng/docker/master/native/in
 ````
 
 # base :  
-- Centos(8.1) + JDK ( jdk-8u241-linux-x64 ) 
+- Centos(8.1) + JDK ( jdk11 ) 
 
 
 #### bootstrap:
