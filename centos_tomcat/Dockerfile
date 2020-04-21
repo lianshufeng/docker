@@ -15,7 +15,7 @@
 # 
 
 
-FROM registry.cn-chengdu.aliyuncs.com/1s/centos_jdk_ssh
+FROM registry.cn-chengdu.aliyuncs.com/1s/jdk_ssh
 MAINTAINER lianshufeng <251708339@qq.com>
 
 #构建参数 --build-arg
