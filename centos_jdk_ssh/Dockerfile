@@ -6,7 +6,7 @@
 #
 
 
-FROM lianshufeng/jdk
+FROM registry.cn-chengdu.aliyuncs.com/1s/jdk
 MAINTAINER lianshufeng <251708339@qq.com>
 
 
