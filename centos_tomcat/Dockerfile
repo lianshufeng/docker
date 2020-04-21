@@ -15,11 +15,11 @@
 # 
 
 
-FROM lianshufeng/jdk_ssh
+FROM registry.cn-chengdu.aliyuncs.com/1s/centos_jdk_ssh
 MAINTAINER lianshufeng <251708339@qq.com>
 
 #构建参数 --build-arg
-ARG TOMCAT_URL="http://build.dzurl.top/apache-tomcat-9.0.31.tar.gz"
+ARG TOMCAT_URL="http://dl.dzurl.top/apache-tomcat-9.0.34.tar"
 ARG TOMCAT_HOME="/opt/tomcat"
 
 
