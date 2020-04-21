@@ -2,15 +2,14 @@ version: "3"
 
 services:
   kafka:
-    image: lianshufeng/kafka
+    image: registry.cn-chengdu.aliyuncs.com/1s/kafka
     ports:
-      - "8822:22"      
       - "9092:9092"
       - "2181:2181"
     volumes:
 #      - ${store}/data1/config:/opt/kafka/config
-      - ${store}/data1/logs:/opt/kafka/logs
-      - ${store}/data1/kafka_logs:/tmp/kafka-logs
+      - ./data/logs:/opt/kafka/logs
+      - ./data/kafka_logs:/tmp/kafka-logs
     container_name: kafka
     restart: always
     environment:
