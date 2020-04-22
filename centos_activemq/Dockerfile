@@ -6,14 +6,16 @@
 #
 
 
-FROM lianshufeng/jdk_ssh
+FROM registry.cn-chengdu.aliyuncs.com/1s/jdk_ssh
 MAINTAINER lianshufeng <251708339@qq.com>
 
 #构建参数 --build-arg
-ARG ACTIVEMQ_URL="http://build.dzurl.top/apache-activemq-5.15.11-bin.tar.gz"
+ARG ACTIVEMQ_URL="http://dl.dzurl.top/apache-activemq-5.15.12-bin.tar.gz"
 ARG ACTIVEMQ_HOME="/opt/activemq"
 
 
+#安装工具
+RUN yum install --nogpgcheck -y telnet
 
 	
 #下载
@@ -60,8 +62,15 @@ RUN set -xe \
 	&& echo "echo "" > /tmp/mq_conf.sh" >> /tmp/mq_conf.sh 
 
 
+# 集群方案
+ENV CLUSTER_HOST ""
+#增加集群脚本
+ADD activemq_cluster.sh /tmp/activemq_cluster.sh
+
+
 #自动启动脚本
 RUN echo "sh /tmp/mq_conf.sh" >> /opt/run.sh
+RUN echo "sh /tmp/activemq_cluster.sh" >> /opt/run.sh
 RUN echo "$ACTIVEMQ_HOME/bin/activemq start" >> /opt/run.sh
 
 
