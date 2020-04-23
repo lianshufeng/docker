@@ -1,83 +1,82 @@
 version: "3"
 
 services:
-  activemqHub1:
+
+  activemqBroker1:
     image: registry.cn-chengdu.aliyuncs.com/1s/activemq
     ports:
       - "1883:1883"
       - "61614:61614"
       - "8161:8161"
     volumes:
-      - ./store/hub1/conf:/opt/activemq/conf
-      - ./store/hub1/data:/opt/activemq/data
-    container_name: activemqHub1
-    restart: always
-    environment:
-      - CLUSTER_HOST=activemqHub2,activemqBroker1,activemqBroker2,activemqBroker3
-      - Broker_Name=activemqHub1
-
-
-  activemqHub2:
-    image: registry.cn-chengdu.aliyuncs.com/1s/activemq
-    ports:
-      - "2883:1883"
-      - "61624:61614"
-      - "8162:8161"
-    volumes:
-      - ./store/hub2/conf:/opt/activemq/conf
-      - ./store/hub2/data:/opt/activemq/data
-    container_name: activemqHub2
-    restart: always
-    environment:
-      - CLUSTER_HOST=activemqHub1,activemqBroker1,activemqBroker2,activemqBroker3
-      - Broker_Name=activemqHub2
-
-
-  activemqBroker1:
-    image: registry.cn-chengdu.aliyuncs.com/1s/activemq
-    ports:
-      - "3883:1883"
-      - "61634:61614"
-      - "8163:8161"
-    volumes:
       - ./store/broker1/conf:/opt/activemq/conf
       - ./store/broker1/data:/opt/activemq/data
     container_name: activemqBroker1
     restart: always
     environment:
-      - CLUSTER_HOST=activemqHub1,activemqHub2
+      - CLUSTER_HOST=activemqBroker1,activemqHub2,activemqBroker4,activemqBroker3,activemqBroker5
       - Broker_Name=activemqBroker1      
 
 
   activemqBroker2:
     image: registry.cn-chengdu.aliyuncs.com/1s/activemq
     ports:
-      - "4883:1883"
-      - "61644:61614"
-      - "8164:8161"
+      - "2883:1883"
+      - "61624:61614"
+      - "8162:8161"
     volumes:
       - ./store/broker2/conf:/opt/activemq/conf
       - ./store/broker2/data:/opt/activemq/data
     container_name: activemqBroker2
     restart: always
     environment:
-      - CLUSTER_HOST=activemqHub1,activemqHub2
+      - CLUSTER_HOST=activemqBroker1,activemqHub2,activemqBroker4,activemqBroker3,activemqBroker5
       - Broker_Name=activemqBroker2
       
   activemqBroker3:
     image: registry.cn-chengdu.aliyuncs.com/1s/activemq
     ports:
-      - "5883:1883"
-      - "61654:61614"
-      - "8165:8161"
+      - "3883:1883"
+      - "61634:61614"
+      - "8163:8161"
     volumes:
       - ./store/broker3/conf:/opt/activemq/conf
       - ./store/broker3/data:/opt/activemq/data
     container_name: activemqBroker3
     restart: always
     environment:
-      - CLUSTER_HOST=activemqHub1,activemqHub2
+      - CLUSTER_HOST=activemqBroker1,activemqHub2,activemqBroker4,activemqBroker3,activemqBroker5
       - Broker_Name=activemqBroker3      
 
 
       
+  activemqBroker4:
+    image: registry.cn-chengdu.aliyuncs.com/1s/activemq
+    ports:
+      - "4883:1883"
+      - "61644:61614"
+      - "8164:8161"
+    volumes:
+      - ./store/broker4/conf:/opt/activemq/conf
+      - ./store/broker4/data:/opt/activemq/data
+    container_name: activemqBroker4
+    restart: always
+    environment:
+      - CLUSTER_HOST=activemqBroker1,activemqHub2,activemqBroker4,activemqBroker3,activemqBroker5
+      - Broker_Name=activemqBroker4
+
+
+  activemqBroker5:
+    image: registry.cn-chengdu.aliyuncs.com/1s/activemq
+    ports:
+      - "5883:1883"
+      - "61654:61614"
+      - "8165:8161"
+    volumes:
+      - ./store/broker5/conf:/opt/activemq/conf
+      - ./store/broker5/data:/opt/activemq/data
+    container_name: activemqBroker5
+    restart: always
+    environment:
+      - CLUSTER_HOST=activemqBroker1,activemqHub2,activemqBroker4,activemqBroker3,activemqBroker5
+      - Broker_Name=activemqBroker5
