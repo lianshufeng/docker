@@ -2,7 +2,7 @@
 
 
 #### 集群配置
-if [ $CLUSTER_HOST != "" ]; then
+if [ "$CLUSTER_HOST" != "" ]; then
 	
 	echo "集群配置---->>>>"
 
