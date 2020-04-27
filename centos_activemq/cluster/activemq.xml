@@ -58,11 +58,7 @@
 				<authorizationEntries> 
 				
 					<!-- 必要订阅,否则users不能自动创建订阅 -->
-					<authorizationEntry topic="ActiveMQ.Advisory.Connection" read="admins" write="admins" admin="admins,users" /> 
-					<authorizationEntry topic="ActiveMQ.Advisory.Consumer.Topic.>" read="admins" write="admins" admin="admins,users" /> 
-					
-
-
+					<authorizationEntry topic="ActiveMQ.Advisory.>" read="admins" write="admins" admin="admins,users" /> 
 					
 				
 					<!-- 任何topic, 限制值有admin才可以创建与删除 -->
@@ -71,9 +67,8 @@
 
 					<!-- 用户端发布，服务端消费 -->
 					<authorizationEntry topic="mq.request" read="admins" write="users" admin="admins" />
-
 					<!-- 用户端仅消费 -->
-					<authorizationEntry topic="mq.message.>" read="users,admins" write="admins" admin="users,admins" /> 
+					<authorizationEntry topic="mq.response.>" read="users,admins" write="admins" admin="users,admins" /> 
 					
 					
 					<!-- 业务消费订阅-->
@@ -93,7 +88,7 @@
 	
 	<!-- 网络集群,账号密码必须与simpleAuthenticationPlugin 一致 -->
 	<networkConnectors>
-		<networkConnector duplex="true" userName="admin" password="password" uri="static://(tcp://mqBroker1:61616,tcp://mqBroker2:61616,tcp://mqBroker3:61616,tcp://mqBroker4:61616,tcp://mqBroker5:61616)"/>
+		<networkConnector duplex="true" userName="admin" password="password" uri="static://(tcp://mqBroker1:61616,tcp://mqBroker2:61616,tcp://mqBroker3:61616)"/>
 	</networkConnectors>
 
 
@@ -103,23 +98,17 @@
         <destinationPolicy>
             <policyMap>
               <policyEntries>
+			  
+			  <!--
                 <policyEntry topic=">" gcInactiveDestinations="true" >
-                    <!-- The constantPendingMessageLimitStrategy is used to prevent
-                         slow topic consumers to block producers and affect other consumers
-                         by limiting the number of messages that are retained
-                         For more information, see:
-
-                         http://activemq.apache.org/slow-consumer-handling.html
-
-                    -->
                   <pendingMessageLimitStrategy>
                     <constantPendingMessageLimitStrategy limit="1000"/>
                   </pendingMessageLimitStrategy>
                 </policyEntry>
-				
+			  -->
 
 				<!-- 过期删除订阅 -->
-				<policyEntry topic="mq.message.>" gcInactiveDestinations="true" inactiveTimoutBeforeGC="60000" />
+				<policyEntry topic="mq.response.>" gcInactiveDestinations="true" inactiveTimoutBeforeGC="60000" />
 				<policyEntry topic="mq.chat.>" gcInactiveDestinations="true"  inactiveTimoutBeforeGC="60000" />
 				<policyEntry topic="mq.board.>" gcInactiveDestinations="true" inactiveTimoutBeforeGC="60000" />
 				
