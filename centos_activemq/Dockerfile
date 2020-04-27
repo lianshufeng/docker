@@ -62,15 +62,9 @@ RUN set -xe \
 	&& echo "echo "" > /tmp/mq_conf.sh" >> /tmp/mq_conf.sh 
 
 
-# 集群方案
-ENV CLUSTER_HOST ""
-#增加集群脚本
-ADD activemq_cluster.sh /tmp/activemq_cluster.sh
-
 
 #自动启动脚本
 RUN echo "sh /tmp/mq_conf.sh" >> /opt/run.sh
-RUN echo "sh /tmp/activemq_cluster.sh" >> /opt/run.sh
 RUN echo "$ACTIVEMQ_HOME/bin/activemq start" >> /opt/run.sh
 
 
