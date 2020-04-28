@@ -45,6 +45,12 @@
 
     <plugins> 
 	
+	
+		<!-- 消息过期时间 -->
+		<timeStampingBrokerPlugin ttlCeiling="30000" zeroExpirationOverride="30000" />
+		
+		
+	
 		<simpleAuthenticationPlugin>
 		  <users>
 			<authenticationUser username="admin" password="password" groups="users,admins"/>
@@ -56,20 +62,19 @@
 			<map> 
 			  <authorizationMap> 
 				<authorizationEntries> 
-				
-					<!-- 必要订阅,否则users不能自动创建订阅 -->
-					<authorizationEntry topic="ActiveMQ.Advisory.>" read="admins" write="admins" admin="admins,users" /> 
-					
-				
-					<!-- 任何topic, 限制值有admin才可以创建与删除 -->
-					<authorizationEntry topic=">" read="admins" write="admins" admin="admins" /> 
-					
 
 					<!-- 用户端发布，服务端消费 -->
-					<authorizationEntry topic="mq.request" read="admins" write="users" admin="admins" />
-					<!-- 用户端仅消费 -->
-					<authorizationEntry topic="mq.response.>" read="users,admins" write="admins" admin="users,admins" /> 
+					<authorizationEntry queue=">" read="admins" write="admins" admin="admins" /> 
+					<authorizationEntry queue="mq.request" read="admins" write="users" admin="admins" />
+					<authorizationEntry queue="mq.response.>" read="users,admins" write="admins" admin="users,admins" /> 
 					
+					
+
+
+					<!-- 任何topic, 限制值有admin才可以创建与删除 -->
+					<authorizationEntry topic=">" read="admins" write="admins" admin="admins" /> 				
+					<!-- 必要订阅,否则users不能自动创建订阅 -->
+					<authorizationEntry topic="ActiveMQ.Advisory.>" read="admins" write="admins" admin="admins,users" /> 
 					
 					<!-- 业务消费订阅-->
 					<authorizationEntry topic="mq.chat.>" read="users,admins" write="admins" admin="users,admins" /> 
@@ -106,9 +111,25 @@
                   </pendingMessageLimitStrategy>
                 </policyEntry>
 			  -->
+			  
+			  <!-- 所有队列仅允许保存过期时间30秒 -->
+				<policyEntry queue=">" gcInactiveDestinations="true" inactiveTimoutBeforeGC="30000">
+					<deadLetterStrategy>
+						<sharedDeadLetterStrategy processExpired="true"  expiration="30000"/>
+					</deadLetterStrategy>
+				</policyEntry>
 
-				<!-- 过期删除订阅 -->
+
+				
+				<!--
 				<policyEntry topic="mq.response.>" gcInactiveDestinations="true" inactiveTimoutBeforeGC="60000" />
+				-->
+				
+				<!-- 清空生产与消费者-->
+				<policyEntry topic="ActiveMQ.Advisory.Producer.>" gcInactiveDestinations="true"  inactiveTimoutBeforeGC="60000" />
+				<policyEntry topic="ActiveMQ.Advisory.Consumer.>" gcInactiveDestinations="true"  inactiveTimoutBeforeGC="60000" />
+				
+				
 				<policyEntry topic="mq.chat.>" gcInactiveDestinations="true"  inactiveTimoutBeforeGC="60000" />
 				<policyEntry topic="mq.board.>" gcInactiveDestinations="true" inactiveTimoutBeforeGC="60000" />
 				
