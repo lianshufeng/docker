@@ -111,23 +111,30 @@
 			  
 
 
+				<policyEntry topic=">" gcInactiveDestinations="true" inactiveTimoutBeforeGC="60000" />
 				
 				
 				
 				
 				
-				<!-- 清空生产与消费者-->
+
+				
+				<!--
 				<policyEntry topic="ActiveMQ.Advisory.Producer.>" gcInactiveDestinations="true"  inactiveTimoutBeforeGC="60000" />
 				<policyEntry topic="ActiveMQ.Advisory.Consumer.>" gcInactiveDestinations="true"  inactiveTimoutBeforeGC="60000" />
 				
 				
-				<!-- 响应-->
+
+				<policyEntry topic="mq.>" gcInactiveDestinations="true" inactiveTimoutBeforeGC="60000" />
+				<policyEntry topic="mq/>" gcInactiveDestinations="true" inactiveTimoutBeforeGC="60000" />
+
+				
 				<policyEntry topic="mq.response.>" gcInactiveDestinations="true" inactiveTimoutBeforeGC="60000" />
 				
 				
 				<policyEntry topic="mq.chat.>" gcInactiveDestinations="true"  inactiveTimoutBeforeGC="60000" />
 				<policyEntry topic="mq.board.>" gcInactiveDestinations="true" inactiveTimoutBeforeGC="60000" />
-				
+				-->
 				
 				
               </policyEntries>
