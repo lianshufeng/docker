@@ -2,11 +2,11 @@ version: "3"
 
 services:
   springboot:
-    image: lianshufeng/springboot
+    image: registry.cn-chengdu.aliyuncs.com/1s/springboot
     ports:
       - "8080:8080"
     volumes:
-      - "/opt/jars:/opt/jar"
+      - "./:/opt/jar"
     working_dir: /opt/jar
     container_name: app
 #    restart: always
