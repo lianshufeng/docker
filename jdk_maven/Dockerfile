@@ -15,7 +15,7 @@ RUN wget -O /tmp/maven.zip --no-cookies --no-check-certificate  $MAVEN_URL
 
 #解压并设置环境
 RUN set -xe \
-	&& mkdir -p $MAVEN_HOME
+	&& mkdir -p $MAVEN_HOME \
 	&& unzip -o /tmp/maven.zip -d $MAVEN_HOME \
 	&& rm -rf /tmp/maven.zip \
 	&& chmod -R 777 $MAVEN_HOME \
