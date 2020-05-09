@@ -30,7 +30,8 @@ RUN set -xe \
 
 
 
-	
+#安装仓库工具
+RUN yum install git -y	
 	
 
 	
