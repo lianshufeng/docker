@@ -21,7 +21,7 @@ RUN set -xe \
 	&& chmod -R 777 $MAVEN_HOME \
 	#环境变量
 	&& echo "" >> /etc/profile \
-	&& echo "MAVEN_HOME="$MAVEN_HOME >> /etc/profile \
+	&& echo "MAVEN_HOME="$MAVEN_HOME$MAVEN_FOLDER >> /etc/profile \
 	&& echo "PATH="\$MAVEN_HOME"/bin:\$PATH" >> /etc/profile \
 	&& echo "export MAVEN_HOME" >> /etc/profile \
 	&& echo "export PATH" >> /etc/profile \
