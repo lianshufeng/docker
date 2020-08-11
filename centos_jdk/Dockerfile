@@ -22,7 +22,7 @@ ENV ENTRYPOINT ""
 #RUN rpm --rebuilddb ,centos8 不需要
 RUN yum install unzip  wget curl fontconfig langpacks-zh_CN -y
 #修改系统默认编码
-# RUN echo LANG=\"zh_CN.utf8\" > /etc/locale.conf
+RUN echo LANG=\"zh_CN.utf8\" > /etc/locale.conf
 	
 #下载 JDK
 RUN wget -O /tmp/jdk.tar.gz --no-cookies --no-check-certificate --header "Cookie: oraclelicense=accept-securebackup-cookie" $JDK_URL
