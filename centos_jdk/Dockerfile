@@ -20,8 +20,9 @@ ENV ENTRYPOINT ""
 
 #安装wget和unzip工具
 #RUN rpm --rebuilddb ,centos8 不需要
-RUN yum install unzip  wget curl fontconfig -y
-
+RUN yum install unzip  wget curl fontconfig langpacks-zh_CN -y
+#修改系统默认编码
+# RUN echo LANG=\"zh_CN.utf8\" > /etc/locale.conf
 	
 #下载 JDK
 RUN wget -O /tmp/jdk.tar.gz --no-cookies --no-check-certificate --header "Cookie: oraclelicense=accept-securebackup-cookie" $JDK_URL
@@ -55,7 +56,8 @@ RUN set -xe \
 	#引导程序
 	&& echo "#!/bin/bash" > /opt/bootstrap.sh \
 	&& echo "source /etc/profile" >> /opt/bootstrap.sh \
-	&& echo "export LANG=en_US.UTF-8" >> /opt/bootstrap.sh 
+	&& echo "source /etc/locale.conf" >> /opt/bootstrap.sh \
+	&& echo "export LANG=zh_CN.utf8" >> /opt/bootstrap.sh 
 	
 	
 #启动项
