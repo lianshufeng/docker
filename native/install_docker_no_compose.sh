@@ -28,21 +28,36 @@ installDocker_bakup(){
 	chkconfig docker on
 }
 
+#特性安装
+installFeature(){
+	#取出当前的centos版本号
+	releaseVer=`cat /etc/redhat-release | awk '{match($0,"release ") ; print substr($0,RSTART+RLENGTH)}' | awk -F '.' '{print $1}'`
+	echo 当前系统 : $releaseVer
+	if [ "$releaseVer" == "8" ];then
+		yum install -y http://dl.dzurl.top/containerd.io-1.2.13-3.2.fc31.x86_64.rpm
+	fi
+	
+	
+
+}
 
 #更新docker
 installDocker(){
-#卸载与更新
+	#卸载与更新
 	yum remove -y docker docker-client docker-client-latest docker-common docker-latest docker-latest-logrotate docker-logrotate docker-engine	
+	#特性安装
+	installFeature
 	#设置稳定库	
-	yum install -y yum-utils device-mapper-persistent-data lvm2
+	yum install -y yum-utils device-mapper-persistent-data lvm2 
 	#设置源
 	# yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
 	#设置阿里源
 	yum-config-manager --add-repo http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo
 	#允许边缘库
 	yum-config-manager --enable docker-ce-edge
+	
 	#安装docker
-	yum install -y docker-ce docker-ce-cli containerd.io
+	yum install -y docker-ce docker-ce-cli containerd.io 
 	#设置自动启动
 	chkconfig docker on
 }
@@ -108,7 +123,17 @@ updatePullImagesUrl(){
 
 #设置同步时区
 installUpdateTimeService(){
-	yum -y install ntp ntpdate
+	releaseVer=`cat /etc/redhat-release | awk '{match($0,"release ") ; print substr($0,RSTART+RLENGTH)}' | awk -F '.' '{print $1}'`
+	
+	if [ "$releaseVer" == "7" ];then
+		yum -y install ntp ntpdate
+	fi
+	
+	if [ "$releaseVer" == "8" ];then
+		rpm -ivh http://mirrors.wlnmp.com/centos/wlnmp-release-centos.noarch.rpm
+		yum install -y wntp
+	fi
+
 	ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
 	tee /opt/updateTime.sh <<-'EOF'
 	#!/bin/sh 
