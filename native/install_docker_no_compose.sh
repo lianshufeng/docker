@@ -34,7 +34,8 @@ installFeature(){
 	releaseVer=`cat /etc/redhat-release | awk '{match($0,"release ") ; print substr($0,RSTART+RLENGTH)}' | awk -F '.' '{print $1}'`
 	echo 当前系统 : $releaseVer
 	if [ "$releaseVer" == "8" ];then
-		yum install -y http://dl.dzurl.top/containerd.io-1.2.13-3.2.fc31.x86_64.rpm
+		# https://download.docker.com/linux/centos/7/x86_64/stable/Packages/
+		yum install -y http://dl.dzurl.top/containerd.io-1.3.7-3.1.el7.x86_64.rpm
 	fi
 	
 	
