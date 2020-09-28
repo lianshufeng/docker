@@ -100,8 +100,15 @@ openFireWall(){
 	callFun "firewall-cmd --add-port=7946/tcp --permanent"
 	callFun "firewall-cmd --add-port=7946/udp --permanent"
 	callFun "firewall-cmd --add-port=4789/udp --permanent"
-		
+	
+	#兼容centos8 的 firewall 与 docker 通信的问题
+	callFun "firewall-cmd --zone=public --add-masquerade --permanent"
+	callFun "firewall-cmd --permanent --zone=public --change-interface=docker0"
+	callFun "firewall-cmd --permanent --direct --add-rule ipv4 filter INPUT 4 -i docker0 -j ACCEPT"
+	
+	
 	callFun "firewall-cmd --reload"
+	
 	#禁用SELINUX：
 	setenforce 0
 	echo "SELINUX=disabled" > /etc/selinux/config
