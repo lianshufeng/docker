@@ -76,9 +76,31 @@ startDocker(){
 installSystemHelper(){
 	# 同步时区
 	ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
-	# 安装服务
-	mkdir -p /opt/docker/systemhelper
-	curl -fsSL http://dl.dzurl.top/systemhelper/docker-compose.yml -o /opt/docker/systemhelper/docker-compose.yml
+	mkdir -p /opt/docker/systemhelper	
+	tee /opt/docker/systemhelper/docker-compose.yml <<-'EOF'
+version: "3"
+services:
+  systemhelper:
+    image: registry.cn-chengdu.aliyuncs.com/1s/systemhelper
+    privileged: true
+    environment:
+      - ntpd_host=cn.pool.ntp.org
+      - uptetime_timer=86400
+      - freemem_timer=1800
+    volumes:
+      # docker api
+      - "/var/run/docker.sock:/var/run/docker.sock"
+      # free mem
+      - "/proc/sys/vm/drop_caches:/drop_caches"
+      # log
+      - "./log/:/var/log/"
+    container_name: docker_systemhelper
+    # update time auth
+    cap_add:
+      - SYS_TIME
+    restart: always
+	EOF
+	
 	cd /opt/docker/systemhelper
 	docker-compose down;docker-compose up -d
 }
@@ -91,6 +113,13 @@ printInfo(){
 	docker -v
 	docker-compose -v
 }
+
+
+#更新docker主机的ip
+updateDockerHostIp(){
+	ip route get 1.2.3.4 | awk '{print $7}' | grep -v  '^\s*$'  > /etc/docker_host_ip
+}
+
 
 
 
@@ -115,12 +144,14 @@ callFun "updatePullImagesUrl"
 #安装DockerCompose
 callFun "installDockerCompose"
 
+#获取主机ip
+callFun "updateDockerHostIp"
+
 #启动docker
 callFun "startDocker"
 
 #安装系统助手
 callFun "installSystemHelper"
-
 
 #打印服务
 callFun "printInfo"
