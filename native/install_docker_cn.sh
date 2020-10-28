@@ -42,7 +42,10 @@ openFireWall(){
 
 #安装docker
 installDocker(){
+	#卸载与更新
 	curl -fsSL https://get.docker.com | sh
+	#设置自动启动
+	chkconfig docker on
 }
 
 
