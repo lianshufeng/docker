@@ -6,7 +6,7 @@
 
 
 
-FROM centos:8
+FROM --platform=linux/arm/v7 centos:8
 COPY qemu-arm-static /usr/bin/
 MAINTAINER lianshufeng <251708339@qq.com>
 
