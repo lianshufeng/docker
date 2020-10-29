@@ -6,7 +6,8 @@
 #
 
 
-FROM lianshufeng/jdk
+FROM lianshufeng/jdk:arm
+COPY qemu-arm-static /usr/bin/
 MAINTAINER lianshufeng <251708339@qq.com>
 
 
