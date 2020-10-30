@@ -45,9 +45,7 @@ RUN set -xe \
 	&& echo "TOMCAT_HOME="$TOMCAT_HOME >> /etc/profile \
 	&& echo "PATH="\$TOMCAT_HOME"/bin:\$PATH" >> /etc/profile \
 	&& echo "export TOMCAT_HOME" >> /etc/profile \
-	&& echo "export PATH" >> /etc/profile \
-	#刷新环境变量
-	&& source /etc/profile \
+	&& echo "export PATH" >> /etc/profile 
 
 
 
