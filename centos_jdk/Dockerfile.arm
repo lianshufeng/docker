@@ -2,13 +2,15 @@
 # 安装： docker build -t lianshufeng/jdk --build-arg JAVA_HOME="/opt/jdk"  ./ 
 #
 
-
-
-
-
 FROM --platform=linux/arm/v7 centos:7
 COPY qemu-arm-static /usr/bin/
 MAINTAINER lianshufeng <251708339@qq.com>
+
+
+#重要:解决 qemu: uncaught target signal 11 (Segmentation fault) - core dumped
+RUN echo "armhfp" > /etc/yum/vars/basearch 
+RUN echo "armv7hl" > /etc/yum/vars/arch
+RUN echo "armv7hl-redhat-linux-gpu" > /etc/rpm/platform
 
 
 #构建参数 --build-arg
