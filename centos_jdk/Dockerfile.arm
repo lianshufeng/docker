@@ -14,6 +14,9 @@ MAINTAINER lianshufeng <251708339@qq.com>
 #RUN yum install curl -y
 #RUN curl -O /etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliyun.com/repo/Centos-8.repo
 copy Centos-8.repo /etc/yum.repos.d/CentOS-Base.repo
+RUN echo "aarch64" > /etc/yum/vars/basearch 
+RUN echo "arm64v8hl" > /etc/yum/vars/arch
+RUN echo "arm64v8hl-redhat-linux-gpu" > /etc/rpm/platform
 
 
 #构建参数 --build-arg
