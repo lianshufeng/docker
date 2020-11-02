@@ -7,10 +7,8 @@ COPY qemu-arm-static /usr/bin/
 MAINTAINER lianshufeng <251708339@qq.com>
 
 
-#重要:解决 qemu: uncaught target signal 11 (Segmentation fault) - core dumped
-RUN echo "armhfp" > /etc/yum/vars/basearch 
-RUN echo "arm64v8hl" > /etc/yum/vars/arch
-RUN echo "arm64v8hl-redhat-linux-gpu" > /etc/rpm/platform
+#设置源为阿里云
+RUN curl -O /etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliyun.com/repo/Centos-8.repo
 
 
 #构建参数 --build-arg
