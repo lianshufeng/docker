@@ -2,8 +2,9 @@
 # 安装： docker build -t lianshufeng/jdk --build-arg JAVA_HOME="/opt/jdk"  ./ 
 #
 
-FROM --platform=linux/arm64/v8 centos:8
+FROM arm64v8/centos:centos8
 COPY qemu-arm-static /usr/bin/
+COPY qemu-aarch64-static /user/bin/
 MAINTAINER lianshufeng <251708339@qq.com>
 
 
@@ -13,10 +14,10 @@ MAINTAINER lianshufeng <251708339@qq.com>
 #RUN echo "arm64v8hl-redhat-linux-gpu" > /etc/rpm/platform
 #RUN yum install curl -y
 #RUN curl -O /etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliyun.com/repo/Centos-8.repo
-copy Centos-8.repo /etc/yum.repos.d/CentOS-Base.repo
-RUN echo "aarch64" > /etc/yum/vars/basearch 
-RUN echo "arm64v8hl" > /etc/yum/vars/arch
-RUN echo "arm64v8hl-redhat-linux-gpu" > /etc/rpm/platform
+#copy Centos-8.repo /etc/yum.repos.d/CentOS-Base.repo
+#RUN echo "aarch64" > /etc/yum/vars/basearch 
+#RUN echo "arm64v8hl" > /etc/yum/vars/arch
+#RUN echo "arm64v8hl-redhat-linux-gpu" > /etc/rpm/platform
 
 
 #构建参数 --build-arg
