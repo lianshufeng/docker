@@ -8,10 +8,12 @@ MAINTAINER lianshufeng <251708339@qq.com>
 
 
 #设置源为阿里云
-RUN curl -O /etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliyun.com/repo/Centos-8.repo
 RUN echo "armhfp" > /etc/yum/vars/basearch 
 RUN echo "arm64v8hl" > /etc/yum/vars/arch
 RUN echo "arm64v8hl-redhat-linux-gpu" > /etc/rpm/platform
+RUN yum install curl -y
+RUN curl -O /etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliyun.com/repo/Centos-8.repo
+
 
 
 #构建参数 --build-arg
@@ -26,6 +28,10 @@ ENV ENTRYPOINT ""
 #RUN rpm --rebuilddb ,centos8 不需要
 RUN yum install unzip  wget curl fontconfig langpacks-zh_CN -y
 #修改系统默认编码
+
+
+
+
 RUN echo LANG=\"zh_CN.utf8\" > /etc/locale.conf
 	
 #下载 JDK
