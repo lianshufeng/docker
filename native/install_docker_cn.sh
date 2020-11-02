@@ -43,7 +43,23 @@ openFireWall(){
 #安装docker
 installDocker(){
 	#卸载与更新
-	curl -fsSL https://get.docker.com | sh
+	#curl -fsSL https://get.docker.com | sh
+	
+	#卸载与更新
+	yum remove -y docker docker-client docker-client-latest docker-common docker-latest docker-latest-logrotate docker-logrotate docker-engine	
+	#特性安装
+	installFeature
+	#设置稳定库	
+	yum install -y yum-utils device-mapper-persistent-data lvm2 
+	#设置源
+	# yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+	#设置阿里源
+	yum-config-manager --add-repo http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo
+	#允许边缘库
+	yum-config-manager --enable docker-ce-edge
+	
+	#安装docker
+	yum install -y docker-ce docker-ce-cli containerd.io 
 	#设置自动启动
 	chkconfig docker on
 }
