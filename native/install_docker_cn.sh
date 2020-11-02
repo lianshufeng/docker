@@ -47,8 +47,6 @@ installDocker(){
 	
 	#卸载与更新
 	yum remove -y docker docker-client docker-client-latest docker-common docker-latest docker-latest-logrotate docker-logrotate docker-engine	
-	#特性安装
-	installFeature
 	#设置稳定库	
 	yum install -y yum-utils device-mapper-persistent-data lvm2 
 	#设置源
