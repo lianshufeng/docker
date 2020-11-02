@@ -3,7 +3,7 @@
 #
 
 FROM --platform=linux/arm64/v8 centos:8
-COPY qemu-${DOCKER_TAG}-static /usr/bin/
+COPY qemu-aarch64-static /usr/bin/
 MAINTAINER lianshufeng <251708339@qq.com>
 
 
