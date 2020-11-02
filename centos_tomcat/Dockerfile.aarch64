@@ -16,6 +16,7 @@
 
 
 FROM lianshufeng/jdk_ssh:aarch64
+COPY qemu-aarch64-static /usr/bin/
 MAINTAINER lianshufeng <251708339@qq.com>
 
 #构建参数 --build-arg
