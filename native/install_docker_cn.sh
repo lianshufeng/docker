@@ -42,22 +42,7 @@ openFireWall(){
 
 #安装docker
 installDocker(){
-	#卸载与更新
-	#curl -fsSL https://get.docker.com | sh
-	
-	#卸载与更新
-	yum remove -y docker docker-client docker-client-latest docker-common docker-latest docker-latest-logrotate docker-logrotate docker-engine	
-	#设置稳定库	
-	yum install -y yum-utils device-mapper-persistent-data lvm2 
-	#设置源
-	# yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
-	#设置阿里源
-	yum-config-manager --add-repo http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo
-	#允许边缘库
-	yum-config-manager --enable docker-ce-edge
-	
-	#安装docker
-	yum install -y docker-ce docker-ce-cli containerd.io 
+	curl -fsSL https://get.docker.com | sh
 	#设置自动启动
 	chkconfig docker on
 }
@@ -66,8 +51,40 @@ installDocker(){
 #安装docker-compose
 installDockerCompose(){
 	# https://github.com/docker/compose/releases
-	curl -L http://dl.dzurl.top/1.27.4/docker-compose-Linux-x86_64 -o /usr/local/bin/docker-compose
-	chmod +x /usr/local/bin/docker-compose
+	#curl -L http://dl.dzurl.top/1.27.4/docker-compose-Linux-x86_64 -o /usr/local/bin/docker-compose
+	#chmod +x /usr/local/bin/docker-compose
+	yum install make gcc python3 python3-devel -y
+	ln -sf /usr/bin/python3 /usr/bin/python
+	pip3 install --upgrade pip
+	pip install  docker-compose 
+	
+
+	
+	
+	
+	# docker编译
+	# dockerComposeTmpPath=/tmp/build/docker-compose
+	# dockercomposeImageName=dockercompose
+	# mkdir -p $dockerComposeTmpPath
+	# echo "" > $dockerComposeTmpPath/Dockerfile
+	# echo "FROM centos" >> $dockerComposeTmpPath/Dockerfile
+	# echo "RUN yum install python3 python3-devel -y" >> $dockerComposeTmpPath/Dockerfile
+	# echo "RUN ln -sf /usr/bin/python3 /usr/bin/python" >> $dockerComposeTmpPath/Dockerfile
+	# echo "RUN pip3 install --upgrade pip" >> $dockerComposeTmpPath/Dockerfile
+	# echo "RUN pip install docker-compose" >> $dockerComposeTmpPath/Dockerfile
+	# cd $dockerComposeTmpPath
+	# docker build ./ -f Dockerfile -t $dockercomposeImageName
+	
+
+	#构建命令行
+	# DOCKER_HOST='/var/run/docker.sock'
+    # DOCKER_ADDR="-v $DOCKER_HOST:$DOCKER_HOST"
+	
+	# echo exec docker run --rm -t -i $DOCKER_ADDR -w "/usr/local/bin/" $dockercomposeImageName /usr/local/bin/docker-compose > /usr/local/bin/docker-compose
+	# cat /usr/local/bin/docker-compose
+	# chmod +x /usr/local/bin/docker-compose
+	
+	# rm -rf $dockerComposeTmpPath
 }
 
 
@@ -111,8 +128,9 @@ services:
       - "/proc/sys/vm/drop_caches:/drop_caches"
       # log
       - "./log/:/var/log/"
-    container_name: docker_systemhelper
-    # update time auth
+      # log
+      - "./store/:/store/"
+    container_name: sh
     cap_add:
       - SYS_TIME
     restart: always
