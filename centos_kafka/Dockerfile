@@ -4,11 +4,11 @@
 # 例子： docker run -d -p 8822:22 -p 2181:2181 -p 9092:9092 lianshufeng/kafka
 
 
-FROM registry.cn-chengdu.aliyuncs.com/1s/jdk_ssh
+FROM lianshufeng/jdk_ssh
 MAINTAINER lianshufeng <251708339@qq.com>
 
 #构建参数 --build-arg
-ARG KAFKA_URL="http://dl.dzurl.top/kafka_2.13-2.5.0.tgz"
+ARG KAFKA_URL="http://dl.dzurl.top/kafka_2.13-2.6.0.tgz"
 ARG KAFKA_HOME="/opt/kafka"
 
 
