@@ -33,8 +33,14 @@ RUN set -xe \
 #安装仓库工具
 RUN yum install --nogpgcheck -y git
 	
+# maven 简易工具
+COPY ./mvn_package.sh /mvn_package.sh
+COPY ./mvn_remove_repository.sh /mvn_remove_repository.sh
 
-	
+RUN set -xe \
+	&& chmod -R 777 /mvn_package.sh \
+	&& chmod -R 777 /mvn_remove_repository.sh
+
 
 
 
