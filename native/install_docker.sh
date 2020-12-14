@@ -14,7 +14,7 @@ installFeature(){
 		# https://download.docker.com/linux/centos/8/x86_64/stable/Packages/
 		#yum install -y http://dl.dzurl.top/containerd.io-1.3.7-3.1.el7.x86_64.rpm
 		#自动寻找最新的版本
-		containerd_url=https://mirrors.aliyun.com/docker-ce/linux/centos/7/x86_64/stable/Packages/
+		containerd_url=https://mirrors.aliyun.com/docker-ce/linux/centos/7/$(uname -m)/stable/Packages/
 		containerd=$(curl $containerd_url | grep containerd.io- | tail -1 );containerd=${containerd#*>};containerd=${containerd%<*}
 		containerd_url=$containerd_url$containerd
 		echo $containerd_url
@@ -38,9 +38,9 @@ openFireWall(){
 	callFun "firewall-cmd --add-port=7946/udp --permanent"
 	callFun "firewall-cmd --add-port=4789/udp --permanent"
 	
-	callFun "firewall-cmd --zone=public --add-masquerade --permanent"
-	callFun "firewall-cmd --permanent --zone=public --change-interface=docker0"
-	callFun "firewall-cmd --permanent --direct --add-rule ipv4 filter INPUT 4 -i docker0 -j ACCEPT"
+	#callFun "firewall-cmd --zone=public --add-masquerade --permanent"
+	#callFun "firewall-cmd --permanent --zone=public --change-interface=docker0"
+	#callFun "firewall-cmd --permanent --direct --add-rule ipv4 filter INPUT 4 -i docker0 -j ACCEPT"
 	
 	
 	callFun "firewall-cmd --reload"
