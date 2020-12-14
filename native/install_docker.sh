@@ -60,7 +60,7 @@ installDocker(){
 	chkconfig docker on
 	
 	#启动服务
-	service docker restart
+	service docker start
 	
 }
 
