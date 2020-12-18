@@ -6,11 +6,11 @@
 #
 
 
-FROM registry.cn-chengdu.aliyuncs.com/1s/jdk_ssh
+FROM lianshufeng/jdk_ssh
 MAINTAINER lianshufeng <251708339@qq.com>
 
 #构建参数 --build-arg
-ARG ACTIVEMQ_URL="http://dl.dzurl.top/apache-activemq-5.15.12-bin.tar.gz"
+ARG ACTIVEMQ_URL="http://www.apache.org/dyn/closer.cgi?filename=/activemq/5.16.0/apache-activemq-5.16.0-bin.tar.gz&action=download"
 ARG ACTIVEMQ_HOME="/opt/activemq"
 
 
