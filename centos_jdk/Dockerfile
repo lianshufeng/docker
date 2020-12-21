@@ -3,10 +3,7 @@
 #
 
 
-
-
-
-FROM centos:8
+FROM centos:8 as builder
 MAINTAINER lianshufeng <251708339@qq.com>
 
 
@@ -20,7 +17,7 @@ ENV ENTRYPOINT ""
 
 #安装wget和unzip工具
 #RUN rpm --rebuilddb ,centos8 不需要
-RUN yum install unzip  wget curl fontconfig langpacks-zh_CN -y
+RUN yum install wget -y
 #修改系统默认编码
 RUN echo LANG=\"zh_CN.utf8\" > /etc/locale.conf
 	
@@ -35,7 +32,25 @@ RUN set -xe \
 	&& rm -rf $JAVA_HOME \
 	&& mv /tmp/jdk/$(ls /tmp/jdk/) $JAVA_HOME \
 	&& rm -rf /tmp/jdk \
-	&& chmod -R 777 $JAVA_HOME \
+	&& chmod -R 777 $JAVA_HOME 
+
+#运行环境
+FROM centos:8 as runtime
+ARG JAVA_HOME="/opt/jdk"
+
+#运行变量 -e
+ENV ENTRYPOINT ""
+
+#安装wget和unzip工具
+#RUN rpm --rebuilddb ,centos8 不需要
+RUN yum install unzip  wget curl fontconfig langpacks-zh_CN -y
+#修改系统默认编码
+RUN echo LANG=\"zh_CN.utf8\" > /etc/locale.conf
+	
+#编译中拷贝文件
+COPY --from=builder $JAVA_HOME $JAVA_HOME
+#解压并设置环境
+RUN set -xe \
 	#环境变量
 	&& echo "" >> /etc/profile \
 	&& echo "JAVA_HOME="$JAVA_HOME >> /etc/profile \
@@ -49,19 +64,11 @@ RUN set -xe \
 	#设置时区
 	&& cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime 
 
-
-
-#创建修改密码的脚本，通过传递参数修改
-RUN set -xe \
-	#引导程序
-	&& echo "#!/bin/bash" > /opt/bootstrap.sh \
-	&& echo "source /etc/profile" >> /opt/bootstrap.sh \
-	&& echo "source /etc/locale.conf" >> /opt/bootstrap.sh \
-	&& echo "export LANG=zh_CN.utf8" >> /opt/bootstrap.sh 
-	
-	
+#创建启动脚本
+COPY ./bootstrap.sh /opt/bootstrap.sh 
+ 
 #启动项
-ENTRYPOINT  sh /opt/bootstrap.sh 
+ENTRYPOINT ["sh", "/opt/bootstrap.sh"]
 
 	
 
