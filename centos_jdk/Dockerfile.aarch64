@@ -36,7 +36,8 @@ RUN set -xe \
 	&& chmod -R 777 $JAVA_HOME 
 
 #运行环境
-FROM centos:8 as runtime
+FROM --platform=linux/arm64/v8 centos:8 as runtime
+COPY qemu-aarch64-static /usr/bin/
 ARG JAVA_HOME="/opt/jdk"
 
 #运行变量 -e

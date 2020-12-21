@@ -15,12 +15,11 @@
 # 
 
 
-FROM lianshufeng/jdk_ssh:aarch64
+FROM lianshufeng/jdk_ssh:aarch64 as builder
 COPY qemu-aarch64-static /usr/bin/
 MAINTAINER lianshufeng <251708339@qq.com>
-
 #构建参数 --build-arg
-ARG TOMCAT_URL="http://dl.dzurl.top/apache-tomcat-9.0.39.tar.gz"
+ARG TOMCAT_URL="https://downloads.apache.org/tomcat/tomcat-9/v9.0.41/bin/apache-tomcat-9.0.41.tar.gz"
 ARG TOMCAT_HOME="/opt/tomcat"
 
 
@@ -51,6 +50,22 @@ RUN set -xe \
 
 
 
+FROM lianshufeng/jdk_ssh as runtime
+ARG TOMCAT_HOME="/opt/tomcat"
+COPY qemu-aarch64-static /usr/bin/
+#编译中拷贝文件
+COPY --from=builder $TOMCAT_HOME $TOMCAT_HOME
+
+
+#解压并设置环境
+RUN set -xe \
+	#环境变量
+	&& echo "" >> /etc/profile \
+	&& echo "TOMCAT_HOME="$TOMCAT_HOME >> /etc/profile \
+	&& echo "PATH="\$TOMCAT_HOME"/bin:\$PATH" >> /etc/profile \
+	&& echo "export TOMCAT_HOME" >> /etc/profile \
+	&& echo "export PATH" >> /etc/profile 
+
 #ssh-server
 EXPOSE 22
 #tomcat
@@ -67,7 +82,6 @@ RUN set -xe \
 	&& echo "echo "" > /tmp/tomcat_conf.sh" >> /tmp/tomcat_conf.sh 
 
 	
-#创建修改密码的脚本，通过传递参数修改
 RUN set -xe \
 	#修改tomcat启动命令行
 	&& echo "#!/bin/bash" > /tmp/tomcat.sh \
