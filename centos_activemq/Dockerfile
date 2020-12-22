@@ -6,7 +6,7 @@
 #
 
 
-FROM lianshufeng/jdk_ssh
+FROM lianshufeng/jdk_ssh as builder
 MAINTAINER lianshufeng <251708339@qq.com>
 
 #构建参数 --build-arg
@@ -29,7 +29,18 @@ RUN set -xe \
 	&& rm -rf $ACTIVEMQ_HOME \
 	&& mv /tmp/mq/$(ls /tmp/mq/ ) $ACTIVEMQ_HOME \
 	&& rm -rf /tmp/mq \
-	&& chmod -R 777 $ACTIVEMQ_HOME \
+	&& chmod -R 777 $ACTIVEMQ_HOME
+
+
+
+FROM lianshufeng/jdk_ssh as runtime
+#构建参数 --build-arg
+ARG ACTIVEMQ_HOME="/opt/activemq"
+
+#编译中拷贝文件
+COPY --from=builder $ACTIVEMQ_HOME $ACTIVEMQ_HOME
+	
+RUN set -xe \
 	#环境变量
 	&& echo "" >> /etc/profile \
 	&& echo "ACTIVEMQ_HOME="$ACTIVEMQ_HOME >> /etc/profile \
