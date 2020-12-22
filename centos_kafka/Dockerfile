@@ -4,18 +4,16 @@
 # 例子： docker run -d -p 8822:22 -p 2181:2181 -p 9092:9092 lianshufeng/kafka
 
 
-FROM lianshufeng/jdk_ssh
+FROM lianshufeng/jdk_ssh as builder
 MAINTAINER lianshufeng <251708339@qq.com>
 
 #构建参数 --build-arg
-ARG KAFKA_URL="http://dl.dzurl.top/kafka_2.13-2.6.0.tgz"
+ARG KAFKA_URL="https://downloads.apache.org/kafka/2.7.0/kafka_2.13-2.7.0.tgz"
 ARG KAFKA_HOME="/opt/kafka"
-
-
 
 #下载
 RUN wget -O /tmp/kafka.tar.gz --no-cookies --no-check-certificate $KAFKA_URL
-#解压并设置环境
+#解压
 RUN set -xe \
 	&& mkdir /tmp/kafka \
 	&& tar -xvzf /tmp/kafka.tar.gz -C /tmp/kafka \
@@ -24,7 +22,17 @@ RUN set -xe \
 	&& rm -rf $KAFKA_HOME \
 	&& mv /tmp/kafka/$(ls /tmp/kafka/ ) $KAFKA_HOME \
 	&& rm -rf /tmp/kafka \
-	&& chmod -R 777 $KAFKA_HOME \
+	&& chmod -R 777 $KAFKA_HOME
+
+
+
+FROM lianshufeng/jdk_ssh as runtime
+ARG KAFKA_HOME="/opt/kafka"
+#编译中拷贝文件
+COPY --from=builder $KAFKA_HOME $KAFKA_HOME
+
+#解压并设置环境
+RUN set -xe \
 	#环境变量
 	&& echo "" >> /etc/profile \
 	&& echo "KAFKA_HOME="$KAFKA_HOME >> /etc/profile \
@@ -33,8 +41,6 @@ RUN set -xe \
 	&& echo "export PATH" >> /etc/profile \
 	#刷新环境变量
 	&& source /etc/profile
-
-
 	
 	
 #外部端口22
