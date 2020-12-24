@@ -2,7 +2,8 @@
 #  docker run -d -p 5901:5901 -p 6901:6901 lianshufeng/centos_vnc
 # 
 
-FROM centos:7
+FROM --platform=linux/arm64/v8 centos:7 as builder
+COPY qemu-aarch64-static /usr/bin/
 MAINTAINER "251708339@qq.com"
 
 # install tools
@@ -68,3 +69,8 @@ RUN $INST_SCRIPTS/set_user_permission.sh $STARTUPDIR $HOME
 
 ENTRYPOINT ["/dockerstartup/vnc_startup.sh"]
 CMD ["--wait"]
+
+
+
+
+
