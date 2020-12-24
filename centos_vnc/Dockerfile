@@ -54,7 +54,7 @@ RUN $INST_SCRIPTS/no_vnc.sh
 ### Install firefox and chrome browser
 #RUN $INST_SCRIPTS/firefox.sh
 #RUN $INST_SCRIPTS/chrome.sh
-RUN yum install -y http://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm
+
 
 ### Install xfce UI
 RUN $INST_SCRIPTS/xfce_ui.sh
