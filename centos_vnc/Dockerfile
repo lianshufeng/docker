@@ -8,8 +8,13 @@ MAINTAINER "251708339@qq.com"
 # install tools
 RUN yum install wget curl fontconfig langpacks-zh_CN -y
 #修改系统默认编码
-RUN echo LANG=\"zh_CN.utf8\" > /etc/locale.conf
+ENV LANG='en_US.UTF-8' LANGUAGE='en_US:en' LC_ALL='en_US.UTF-8'
 
+RUN set -xe \
+	&& echo LANG=\"en_US.UTF-8\" >> /etc/locale.conf \
+	&& echo LANGUAGE=\"en_US:en\" >> /etc/locale.conf \
+	&& echo LC_ALL=\"en_US.UTF-8\" >> /etc/locale.conf  
+	 
 ## Connection ports for controlling the UI:
 # VNC port:5901
 # noVNC webport, connect via http://IP:6901/?password=vncpassword
@@ -40,15 +45,15 @@ RUN cat $INST_SCRIPTS/tools.sh
  
 ### Install some common tools
 RUN $INST_SCRIPTS/tools.sh
-ENV LANG='en_US.UTF-8' LANGUAGE='en_US:en' LC_ALL='en_US.UTF-8'
+
 
 ### Install xvnc-server & noVNC - HTML5 based VNC viewer
 RUN $INST_SCRIPTS/tigervnc.sh
 RUN $INST_SCRIPTS/no_vnc.sh
 
 ### Install firefox and chrome browser
-RUN $INST_SCRIPTS/firefox.sh
-RUN $INST_SCRIPTS/chrome.sh
+#RUN $INST_SCRIPTS/firefox.sh
+#RUN $INST_SCRIPTS/chrome.sh
 
 ### Install xfce UI
 RUN $INST_SCRIPTS/xfce_ui.sh
