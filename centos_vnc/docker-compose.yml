@@ -1,0 +1,26 @@
+version: "3"
+
+services:
+
+  centos_vnc:
+    build:
+      args:
+        http_proxy: http://192.168.0.37:707
+        https_proxy: http://192.168.0.37:707
+      context: ./
+      dockerfile: Dockerfile
+    image: lianshufeng/centos_vnc
+    ports:
+      - "5901:5901"
+      - "6901:6901"
+    privileged: true
+    container_name: centos_vnc
+    restart: always
+    environment:
+      - VNC_PW=vncpassword
+      - LANG="zh_CN.UTF-8"
+      - LC_ALL="zh_CN.UTF-8"
+    
+    
+    
+# http://192.168.80.128:6901/?password=vncpassword
