@@ -2,7 +2,7 @@
 #  docker run -d -p 5901:5901 -p 6901:6901 lianshufeng/centos_vnc
 # 
 
-FROM centos:7
+FROM centos:8
 MAINTAINER "251708339@qq.com"
 
 # install tools
@@ -50,6 +50,11 @@ RUN $INST_SCRIPTS/tools.sh
 ### Install xvnc-server & noVNC - HTML5 based VNC viewer
 RUN $INST_SCRIPTS/tigervnc.sh
 RUN $INST_SCRIPTS/no_vnc.sh
+#更新脚本
+RUN rm -rf /usr/bin/vncserver
+COPY ./src/other/vncserver.pl /usr/bin/vncserver
+RUN chmod -R 777 /usr/bin/vncserver
+
 
 ### Install firefox and chrome browser
 #RUN $INST_SCRIPTS/firefox.sh

@@ -9,3 +9,9 @@ wget -qO- https://github.com/novnc/websockify/archive/v0.9.0.tar.gz| tar xz --st
 chmod +x -v $NO_VNC_HOME/utils/*.sh
 ## create index.html to forward automatically to `vnc_lite.html`
 ln -s $NO_VNC_HOME/vnc_lite.html $NO_VNC_HOME/index.html
+
+
+
+#安装python2
+yum install -y python2
+ln -s /usr/bin/python2 /usr/bin/python
