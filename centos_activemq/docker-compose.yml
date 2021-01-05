@@ -2,6 +2,12 @@ version: "3"
 
 services:
   activemq:
+    build:
+      args:
+        http_proxy: http://192.168.0.37:707
+        https_proxy: http://192.168.0.37:707
+      context: ./
+      dockerfile: Dockerfile
     image: registry.cn-chengdu.aliyuncs.com/1s/activemq
     ports:
       - "1883:1883"
@@ -11,7 +17,6 @@ services:
       - "61614:61614"
       - "61616:61616"
     volumes:
-#      - ${store}/data1/config:/opt/kafka/config
       - ./conf:/opt/activemq/conf
       - ./data:/opt/activemq/data
     container_name: activemq

@@ -60,7 +60,8 @@ EXPOSE 61613
 EXPOSE 1883
 EXPOSE 61614
 
-
+#修改后台任意端口都可访问
+RUN sed -i "s/127.0.0.1/0.0.0.0/g" $ACTIVEMQ_HOME/conf/jetty.xml
 
 #备份配置文件
 RUN cp -rf $ACTIVEMQ_HOME/conf $ACTIVEMQ_HOME/conf.backup
