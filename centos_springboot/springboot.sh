@@ -49,3 +49,9 @@ loadResources(){
 
 
 loadResources
+
+
+# 执行命令
+if [ "$ENTRYPOINT" != "" ];then
+	 $ENTRYPOINT
+fi

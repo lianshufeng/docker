@@ -8,7 +8,8 @@
 
 FROM lianshufeng/jdk
 MAINTAINER lianshufeng <251708339@qq.com>
-
+ENV JAVA_HOME="/opt/jdk"
+ENV PATH=$PATH:$JAVA_HOME/bin
 
 #运行变量, 外部执行的命令行
 ENV ENTRYPOINT ""
@@ -24,9 +25,6 @@ ADD springboot.sh /tmp/springboot.sh
 RUN echo "/bin/bash /tmp/springboot.sh" >> /opt/bootstrap.sh 
 
 
-#springboot 启动
-RUN echo "echo \${ENTRYPOINT}|awk '{run=\$0;system(run)}'" >> /opt/bootstrap.sh 
-	
 
 
 
