@@ -20,9 +20,9 @@ ENV CacheResources ""
 #更新的资源,每次启动重新下载，多个资源用,间隔
 ENV UpdateResources ""
 
-
-ADD springboot.sh /tmp/springboot.sh
-RUN echo "/bin/bash /tmp/springboot.sh" >> /opt/bootstrap.sh 
+RUN rm -rf /opt/bootstrap.sh 
+ADD ./bootstrap.sh /opt/bootstrap.sh 
+RUN chmod -R 777 /opt/bootstrap.sh 
 
 
 
