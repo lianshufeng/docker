@@ -83,7 +83,7 @@ updatePullImagesUrl(){
 	{
 		"registry-mirrors": ["https://yo9l653d.mirror.aliyuncs.com"],
 		"log-driver": "json-file",
-		"log-opts": {"max-size": "100m", "max-file": "3"}
+		"log-opts": {"max-size": "1024m", "max-file": "3"}
 	}
 	EOF
 	systemctl daemon-reload
