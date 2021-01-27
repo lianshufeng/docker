@@ -1,5 +1,8 @@
 #!/bin/bash
-
+set -e
+source /etc/profile
+source /etc/locale.conf
+export LANG=zh_CN.utf8
 
 downloadResources(){
 	url=$1
@@ -49,3 +52,17 @@ loadResources(){
 
 
 loadResources
+
+
+# 执行命令
+if [ "$ENTRYPOINT" != "" ];then
+	 $ENTRYPOINT
+fi
+
+
+# execute command line
+if [ -n "$1" ] ;then
+	cmd="$*"
+	$cmd
+fi
+

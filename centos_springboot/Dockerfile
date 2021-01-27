@@ -8,7 +8,8 @@
 
 FROM lianshufeng/jdk
 MAINTAINER lianshufeng <251708339@qq.com>
-
+ENV JAVA_HOME="/opt/jdk"
+ENV PATH=$PATH:$JAVA_HOME/bin
 
 #运行变量, 外部执行的命令行
 ENV ENTRYPOINT ""
@@ -19,14 +20,11 @@ ENV CacheResources ""
 #更新的资源,每次启动重新下载，多个资源用,间隔
 ENV UpdateResources ""
 
+RUN rm -rf /opt/bootstrap.sh 
+ADD ./bootstrap.sh /opt/bootstrap.sh 
+RUN chmod -R 777 /opt/bootstrap.sh 
 
-ADD springboot.sh /tmp/springboot.sh
-RUN echo "/bin/bash /tmp/springboot.sh" >> /opt/bootstrap.sh 
 
-
-#springboot 启动
-RUN echo "echo \${ENTRYPOINT}|awk '{run=\$0;system(run)}'" >> /opt/bootstrap.sh 
-	
 
 
 
