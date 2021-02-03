@@ -8,7 +8,7 @@ MAINTAINER lianshufeng <251708339@qq.com>
 
 
 #构建参数 --build-arg
-ARG JDK_URL="http://dl.dzurl.top/jdk-11.0.9_linux-x64_bin.tar.gz"
+ARG JDK_URL="http://dl.dzurl.top/jdk-11.0.10_linux-x64_bin.tar.gz"
 ARG JAVA_HOME="/opt/jdk"
 
 
