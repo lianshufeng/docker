@@ -81,7 +81,7 @@ updatePullImagesUrl(){
 	mkdir -p /etc/docker	
 	tee /etc/docker/daemon.json <<-'EOF'
 	{
-		"registry-mirrors": ["https://yo9l653d.mirror.aliyuncs.com"],
+		"registry-mirrors": ["https://registry.docker-cn.com"],
 		"log-driver": "json-file",
 		"log-opts": {"max-size": "1024m", "max-file": "3"}
 	}
