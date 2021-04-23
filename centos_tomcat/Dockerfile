@@ -19,7 +19,7 @@ FROM lianshufeng/jdk_ssh as builder
 MAINTAINER lianshufeng <251708339@qq.com>
 
 #构建参数 --build-arg
-ARG TOMCAT_URL="https://downloads.apache.org/tomcat/tomcat-9/v9.0.41/bin/apache-tomcat-9.0.41.tar.gz"
+ARG TOMCAT_URL="https://downloads.apache.org/tomcat/tomcat-9/v9.0.45/bin/apache-tomcat-9.0.45.tar.gz"
 ARG TOMCAT_HOME="/opt/tomcat"
 
 

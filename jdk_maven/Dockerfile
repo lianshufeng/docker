@@ -4,7 +4,7 @@ MAINTAINER lianshufeng <251708339@qq.com>
 
 
 #依赖的环境变量
-ARG MAVEN_URL="https://downloads.apache.org/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.zip"
+ARG MAVEN_URL="https://downloads.apache.org/maven/maven-3/3.8.1/binaries/apache-maven-3.8.1-bin.zip"
 ARG MAVEN_HOME="/opt/maven/"
 
 
