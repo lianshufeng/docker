@@ -50,7 +50,7 @@ RUN set -xe \
 
 
 
-FROM lianshufeng/jdk_ssh as runtime
+FROM lianshufeng/jdk_ssh:aarch64 as runtime
 ARG TOMCAT_HOME="/opt/tomcat"
 COPY qemu-aarch64-static /usr/bin/
 #编译中拷贝文件
