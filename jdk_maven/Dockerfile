@@ -21,7 +21,7 @@ RUN set -xe \
 
 
 FROM lianshufeng/jdk as runtime
-ARG MAVEN_FOLDER="apache-maven-3.6.3"
+ARG MAVEN_FOLDER="apache-maven-3.8.1"
 ARG MAVEN_HOME="/opt/maven/"
 #编译中拷贝文件
 COPY --from=builder $MAVEN_HOME $MAVEN_HOME
