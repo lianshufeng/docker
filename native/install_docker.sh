@@ -77,11 +77,10 @@ installDockerCompose(){
 
 
 #修改docker镜像加速器
-updatePullImagesUrl(){
+updateDockerConfig(){
 	mkdir -p /etc/docker	
 	tee /etc/docker/daemon.json <<-'EOF'
 	{
-		"registry-mirrors": ["https://ugnpisps.mirror.aliyuncs.com"],
 		"log-driver": "json-file",
 		"log-opts": {"max-size": "1024m", "max-file": "3"}
 	}
@@ -166,8 +165,8 @@ callFun "disableSELINUX"
 #获取主机ip
 callFun "updateDockerHostIp"
 
-#docker加速器
-callFun "updatePullImagesUrl"
+#更新docker配置
+callFun "updateDockerConfig"
 
 #安装docker
 callFun "installDocker"
