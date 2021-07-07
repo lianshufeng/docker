@@ -1,0 +1,14 @@
+version: "3"
+
+services:
+  maven:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    image: maven
+    ports:
+      - "8080:8080"
+    container_name: maven
+    restart: always
+    command:
+      - "mvn -v"

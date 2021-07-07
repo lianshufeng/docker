@@ -4,7 +4,7 @@ MAINTAINER lianshufeng <251708339@qq.com>
 
 
 #依赖的环境变量
-ARG MAVEN_URL="https://downloads.apache.org/maven/maven-3/3.8.1/binaries/apache-maven-3.8.1-bin.zip"
+ARG MAVEN_URL="https://mirrors.tuna.tsinghua.edu.cn/apache/maven/maven-3/3.8.1/binaries/apache-maven-3.8.1-bin.zip"
 ARG MAVEN_HOME="/opt/maven/"
 
 
@@ -21,15 +21,17 @@ RUN set -xe \
 
 
 FROM lianshufeng/jdk as runtime
-ARG MAVEN_FOLDER="apache-maven-3.8.1"
 ARG MAVEN_HOME="/opt/maven/"
 #编译中拷贝文件
 COPY --from=builder $MAVEN_HOME $MAVEN_HOME
 
+#向上移动一层
+RUN mv $MAVEN_HOME`ls $MAVEN_HOME`/* $MAVEN_HOME
+
 #设置环境
 RUN set -xe \
 	&& echo "" >> /etc/profile \
-	&& echo "MAVEN_HOME="$MAVEN_HOME$MAVEN_FOLDER >> /etc/profile \
+	&& echo "MAVEN_HOME="$MAVEN_HOME >> /etc/profile \
 	&& echo "PATH="\$MAVEN_HOME"/bin:\$PATH" >> /etc/profile \
 	&& echo "export MAVEN_HOME" >> /etc/profile \
 	&& echo "export PATH" >> /etc/profile \
