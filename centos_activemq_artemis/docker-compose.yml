@@ -1,0 +1,25 @@
+version: "3"
+
+services:
+  activemq:
+    build:
+      # args:
+        # http_proxy: http://192.168.31.222:808
+        # https_proxy: http://192.168.31.222:808
+      context: ./
+      dockerfile: Dockerfile
+    image: lianshufeng/activemq_artemis
+    ports:
+      # - "8822:22"
+      - "8161:8161"
+      - "9404:9404"
+      - "61616:61616"
+      - "5445:5445"
+      - "5672:5672"      
+      - "1883:1883"
+      - "61613:61613"      
+    volumes:
+      - ./broker:/opt/broker
+    container_name: activemq
+    restart: always
+
