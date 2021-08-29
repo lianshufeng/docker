@@ -15,9 +15,13 @@ services:
       - "9404:9404"
       - "61616:61616"
       - "5445:5445"
-      - "5672:5672"      
+      - "5672:5672"
       - "1883:1883"
-      - "61613:61613"      
+      - "61613:61613"
+    environment:
+      - Broker_User=admin
+      - Broker_Password=admin
+      - Broker_Role=admins
     volumes:
       - ./broker:/opt/broker
     container_name: activemq

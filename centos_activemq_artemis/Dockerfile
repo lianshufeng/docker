@@ -10,7 +10,7 @@ FROM lianshufeng/jdk_ssh as builder
 MAINTAINER lianshufeng <251708339@qq.com>
 
 #构建参数 --build-arg
-ARG ACTIVEMQ_URL="https://dlcdn.apache.org/activemq/activemq-artemis/2.18.0/apache-artemis-2.18.0-bin.tar.gz"
+ARG ACTIVEMQ_URL="https://www.apache.org/dyn/closer.cgi?filename=activemq/activemq-artemis/2.18.0/apache-artemis-2.18.0-bin.tar.gz&action=download"
 ARG ACTIVEMQ_HOME="/opt/activemq"
 
 	
@@ -31,12 +31,13 @@ RUN set -xe \
 
 FROM lianshufeng/jdk_ssh as runtime
 #构建参数 --build-arg
+ARG ACTIVEMQ_HOME="/opt/activemq"
 ARG Broker_Store="/opt/broker"
 
-ARG ACTIVEMQ_HOME="/opt/activemq"
-ARG Broker_User="admin"
-ARG Broker_Password="admin"
-ARG Broker_Role="admins"
+
+ENV Broker_User="admin"
+ENV Broker_Password="admin"
+ENV Broker_Role="admins"
 
 
 
@@ -72,26 +73,22 @@ EXPOSE 1883
 EXPOSE 61613
 
 
-#构建 Broker
-RUN source /etc/profile && artemis create --user $Broker_User --password $Broker_Password --allow-anonymous –role $Broker_Role $Broker_Store
 
-
-
-#允许任何ip访问控制台
-RUN sed -i "s/localhost:8161/0.0.0.0:8161/g" $Broker_Store/etc/bootstrap.xml
-RUN sed -i "s/localhost\*/\*/g" $Broker_Store/etc/jolokia-access.xml
-
-
-#备份配置文件
-RUN cp -rf $Broker_Store $Broker_Store.backup
+#生成构建  broker 命令
 RUN set -xe \
-	# 修改tomcat启动命令行
+	&& echo "#!/bin/bash" > /tmp/make_broker.sh \	
+    && echo "source /etc/profile" >> /tmp/make_broker.sh \
+    && echo "artemis create --require-login --user \$Broker_User --password \$Broker_Password  –role \$Broker_Role $Broker_Store" >> /tmp/make_broker.sh \
+    && echo "sed -i \"s/localhost:8161/0.0.0.0:8161/g\" $Broker_Store/etc/bootstrap.xml" >> /tmp/make_broker.sh \
+    && echo "sed -i \"s/localhost\*/\*/g\" $Broker_Store/etc/jolokia-access.xml" >> /tmp/make_broker.sh 
+
+
+#没有 broker 则创建
+RUN set -xe \
 	&& echo "#!/bin/bash" > /tmp/mq_conf.sh \	
-	# 若配置文件为空则自动恢复配置文件的备份
-	&& echo "if [[ \$(ls \\$Broker_Store -l |grep '^-'|wc -l) -eq 0 ]] ; then cp -rf  \\$Broker_Store.backup/. \\$Broker_Store/; fi" >> /tmp/mq_conf.sh \
-	&& echo "rm -rf \\$Broker_Store.backup " >> /tmp/mq_conf.sh \
-	&& echo "echo "" > /tmp/mq_conf.sh" >> /tmp/mq_conf.sh 
+	&& echo "if [[ \$(ls \\$Broker_Store -l |grep '^-'|wc -l) -eq 0 ]] ; then sh /tmp/make_broker.sh ; fi" >> /tmp/mq_conf.sh 
 RUN echo "sh /tmp/mq_conf.sh" >> /opt/run.sh
+
 
 #启动
 RUN echo "$Broker_Store/bin/artemis-service start" >> /opt/run.sh
