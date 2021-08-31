@@ -19,7 +19,7 @@ FROM lianshufeng/jdk_ssh:aarch64 as builder
 COPY qemu-aarch64-static /usr/bin/
 MAINTAINER lianshufeng <251708339@qq.com>
 #构建参数 --build-arg
-ARG TOMCAT_URL="https://downloads.apache.org/tomcat/tomcat-10/v10.0.8/bin/apache-tomcat-10.0.8.tar.gz"
+ARG TOMCAT_URL="https://dlcdn.apache.org/tomcat/tomcat-10/v10.0.10/bin/apache-tomcat-10.0.10.tar.gz"
 ARG TOMCAT_HOME="/opt/tomcat"
 
 
