@@ -14,6 +14,7 @@ services:
     volumes:
       - ./broker1:/opt/broker
     container_name: mq1
+    restart: always
 
   mq2:
     image: lianshufeng/activemq:artemis
@@ -28,6 +29,7 @@ services:
     volumes:
       - ./broker2:/opt/broker
     container_name: mq2
+    restart: always
    
   mq3:
     image: lianshufeng/activemq:artemis
@@ -42,3 +44,4 @@ services:
     volumes:
       - ./broker3:/opt/broker
     container_name: mq3
+    restart: always
