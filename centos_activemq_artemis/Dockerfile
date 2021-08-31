@@ -86,7 +86,7 @@ RUN set -xe \
 #没有 broker 则创建
 RUN set -xe \
 	&& echo "#!/bin/bash" > /tmp/mq_conf.sh \	
-	&& echo "if [[ \$(ls \\$Broker_Store/bin/ -l |grep '^-'|wc -l) -eq 0 ]] ; then sh /tmp/make_broker.sh ; fi" >> /tmp/mq_conf.sh 
+	&& echo "if [[ \$(ls \\$Broker_Store -l |grep '^-'|wc -l) -eq 0 ]] ; then sh /tmp/make_broker.sh ; fi" >> /tmp/mq_conf.sh 
 RUN echo "sh /tmp/mq_conf.sh" >> /opt/run.sh
 
 
