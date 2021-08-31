@@ -90,6 +90,11 @@ RUN set -xe \
 RUN echo "sh /tmp/mq_conf.sh" >> /opt/run.sh
 
 
+# 启动获取内网ip
+RUN echo "sed -i '/HOST_IP/d' $Broker_Store/etc/artemis.profile" >> /opt/run.sh
+RUN echo "echo HOST_IP=\'\$(hostname -I)\' | sed 's/ //g' >> $Broker_Store/etc/artemis.profile" >> /opt/run.sh
+
+
 #启动
 RUN echo "$Broker_Store/bin/artemis-service start" >> /opt/run.sh
 
