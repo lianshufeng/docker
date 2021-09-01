@@ -78,8 +78,8 @@ RUN set -xe \
 #自动启动脚本
 RUN echo "sh /tmp/mq_conf.sh" >>  /opt/bootstrap.sh 
 RUN echo "$ACTIVEMQ_HOME/bin/activemq start" >>  /opt/bootstrap.sh 
-RUN echo "sleep 30 " >> /opt/bootstrap.sh 
-RUN echo "tail --pid=\$(pgrep java) -f /dev/null" >> /opt/bootstrap.sh 
+RUN echo "sleep 30" >> /opt/bootstrap.sh 
+RUN echo "sh /opt/wait_java_exit.sh" >> /opt/bootstrap.sh 
 
 
 
