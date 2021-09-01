@@ -15,7 +15,7 @@
 # 
 
 
-FROM lianshufeng/jdk_ssh as builder
+FROM lianshufeng/jdk as builder
 MAINTAINER lianshufeng <251708339@qq.com>
 
 #构建参数 --build-arg
@@ -50,7 +50,7 @@ RUN set -xe \
 
 
 
-FROM lianshufeng/jdk_ssh as runtime
+FROM lianshufeng/jdk as runtime
 ARG TOMCAT_HOME="/opt/tomcat"
 #编译中拷贝文件
 COPY --from=builder $TOMCAT_HOME $TOMCAT_HOME
@@ -91,12 +91,15 @@ RUN set -xe \
 	&& echo "rm -rf \$TOMCAT_HOME/bin/catalina.sh" >> /tmp/tomcat.sh \
 	&& echo "mv \$TOMCAT_HOME/bin/catalina.sh.bak \$TOMCAT_HOME/bin/catalina.sh" >> /tmp/tomcat.sh \
 	&& echo "chmod -R 777 \$TOMCAT_HOME/bin/catalina.sh" >> /tmp/tomcat.sh \
-	&& echo "echo "" > /tmp/tomcat.sh" >> /tmp/tomcat.sh \
+	&& echo "echo "" > /tmp/tomcat.sh" >> /tmp/tomcat.sh 
 	
-	#引导程序
-	&& echo "sh /tmp/tomcat_conf.sh" >> /opt/run.sh \
-	&& echo "sh /tmp/tomcat.sh" >> /opt/run.sh \
-	&& echo "nohup $TOMCAT_HOME/bin/startup.sh" >> /opt/run.sh 
+#启动
+RUN set -xe \
+	&& echo "sh /tmp/tomcat_conf.sh" >> /opt/bootstrap.sh \
+	&& echo "sh /tmp/tomcat.sh" >> /opt/bootstrap.sh \
+	&& echo "nohup $TOMCAT_HOME/bin/startup.sh" >>/opt/bootstrap.sh \
+	&& echo "sleep 30" >> /opt/bootstrap.sh \
+	&& echo "sh /opt/wait_java_exit.sh" >> /opt/bootstrap.sh 
 	
 	
 
