@@ -83,11 +83,23 @@ RUN set -xe \
     && echo "sed -i \"s/localhost\*/\*/g\" $Broker_Store/etc/jolokia-access.xml" >> /tmp/make_broker.sh 
 
 
-#没有 broker 则创建
+#拷贝更新文件
 RUN set -xe \
-	&& echo "#!/bin/bash" > /tmp/mq_conf.sh \	
-	&& echo "if [[ \$(ls \\$Broker_Store -l |grep '^-'|wc -l) -eq 0 ]] ; then sh /tmp/make_broker.sh ; fi" >> /tmp/mq_conf.sh 
-RUN echo "sh /tmp/mq_conf.sh" >> /opt/run.sh
+	&& echo "#!/bin/bash" > /tmp/update_broker.sh \	
+    && echo "source /etc/profile" >> /tmp/update_broker.sh \
+    && echo "cp -f /opt/broker_update.xml $Broker_Store/etc/broker.xml" >> /tmp/update_broker.sh \
+	&& echo "hn=\$(eval hostname)" >> /tmp/update_broker.sh \
+    && echo "sed -i \"s/{MQHOST}/\$hn/g\" $Broker_Store/etc/broker.xml" >> /tmp/update_broker.sh 
+
+
+
+
+#执行条件
+RUN set -xe \
+	&& echo "#!/bin/bash" > /tmp/mq_run.sh \	
+	&& echo "if [[ \$(ls \\$Broker_Store -l |grep '^-'|wc -l) -eq 0 ]] ; then sh /tmp/make_broker.sh ; fi" >> /tmp/mq_run.sh \
+	&& echo "if [[ -f "/opt/broker_update.xml" ]] ; then sh /tmp/update_broker.sh ; fi" >> /tmp/mq_run.sh 
+RUN echo "sh /tmp/mq_run.sh" >> /opt/run.sh
 
 
 

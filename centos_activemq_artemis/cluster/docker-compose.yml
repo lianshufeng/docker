@@ -8,13 +8,15 @@ services:
       - "61616:61616"
       - "1883:1883"
     environment:
-      - Broker_User=admin
-      - Broker_Password=admin
-      - Broker_Role=admins
+      - Broker_User=${Broker_User}
+      - Broker_Password=${Broker_Password}
+      - Broker_Role=${admins}
     volumes:
       - ./broker1:/opt/broker
+      - ./broker.xml:/opt/broker_update.xml
     container_name: mq1
     restart: always
+    hostname: mq1
 
   mq2:
     image: lianshufeng/activemq:artemis
@@ -23,14 +25,16 @@ services:
       - "61626:61616"
       - "1884:1883"
     environment:
-      - Broker_User=admin
-      - Broker_Password=admin
-      - Broker_Role=admins
+      - Broker_User=${Broker_User}
+      - Broker_Password=${Broker_Password}
+      - Broker_Role=${admins}
     volumes:
       - ./broker2:/opt/broker
+      - ./broker.xml:/opt/broker_update.xml
     container_name: mq2
     restart: always
-   
+    hostname: mq2
+    
   mq3:
     image: lianshufeng/activemq:artemis
     ports:
@@ -38,10 +42,12 @@ services:
       - "61636:61616"
       - "1885:1883"
     environment:
-      - Broker_User=admin
-      - Broker_Password=admin
-      - Broker_Role=admins
+      - Broker_User=${Broker_User}
+      - Broker_Password=${Broker_Password}
+      - Broker_Role=${admins}
     volumes:
       - ./broker3:/opt/broker
+      - ./broker.xml:/opt/broker_update.xml
     container_name: mq3
     restart: always
+    hostname: mq3
