@@ -6,7 +6,7 @@
 #
 
 
-FROM lianshufeng/jdk_ssh as builder
+FROM lianshufeng/jdk as builder
 MAINTAINER lianshufeng <251708339@qq.com>
 
 #构建参数 --build-arg
@@ -29,7 +29,7 @@ RUN set -xe \
 
 
 
-FROM lianshufeng/jdk_ssh as runtime
+FROM lianshufeng/jdk as runtime
 #构建参数 --build-arg
 ARG ACTIVEMQ_HOME="/opt/activemq"
 ARG Broker_Store="/opt/broker"

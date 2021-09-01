@@ -51,3 +51,4 @@ services:
     container_name: mq3
     restart: always
     hostname: mq3
+    
