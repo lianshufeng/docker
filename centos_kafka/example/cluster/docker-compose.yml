@@ -2,7 +2,7 @@ version: '3.1'
 
 services:
   kafka1:
-    image: "registry.cn-chengdu.aliyuncs.com/1s/kafka"
+    image: "lianshufeng/kafka"
     container_name: kafka1
     hostname: kafka1
     restart: always
@@ -18,7 +18,7 @@ services:
 
 
   kafka2:
-    image: "registry.cn-chengdu.aliyuncs.com/1s/kafka"
+    image: "lianshufeng/kafka"
     container_name: kafka2
     hostname: kafka2
     restart: always
@@ -34,7 +34,7 @@ services:
 
 
   kafka3:
-    image: "registry.cn-chengdu.aliyuncs.com/1s/kafka"
+    image: "lianshufeng/kafka"
     container_name: kafka3
     hostname: kafka3
     restart: always
