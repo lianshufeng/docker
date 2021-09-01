@@ -4,7 +4,7 @@
 # 例子： docker run -d -p 8822:22 -p 2181:2181 -p 9092:9092 lianshufeng/kafka
 
 
-FROM lianshufeng/jdk_ssh as builder
+FROM lianshufeng/jdk as builder
 MAINTAINER lianshufeng <251708339@qq.com>
 
 #构建参数 --build-arg
@@ -26,7 +26,7 @@ RUN set -xe \
 
 
 
-FROM lianshufeng/jdk_ssh as runtime
+FROM lianshufeng/jdk as runtime
 ARG KAFKA_HOME="/opt/kafka"
 #编译中拷贝文件
 COPY --from=builder $KAFKA_HOME $KAFKA_HOME
