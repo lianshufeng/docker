@@ -105,7 +105,8 @@ RUN echo "sh /tmp/mq_run.sh" >> /opt/bootstrap.sh
 
 #启动
 RUN echo "$Broker_Store/bin/artemis-service start" >> /opt/bootstrap.sh 
-
+RUN echo "sleep 30 " >> /opt/bootstrap.sh 
+RUN echo "tail --pid=\$(pgrep java) -f /dev/null" >> /opt/bootstrap.sh 
 
 
 
