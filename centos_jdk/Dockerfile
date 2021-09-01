@@ -66,7 +66,8 @@ RUN set -xe \
 
 #创建启动脚本
 COPY ./bootstrap.sh /opt/bootstrap.sh 
- 
+COPY ./wait_java_exit.sh /opt/wait_java_exit.sh 
+
 #启动项
 ENTRYPOINT ["sh", "/opt/bootstrap.sh"]
 
