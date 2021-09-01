@@ -99,12 +99,14 @@ RUN set -xe \
 	&& echo "#!/bin/bash" > /tmp/mq_run.sh \	
 	&& echo "if [[ \$(ls \\$Broker_Store -l |grep '^-'|wc -l) -eq 0 ]] ; then sh /tmp/make_broker.sh ; fi" >> /tmp/mq_run.sh \
 	&& echo "if [[ -f "/opt/broker_update.xml" ]] ; then sh /tmp/update_broker.sh ; fi" >> /tmp/mq_run.sh 
-RUN echo "sh /tmp/mq_run.sh" >> /opt/run.sh
+RUN echo "sh /tmp/mq_run.sh" >> /opt/bootstrap.sh 
 
 
 
 #启动
-RUN echo "$Broker_Store/bin/artemis-service start" >> /opt/run.sh
+RUN echo "$Broker_Store/bin/artemis-service start" >> /opt/bootstrap.sh 
+
+
 
 
 
