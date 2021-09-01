@@ -3,7 +3,7 @@ version: "3"
 services:
 
   mqBroker1:
-    image: registry.cn-chengdu.aliyuncs.com/1s/activemq
+    image: lianshufeng/activemq
     ports:
       - "1883:1883"
       - "61614:61614"
@@ -20,7 +20,7 @@ services:
 
 
   mqBroker2:
-    image: registry.cn-chengdu.aliyuncs.com/1s/activemq
+    image: lianshufeng/activemq
     ports:
       - "2883:1883"
       - "61624:61614"
@@ -36,7 +36,7 @@ services:
       - Broker_Name=mqBroker2
       
   mqBroker3:
-    image: registry.cn-chengdu.aliyuncs.com/1s/activemq
+    image: lianshufeng/activemq
     ports:
       - "3883:1883"
       - "61634:61614"
