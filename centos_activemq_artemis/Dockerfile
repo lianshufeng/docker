@@ -87,10 +87,7 @@ RUN set -xe \
 RUN set -xe \
 	&& echo "#!/bin/bash" > /tmp/update_broker.sh \	
     && echo "source /etc/profile" >> /tmp/update_broker.sh \
-    && echo "cp -f /opt/broker_update.xml $Broker_Store/etc/broker.xml" >> /tmp/update_broker.sh \
-	&& echo "hn=\$(eval hostname)" >> /tmp/update_broker.sh \
-    && echo "sed -i \"s/{MQHOST}/\$hn/g\" $Broker_Store/etc/broker.xml" >> /tmp/update_broker.sh 
-
+    && echo "cp -f /opt/broker_update.xml $Broker_Store/etc/broker.xml" >> /tmp/update_broker.sh 
 
 
 
@@ -98,7 +95,9 @@ RUN set -xe \
 RUN set -xe \
 	&& echo "#!/bin/bash" > /tmp/mq_run.sh \	
 	&& echo "if [[ \$(ls \\$Broker_Store -l |grep '^-'|wc -l) -eq 0 ]] ; then sh /tmp/make_broker.sh ; fi" >> /tmp/mq_run.sh \
-	&& echo "if [[ -f "/opt/broker_update.xml" ]] ; then sh /tmp/update_broker.sh ; fi" >> /tmp/mq_run.sh 
+	&& echo "if [[ -f "/opt/broker_update.xml" ]] ; then sh /tmp/update_broker.sh ; fi" >> /tmp/mq_run.sh \
+	&& echo "hn=\$(eval hostname)" >> /tmp/mq_run.sh \
+    && echo "sed -i \"s/{MQHOST}/\$hn/g\" $Broker_Store/etc/broker.xml" >> /tmp/mq_run.sh 
 RUN echo "sh /tmp/mq_run.sh" >> /opt/bootstrap.sh 
 
 

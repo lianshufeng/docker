@@ -13,7 +13,6 @@ services:
       - Broker_Role=${admins}
     volumes:
       - ./broker1:/opt/broker
-      - ./broker.xml:/opt/broker_update.xml
     container_name: mq1
     restart: always
     hostname: mq1
@@ -30,7 +29,6 @@ services:
       - Broker_Role=${admins}
     volumes:
       - ./broker2:/opt/broker
-      - ./broker.xml:/opt/broker_update.xml
     container_name: mq2
     restart: always
     hostname: mq2
@@ -47,7 +45,6 @@ services:
       - Broker_Role=${admins}
     volumes:
       - ./broker3:/opt/broker
-      - ./broker.xml:/opt/broker_update.xml
     container_name: mq3
     restart: always
     hostname: mq3
