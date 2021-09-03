@@ -1,0 +1,57 @@
+version: "3.9"
+
+services:
+  mq1:
+    image: lianshufeng/activemq:artemis
+    ports:
+      - "8161:8161"
+      - "61616:61616"
+      - "1883:1883"
+    environment:
+      - Broker_User=${Broker_User}
+      - Broker_Password=${Broker_Password}
+      - Broker_Role=${admins}
+    volumes:
+      - ./broker1:/opt/broker
+      - ./cert.jks:/opt/cert/cert.jks
+      - ./cert.p12:/opt/cert/cert.p12
+    container_name: mq1
+    restart: always
+    hostname: mq1
+
+  mq2:
+    image: lianshufeng/activemq:artemis
+    ports:
+      - "8162:8161"
+      - "61626:61616"
+      - "1884:1883"
+    environment:
+      - Broker_User=${Broker_User}
+      - Broker_Password=${Broker_Password}
+      - Broker_Role=${admins}
+    volumes:
+      - ./broker2:/opt/broker
+      - ./cert.jks:/opt/cert/cert.jks
+      - ./cert.p12:/opt/cert/cert.p12
+    container_name: mq2
+    restart: always
+    hostname: mq2
+    
+  mq3:
+    image: lianshufeng/activemq:artemis
+    ports:
+      - "8163:8161"
+      - "61636:61616"
+      - "1885:1883"
+    environment:
+      - Broker_User=${Broker_User}
+      - Broker_Password=${Broker_Password}
+      - Broker_Role=${admins}
+    volumes:
+      - ./broker3:/opt/broker
+      - ./cert.jks:/opt/cert/cert.jks
+      - ./cert.p12:/opt/cert/cert.p12
+    container_name: mq3
+    restart: always
+    hostname: mq3
+    
