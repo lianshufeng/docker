@@ -9,6 +9,8 @@ services:
         https_proxy: http://192.168.31.222:707
       context: ./
       dockerfile: Dockerfile
+      shm_size: 2gb
+    shm_size: 2gb
     image: lianshufeng/centos_vnc_chrome
     ports:
       - "5901:5901"
