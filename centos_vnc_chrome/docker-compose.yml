@@ -4,9 +4,9 @@ services:
 
   centos_vnc_chrome:
     build:
-      args:
-        http_proxy: http://192.168.31.222:707
-        https_proxy: http://192.168.31.222:707
+      # args:
+        # http_proxy: http://192.168.31.222:707
+        # https_proxy: http://192.168.31.222:707
       context: ./
       dockerfile: Dockerfile
       shm_size: 2gb
