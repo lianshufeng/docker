@@ -105,6 +105,7 @@ installHelper(){
 	EOF
 	sed  -i "s/\$dockerTagName/$dockerTagName/g"  /usr/local/bin/docker-compose
 	chmod +x /usr/local/bin/docker-compose
+	ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
 
 
 
