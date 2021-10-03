@@ -1,18 +1,27 @@
-#!/bin/sh
-# 适合 centos 及国内环境:
-# 1、安装系统时间同步服务
-# 2、修改镜像下载阿里的加速源
-# 3、安装定期释放缓存服务
-# 4、允许防火墙使用网络覆盖端口
-#
+#!/bin/bash
 
-#安装特性
-installFeature(){
-	#centos8 必须安装
+# Os Type
+if [[ `cat /etc/os-release | grep NAME= | grep CentOS` != "" ]];then
+	ostype="centos"
+elif [[ `cat /etc/os-release | grep NAME= | grep Ubuntu` != "" ]];then
+	ostype="ubuntu"
+fi
+
+# Platform Type
+platformtype=$(uname -m)
+if [[ $platformtype == "x86_64" ]];then
+	dockerTagName="latest"
+else
+	dockerTagName=$platformtype
+fi
+
+# centos
+preInstallFromCentos(){
+	echo "install centos"
+	
+	# centos 8 打补丁
 	releaseVer=`cat /etc/redhat-release | awk '{match($0,"release ") ; print substr($0,RSTART+RLENGTH)}' | awk -F '.' '{print $1}'`
 	if [ "$releaseVer" == "8" ];then
-		# https://download.docker.com/linux/centos/8/x86_64/stable/Packages/
-		#yum install -y http://dl.dzurl.top/containerd.io-1.3.7-3.1.el7.x86_64.rpm
 		#自动寻找最新的版本
 		containerd_url=https://mirrors.aliyun.com/docker-ce/linux/centos/7/$(uname -m)/stable/Packages/
 		containerd=$(curl $containerd_url | grep containerd.io- | tail -1 );containerd=${containerd#*>};containerd=${containerd%<*}
@@ -20,64 +29,54 @@ installFeature(){
 		echo $containerd_url
 		yum install -y $containerd_url
 	fi
-}
 
-#禁用SELINUX：
-disableSELINUX(){
+	#SELINUX
 	setenforce 0
 	echo "SELINUX=disabled" > /etc/selinux/config
 	echo "SELINUXTYPE=targeted" >> /etc/selinux/config
-}
 
-#设置防火墙
-openFireWall(){
-	#允许防火墙
-	callFun "firewall-cmd --add-port=2376/tcp --permanent"
-	callFun "firewall-cmd --add-port=2377/tcp --permanent"
-	callFun "firewall-cmd --add-port=7946/tcp --permanent"
-	callFun "firewall-cmd --add-port=7946/udp --permanent"
-	callFun "firewall-cmd --add-port=4789/udp --permanent"
-	
-	#callFun "firewall-cmd --zone=public --add-masquerade --permanent"
-	#callFun "firewall-cmd --permanent --zone=public --change-interface=docker0"
-	#callFun "firewall-cmd --permanent --direct --add-rule ipv4 filter INPUT 4 -i docker0 -j ACCEPT"
-	
-	
-	callFun "firewall-cmd --reload"
-	
 
 }
+
+# ubuntu
+preInstallFromUbuntu(){
+	echo "install ubuntu"
+}
+
+
+installServiceFromCentos(){
+	# 打开防火墙
+	firewall-cmd --add-port=2376/tcp --permanent
+	firewall-cmd --add-port=2377/tcp --permanent
+	firewall-cmd --add-port=7946/tcp --permanent
+	firewall-cmd --add-port=7946/udp --permanent
+	firewall-cmd --add-port=4789/udp --permanent
+	firewall-cmd --reload
+}
+
+
+
+installServiceFromUbuntu(){
+	# 打开防火墙
+	ufw allow 2376/tcp
+	ufw allow 2377/tcp
+	ufw allow 7946/tcp
+	ufw allow 7946/udp
+	ufw allow 4789/udp
+}
+
+
+
+# 获取主机ip
+updateHostIp(){
+	ip route get 1.2.3.4 | awk '{print $7}' | grep -v  '^\s*$'  > /etc/docker_host_ip
+}
+
 
 #安装docker
 installDocker(){
-	#curl -fsSL https://get.docker.com | sh
-	curl -fsSL https://get.docker.com -o /tmp/get-docker.sh
-	sh /tmp/get-docker.sh --mirror Aliyun 
-	rm -rf /tmp/get-docker.sh
-	
-	
-	#设置自动启动
-	chkconfig docker on
-	
-	#启动服务
-	service docker start
-	
-}
 
-
-#安装docker-compose
-installDockerCompose(){
-	tee /usr/local/bin/docker-compose <<-'EOF'
-	#!/bin/sh
-	if [[ $(uname -m) == "x86_64" ]];then tag="latest"; else tag=$(uname -m);fi
-	docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v $(pwd):$(pwd) -w $(pwd) lianshufeng/docker-compose:$tag "$@"
-	EOF
-	chmod +x /usr/local/bin/docker-compose
-}
-
-
-#修改docker镜像加速器
-updateDockerConfig(){
+	#配置文件
 	mkdir -p /etc/docker	
 	tee /etc/docker/daemon.json <<-'EOF'
 	{
@@ -85,16 +84,29 @@ updateDockerConfig(){
 		"log-opts": {"max-size": "1024m", "max-file": "3"}
 	}
 	EOF
-	systemctl daemon-reload
+
+	#安装
+	curl -fsSL https://get.docker.com | bash -s docker --mirror Aliyun	
+	
+	#自动启动
+	systemctl enable docker.service
+	#启动服务
+	service docker start
 }
 
 
+# 安装助手
+installHelper(){
 
-#安装系统助手:时间同步与缓存释放
-installSystemHelper(){
-	#cpu架构选择
-	if [[ $(uname -m) == "x86_64" ]];then cpuUname="latest"; else cpuUname=$(uname -m);fi
-	echo "cpu : $cpuUname"
+	#docker-compose
+	tee /usr/local/bin/docker-compose <<-'EOF'
+	#!/bin/bash
+	docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v $(pwd):$(pwd) -w $(pwd) lianshufeng/docker-compose:$dockerTagName "$@"
+	EOF
+	sed  -i "s/\$dockerTagName/$dockerTagName/g"  /usr/local/bin/docker-compose
+	chmod +x /usr/local/bin/docker-compose
+
+
 
 	# 同步时区
 	ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
@@ -103,7 +115,7 @@ installSystemHelper(){
 version: "3"
 services:
   systemhelper:
-    image: lianshufeng/systemhelper:$cpuUname
+    image: lianshufeng/systemhelper:$dockerTagName
     privileged: true
     environment:
       - ntpd_host=cn.pool.ntp.org
@@ -124,17 +136,13 @@ services:
     restart: always
 	EOF
 	
-	#修改版本号
-	sed  -i "s/\$cpuUname/$cpuUname/g"  /opt/docker/systemhelper/docker-compose.yml
-	cat /opt/docker/systemhelper/docker-compose.yml
+	sed  -i "s/\$dockerTagName/$dockerTagName/g"  /opt/docker/systemhelper/docker-compose.yml
 	
 	cd /opt/docker/systemhelper
 	docker-compose down;docker-compose up -d
 }
 
 
-
-#打印docker日志
 printInfo(){
 	docker info
 	docker -v
@@ -142,45 +150,40 @@ printInfo(){
 }
 
 
-#更新docker主机的ip
-updateDockerHostIp(){
-	ip route get 1.2.3.4 | awk '{print $7}' | grep -v  '^\s*$'  > /etc/docker_host_ip
+
+# main function
+main(){
+	echo $ostype" : ["$platformtype"] -> "$dockerTagName
+	
+	#保存当前主机ip到 /etc/docker_host_ip
+	updateHostIp
+	
+	# 安装依赖环境
+	if [[ `echo $ostype | grep centos` != "" ]];then
+		preInstallFromCentos
+	elif [[ `echo $ostype | grep ubuntu` != "" ]];then
+		preInstallFromUbuntu
+	fi
+
+
+	#安装docker
+	installDocker
+	
+	#安装服务
+	if [[ `echo $ostype | grep centos` != "" ]];then
+		installServiceFromCentos
+	elif [[ `echo $ostype | grep ubuntu` != "" ]];then
+		installServiceFromUbuntu
+	fi
+	
+	#安装助手 docker-compose 与 系统助手
+	installHelper
+	
+	#打印
+	printInfo
 }
 
 
 
-
-#动态执行方法
-callFun(){
-	echo "call : "$1 && $1
-}
-
-
-#安装特性
-callFun "installFeature"
-
-#禁用selinux
-callFun "disableSELINUX"
-
-#获取主机ip
-callFun "updateDockerHostIp"
-
-#更新docker配置
-callFun "updateDockerConfig"
-
-#安装docker
-callFun "installDocker"
-
-#允许docker防火墙
-callFun "openFireWall"
-
-#安装DockerCompose
-callFun "installDockerCompose"
-
-#安装系统助手
-callFun "installSystemHelper"
-
-#打印服务
-callFun "printInfo"
-
+main
 
