@@ -43,7 +43,7 @@ ENV ENTRYPOINT ""
 
 #安装wget和unzip工具
 #RUN rpm --rebuilddb ,centos8 不需要
-RUN yum install unzip  wget curl fontconfig langpacks-zh_CN -y
+RUN yum install unzip  wget curl fontconfig langpacks-zh_CN jq -y
 #修改系统默认编码
 RUN echo LANG=\"zh_CN.utf8\" > /etc/locale.conf
 	
