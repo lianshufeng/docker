@@ -8,7 +8,7 @@ FROM lianshufeng/jdk as builder
 MAINTAINER lianshufeng <251708339@qq.com>
 
 #构建参数 --build-arg
-ARG KAFKA_URL="https://downloads.apache.org/kafka/2.8.0/kafka_2.13-2.8.0.tgz"
+ARG KAFKA_URL="https://downloads.apache.org/kafka/3.0.0/kafka_2.13-3.0.0.tgz"
 ARG KAFKA_HOME="/opt/kafka"
 
 #下载
