@@ -121,7 +121,7 @@ services:
     environment:
       - ntpd_host=cn.pool.ntp.org
       - uptetime_timer=86400
-      - freemem_timer=1800
+      - freemem_timer=7200
     volumes:
       # docker api
       - "/var/run/docker.sock:/var/run/docker.sock"
@@ -129,7 +129,7 @@ services:
       - "/proc/sys/vm/drop_caches:/drop_caches"
       # log
       - "./log/:/var/log/"
-      # log
+      # store
       - "./store/:/store/"
     container_name: sh
     cap_add:
