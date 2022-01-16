@@ -24,7 +24,7 @@ preInstallFromCentos(){
 	if [ "$releaseVer" == "8" ];then
 		#自动寻找最新的版本
 		containerd_url=https://mirrors.aliyun.com/docker-ce/linux/centos/7/$(uname -m)/stable/Packages/
-		containerd=$(curl $containerd_url | grep containerd.io- | tail -1 );containerd=${containerd#*>};containerd=${containerd%<*}
+		containerd=$(curl $containerd_url | grep containerd.io- | tail -1 );containerd=${containerd#*>containerd.io};containerd=${containerd%<*};containerd=${containerd%<*};containerd="containerd.io"$containerd
 		containerd_url=$containerd_url$containerd
 		echo $containerd_url
 		yum install -y $containerd_url
