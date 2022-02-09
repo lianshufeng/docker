@@ -15,8 +15,14 @@ ARG JAVA_HOME="/opt/jdk"
 #运行变量 -e
 ENV ENTRYPOINT ""
 
+# upgrade
+RUN sed -i 's/mirrorlist/#mirrorlist/g' /etc/yum.repos.d/CentOS-Linux-* &&\
+    sed -i 's|#baseurl=http://mirror.centos.org|baseurl=http://vault.centos.org|g' /etc/yum.repos.d/CentOS-Linux-*
+# docker
+RUN yum upgrade -y
+
+
 #安装wget和unzip工具
-#RUN rpm --rebuilddb ,centos8 不需要
 RUN yum install wget -y
 #修改系统默认编码
 RUN echo LANG=\"zh_CN.utf8\" > /etc/locale.conf
