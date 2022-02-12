@@ -1,0 +1,33 @@
+version: "3"
+
+services:
+  kafka:
+    build:
+      # args:
+        # http_proxy: http://192.168.31.222:808
+        # https_proxy: http://192.168.31.222:808
+      context: ./
+      dockerfile: Dockerfile
+    image: lianshufeng/kafka
+    ports:
+      - "9092:9092"
+      - "2181:2181"
+    volumes:
+      - ${store}/data/logs:/opt/kafka/logs
+      - ${store}/data/kafka_logs:/tmp/kafka-logs
+      - ${store}/data/zookeeper:/tmp/zookeeper
+    container_name: kafka
+    restart: always
+    environment:
+      - KAFKA_LISTENERS=${KAFKA_HOST}:9092
+      
+      
+      
+      
+#sudo firewall-cmd --add-port=2181/tcp --permanent 
+#sudo firewall-cmd --add-port=9092/tcp --permanent 
+#firewall-cmd --reload 
+
+
+ 
+
