@@ -6,7 +6,7 @@
 #
 
 
-FROM lianshufeng/springboot:aarch64
+FROM lianshufeng/jdk:aarch64 as builder
 COPY qemu-aarch64-static /usr/bin/
 MAINTAINER lianshufeng <251708339@qq.com>
 
@@ -18,7 +18,7 @@ RUN set -xe \
 	&& rm -rf /tmp/Fonts.zip
 
 
-
-
+FROM lianshufeng/springboot:aarch64 as runtime
+COPY --from=builder /usr/share/fonts/dejavu/ /usr/share/fonts/dejavu/
 
 

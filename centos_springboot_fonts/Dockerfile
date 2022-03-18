@@ -6,20 +6,16 @@
 #
 
 
-FROM lianshufeng/springboot
+FROM lianshufeng/jdk as builder
 MAINTAINER lianshufeng <251708339@qq.com>
 
 # 字体
 RUN set -xe \
 	&& curl https://download.jpy.wang/Fonts.zip -o /tmp/Fonts.zip \
 	&& unzip -d /usr/share/fonts/dejavu /tmp/Fonts.zip \
-	&& cp /tmp/Fonts/* /usr/share/fonts/dejavu/ \
-	&& rm -rf /tmp/Fonts.zip
+	&& cp /tmp/Fonts/* /usr/share/fonts/dejavu/ 
 
 
 
-
-
-
-
-
+FROM lianshufeng/springboot as runtime
+COPY --from=builder /usr/share/fonts/dejavu/ /usr/share/fonts/dejavu/
