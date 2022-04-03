@@ -6,7 +6,7 @@
 #
 
 
-FROM lianshufeng/springboot
+FROM lianshufeng/jdk as builder
 MAINTAINER lianshufeng <251708339@qq.com>
 
 # 字体
@@ -16,9 +16,5 @@ RUN set -xe \
 	&& rm -rf /tmp/Fonts.zip
 
 
-
-
-
-
-
-
+FROM lianshufeng/springboot as runtime
+COPY --from=builder /usr/share/fonts/dejavu/ /usr/share/fonts/dejavu/
