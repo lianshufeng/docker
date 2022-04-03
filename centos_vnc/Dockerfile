@@ -5,6 +5,11 @@
 FROM centos:8
 MAINTAINER "251708339@qq.com"
 
+# upgrade
+RUN sed -i 's/mirrorlist/#mirrorlist/g' /etc/yum.repos.d/CentOS-Linux-* &&\
+    sed -i 's|#baseurl=http://mirror.centos.org|baseurl=http://vault.centos.org|g' /etc/yum.repos.d/CentOS-Linux-*
+RUN yum upgrade -y
+
 # install tools
 RUN yum install wget curl fontconfig langpacks-zh_CN -y
 #修改系统默认编码
