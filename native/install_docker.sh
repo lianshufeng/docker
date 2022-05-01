@@ -99,19 +99,21 @@ installDocker(){
 installHelper(){
 
 	#docker-compose
-	tee /usr/local/bin/docker-compose <<-'EOF'
-	#!/bin/bash
-	docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v $(pwd):$(pwd) -w $(pwd) lianshufeng/docker-compose:$dockerTagName "$@"
-	EOF
-	sed  -i "s/\$dockerTagName/$dockerTagName/g"  /usr/local/bin/docker-compose
-	chmod +x /usr/local/bin/docker-compose
-	ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
+	# chmod +x /usr/local/bin/docker-compose
+	# ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
 
+	DOCKER_CONFIG=${DOCKER_CONFIG:-$HOME/.docker}
+	mkdir -p $DOCKER_CONFIG/cli-plugins
+	curl -SL https://github.com/docker/compose/releases/download/v2.5.0/docker-compose-linux-${dockerTagName} -o $DOCKER_CONFIG/cli-plugins/docker-compose
+	chmod +x $DOCKER_CONFIG/cli-plugins/docker-compose
+	ln -s $DOCKER_CONFIG/cli-plugins/docker-compose /usr/bin/docker-compose
 
 
 	# 同步时区
 	ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
-	mkdir -p /opt/docker/systemhelper	
+	mkdir -p /opt/docker/systemhelper
+	
+	# systemhelper
 	tee /opt/docker/systemhelper/docker-compose.yml <<-'EOF'
 version: "3"
 services:
