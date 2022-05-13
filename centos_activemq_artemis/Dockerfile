@@ -10,7 +10,7 @@ FROM lianshufeng/jdk as builder
 MAINTAINER lianshufeng <251708339@qq.com>
 
 #构建参数 --build-arg
-ARG ACTIVEMQ_URL="https://dlcdn.apache.org/activemq/activemq-artemis/2.20.0/apache-artemis-2.20.0-bin.tar.gz"
+ARG ACTIVEMQ_URL="https://dlcdn.apache.org/activemq/activemq-artemis/2.22.0/apache-artemis-2.22.0-bin.tar.gz"
 ARG ACTIVEMQ_HOME="/opt/activemq"
 
 	
@@ -104,7 +104,7 @@ RUN echo "sh /tmp/mq_run.sh" >> /opt/bootstrap.sh
 
 #启动
 RUN echo "$Broker_Store/bin/artemis-service start" >> /opt/bootstrap.sh 
-RUN echo "sleep 30" >> /opt/bootstrap.sh 
+RUN echo "sleep 3600" >> /opt/bootstrap.sh 
 RUN echo "sh /opt/wait_java_exit.sh" >> /opt/bootstrap.sh 
 
 
