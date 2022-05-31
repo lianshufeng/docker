@@ -104,7 +104,7 @@ installHelper(){
 
 	DOCKER_CONFIG=${DOCKER_CONFIG:-$HOME/.docker}
 	mkdir -p $DOCKER_CONFIG/cli-plugins
-	curl -SL https://dl.jpy.wang/docker-compose/2.5.0/docker-compose-linux-$(uname -m) -o $DOCKER_CONFIG/cli-plugins/docker-compose
+	curl -SL https://dl.jpy.wang/docker-compose/2.6.0/docker-compose-linux-$(uname -m) -o $DOCKER_CONFIG/cli-plugins/docker-compose
 	chmod +x $DOCKER_CONFIG/cli-plugins/docker-compose
 	ln -s $DOCKER_CONFIG/cli-plugins/docker-compose /usr/bin/docker-compose
 
