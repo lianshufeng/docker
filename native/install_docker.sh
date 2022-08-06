@@ -22,6 +22,9 @@ preInstallFromCentos(){
 	# centos > 7 补丁
 	releaseVer=`cat /etc/redhat-release | awk '{match($0,"release ") ; print substr($0,RSTART+RLENGTH)}' | awk -F '.' '{print $1}'`	
 	if [ "$releaseVer" -gt 7 ];then
+		#删除 podman 和 buildah (解决冲突的问题)
+		yum erase podman buildah -y
+	
 		#自动寻找最新的版本
 		containerd_url=https://mirrors.aliyun.com/docker-ce/linux/centos/7/$(uname -m)/stable/Packages/
 		containerd=$(curl $containerd_url | grep containerd.io- | tail -1 );containerd=${containerd#*>containerd.io};containerd=${containerd%<*};containerd=${containerd%<*};containerd="containerd.io"$containerd
