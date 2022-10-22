@@ -8,7 +8,7 @@ MAINTAINER lianshufeng <251708339@qq.com>
 
 
 #构建参数 --build-arg
-ARG JDK_URL="http://dl.jpy.wang/jdk-11.0.15.1_linux-x64_bin.tar.gz"
+ARG JDK_URL="https://download.oracle.com/java/17/archive/jdk-17.0.5_linux-x64_bin.tar.gz"
 ARG JAVA_HOME="/opt/jdk"
 
 
