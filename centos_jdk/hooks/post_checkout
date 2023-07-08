@@ -22,5 +22,5 @@ TAG=$(curl -Ls $API | awk -F'"' '/name.*v[0-9]/ {print $4; exit}')
 ARCH=$([[ "${DOCKER_TAG}" == "armhf" ]] && \
             echo "${DOCKER_TAG::-2}" || echo "${DOCKER_TAG}")
 
-echo "${URL}/${TAG}/x86_64_qemu-${ARCH}-static.tar.gz"
+echo "${URL}/${TAG}/qemu-${ARCH}-static.tar.gz"
 curl -LSs "${URL}/${TAG}/qemu-${ARCH}-static.tar.gz" | tar xzv
