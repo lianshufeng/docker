@@ -23,4 +23,4 @@ ARCH=$([[ "${DOCKER_TAG}" == "armhf" ]] && \
             echo "${DOCKER_TAG::-2}" || echo "${DOCKER_TAG}")
 
 echo "${URL}/${TAG}/x86_64_qemu-${ARCH}-static.tar.gz"
-curl -LSs "${URL}/${TAG}/x86_64_qemu-${ARCH}-static.tar.gz" | tar xzv
+curl -LSs "${URL}/${TAG}/qemu-${ARCH}-static.tar.gz" | tar xzv
