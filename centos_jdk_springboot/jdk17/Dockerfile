@@ -81,6 +81,20 @@ RUN set -xe \
 COPY ./bootstrap.sh /opt/bootstrap.sh 
 COPY ./wait_java_exit.sh /opt/wait_java_exit.sh 
 
+
+ENV JAVA_HOME="/opt/jdk"
+ENV PATH=$PATH:$JAVA_HOME/bin
+
+#运行变量, 外部执行的命令行
+ENV ENTRYPOINT ""
+
+#缓存的资源，存在则不重新下载，多个资源用,间隔
+ENV CacheResources ""
+
+#更新的资源,每次启动重新下载，多个资源用,间隔
+ENV UpdateResources ""
+
+
 #启动项
 ENTRYPOINT ["sh", "/opt/bootstrap.sh"]
 
