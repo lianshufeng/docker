@@ -84,7 +84,8 @@ installDocker(){
 	tee /etc/docker/daemon.json <<-'EOF'
 	{
 		"log-driver": "json-file",
-		"log-opts": {"max-size": "1024m", "max-file": "3"}
+		"log-opts": {"max-size": "1024m", "max-file": "3"},
+		"registry-mirrors": ["https://docker.jpy.wang"]
 	}
 	EOF
 
