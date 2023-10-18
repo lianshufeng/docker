@@ -20,7 +20,7 @@ RUN set -xe \
 
 
 
-FROM lianshufeng/jdk as runtime
+FROM lianshufeng/jdk:17 as runtime
 ARG MAVEN_HOME="/opt/maven/"
 #编译中拷贝文件
 COPY --from=builder $MAVEN_HOME $MAVEN_HOME
