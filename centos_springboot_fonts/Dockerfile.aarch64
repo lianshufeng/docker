@@ -6,15 +6,21 @@
 #
 
 
-FROM lianshufeng/jdk:aarch64 as builder
-COPY qemu-aarch64-static /usr/bin/
-MAINTAINER lianshufeng <251708339@qq.com>
+#FROM lianshufeng/jdk:aarch64 as builder
+#COPY qemu-aarch64-static /usr/bin/
+#MAINTAINER lianshufeng <251708339@qq.com>
 
 # 字体
-RUN set -xe \
-	&& curl -k https://download.jpy.wang/Fonts.zip -o /tmp/Fonts.zip \
-	&& unzip -d /usr/share/fonts/dejavu /tmp/Fonts.zip \
-	&& rm -rf /tmp/Fonts.zip
+#RUN set -xe \
+#	&& curl -k https://download.jpy.wang/Fonts.zip -o /tmp/Fonts.zip \
+#	&& unzip -d /usr/share/fonts/dejavu /tmp/Fonts.zip \
+#	&& rm -rf /tmp/Fonts.zip
+
+
+
+FROM lianshufeng/springboot_fonts:aarch64 as builder
+COPY qemu-aarch64-static /usr/bin/
+MAINTAINER lianshufeng <251708339@qq.com>
 
 
 FROM lianshufeng/springboot:aarch64 as runtime
