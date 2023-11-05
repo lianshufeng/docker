@@ -11,7 +11,7 @@ MAINTAINER lianshufeng <251708339@qq.com>
 
 # 字体
 RUN set -xe \
-	&& curl -k https://download.jpy.wang/Fonts.zip -o /tmp/Fonts.zip \
+	&& curl -k https://dl.jpy.wang/fonts/Fonts.zip -o /tmp/Fonts.zip \
 	&& unzip -d /usr/share/fonts/dejavu /tmp/Fonts.zip \
 	&& rm -rf /tmp/Fonts.zip
 
