@@ -1,10 +1,30 @@
 # install docker (china): 
 ````shell
-curl -fsSL https://raw.githubusercontent.com/lianshufeng/docker/master/native/install_docker.sh | sh
+curl -fsSL https://github.jpy.wang/lianshufeng/docker/raw/master/native/install_docker.sh | sh
 ````
 
 # base :  
-- Centos(8.1) + JDK ( jdk11 ) 
+- Centos(8.1) + JDK ( jdk11/JDK17 ) 
+
+## order :
+- JDK
+```shell
+https://hub.docker.com/repository/docker/lianshufeng/jdk
+```
+- ssh & maven & springboot & 
+```shell
+https://hub.docker.com/repository/docker/lianshufeng/springboot
+https://hub.docker.com/repository/docker/lianshufeng/maven
+https://hub.docker.com/repository/docker/lianshufeng/activemq
+https://hub.docker.com/repository/docker/lianshufeng/tomcat
+https://hub.docker.com/repository/docker/lianshufeng/kafka
+https://hub.docker.com/repository/docker/lianshufeng/jdk_ssh
+```
+- springboot_fonts & 
+```
+https://hub.docker.com/repository/docker/lianshufeng/springboot_fonts
+```
+
 
 
 #### bootstrap:
