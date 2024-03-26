@@ -13,5 +13,5 @@ ln -s $NO_VNC_HOME/vnc_lite.html $NO_VNC_HOME/index.html
 
 
 #安装python2
-yum install -y python3
-ln -s /usr/bin/python3 /usr/bin/python
+yum install -y python2
+ln -s /usr/bin/python2 /usr/bin/python
