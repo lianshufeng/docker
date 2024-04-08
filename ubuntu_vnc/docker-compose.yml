@@ -13,14 +13,16 @@ services:
     shm_size: 2gb
     image: lianshufeng/ubuntu_vnc
     ports:
-      - "5901:5901"
-      - "6901:6901"
+      - "4444:4444"
+      - "7900:7900"
     privileged: true
     container_name: ubuntu_vnc
     restart: always
     environment:
       - VNC_PW=vncpassword
-      - DEBUG=true
+      - CHROME_CMD=www.baidu.com
+
     
-    
-# http://192.168.31.132:6901/?password=vncpassword
+# docker-compose down && docker-compose up --build    
+
+# http://localhost:7900/?autoconnect=1&resize=scale&password=vncpassword

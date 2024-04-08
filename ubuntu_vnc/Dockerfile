@@ -1,63 +1,39 @@
-# This Dockerfile is used to build an headles vnc image based on Debian
-
-#FROM debian:11
-FROM ubuntu:24.04
-
-## Connection ports for controlling the UI:
-# VNC port:5901
-# noVNC webport, connect via http://IP:6901/?password=vncpassword
-ENV DISPLAY=:1 \
-    VNC_PORT=5901 \
-    NO_VNC_PORT=6901
-EXPOSE $VNC_PORT $NO_VNC_PORT
-
-### Envrionment config
-ENV HOME=/headless \
-    TERM=xterm \
-    STARTUPDIR=/dockerstartup \
-    INST_SCRIPTS=/headless/install \
-    NO_VNC_HOME=/headless/noVNC \
-    DEBIAN_FRONTEND=noninteractive \
-    VNC_COL_DEPTH=24 \
-    VNC_RESOLUTION=1280x1024 \
-    VNC_PW=vncpassword \
-    VNC_VIEW_ONLY=false
-WORKDIR $HOME
-
-### Add all install scripts for further steps
-ADD ./src/common/install/ $INST_SCRIPTS/
-ADD ./src/debian/install/ $INST_SCRIPTS/
+FROM seleniarm/standalone-chromium
 
 
-### chmod
-RUN find $INST_SCRIPTS/ -name "*.sh" -exec dos2unix {} \;
-RUN chmod -R 777 $INST_SCRIPTS
+# vnc 密码
+ENV VNC_PW=secret
 
-### Install some common tools
-RUN $INST_SCRIPTS/tools.sh
-ENV LANG='en_US.UTF-8' LANGUAGE='en_US:en' LC_ALL='en_US.UTF-8'
+# 启动后要执行的chrome 命令行
+ENV CHROME_CMD=""
 
-### Install custom fonts
-RUN $INST_SCRIPTS/install_custom_fonts.sh
+#启动后要执行的命令
+ENV RUN_CMD=""
 
-### Install xvnc-server & noVNC - HTML5 based VNC viewer
-RUN $INST_SCRIPTS/tigervnc.sh
-RUN $INST_SCRIPTS/no_vnc.sh
 
-### Install firefox and chrome browser
-# RUN $INST_SCRIPTS/firefox.sh
-RUN $INST_SCRIPTS/chrome.sh
+#屏幕
+ENV SCREEN_WIDTH=1360
+ENV SCREEN_HEIGHT=1020
+ENV SCREEN_DEPTH=24
 
-### Install IceWM UI
-RUN $INST_SCRIPTS/icewm_ui.sh
-ADD ./src/debian/icewm/ $HOME/
+# 剪贴板
+ENV NOVNC_CLIPBOARD_ENCODING=UTF-8
 
-### configure startup
-RUN $INST_SCRIPTS/libnss_wrapper.sh
-ADD ./src/common/scripts $STARTUPDIR
-RUN $INST_SCRIPTS/set_user_permission.sh $STARTUPDIR $HOME
+USER root
 
-# USER 1000
 
-ENTRYPOINT ["/dockerstartup/vnc_startup.sh"]
-CMD ["--wait"]
+#安装依赖库
+# RUN apt update -y && apt upgrade -y && apt install -y --no-install-recommends  \
+    # git \
+# && rm -rf /var/lib/apt/lists/*
+
+
+#拷贝启动代码
+COPY ./boot /boot
+
+#增加启动项,第一行为 #!/bin/bash
+RUN sed -i '2i sh /boot/run_before.sh' /opt/bin/entry_point.sh
+
+# 在wait前增加一行
+RUN sed -i '$i\sh /boot/run_after.sh'  /opt/bin/entry_point.sh
+
