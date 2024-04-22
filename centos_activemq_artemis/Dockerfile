@@ -78,7 +78,7 @@ EXPOSE 61613
 RUN set -xe \
 	&& echo "#!/bin/bash" > /tmp/make_broker.sh \	
     && echo "source /etc/profile" >> /tmp/make_broker.sh \
-    && echo "artemis create --require-login --user \$Broker_User --password \$Broker_Password  –role \$Broker_Role $Broker_Store" >> /tmp/make_broker.sh \
+    && echo "artemis create --require-login --user \$Broker_User --password \$Broker_Password $Broker_Store" >> /tmp/make_broker.sh \
     && echo "sed -i \"s/localhost:8161/0.0.0.0:8161/g\" $Broker_Store/etc/bootstrap.xml" >> /tmp/make_broker.sh \
     && echo "sed -i \"s/localhost\*/\*/g\" $Broker_Store/etc/jolokia-access.xml" >> /tmp/make_broker.sh 
 

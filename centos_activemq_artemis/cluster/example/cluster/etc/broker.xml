@@ -26,13 +26,12 @@ under the License.
    <core xmlns="urn:activemq:core" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="urn:activemq:core ">
 
-    <name>{MQHOST}</name>
-	  
+	<name>{MQHOST}</name>
 	<cluster-user>admin</cluster-user>
 	<cluster-password>admin</cluster-password>
-    <connectors>
-       <connector name="artemis">tcp://{MQHOST}:61616</connector>
-    </connectors>
+	<connectors>
+	   <connector name="artemis">tcp://{MQHOST}:61616</connector>
+	</connectors>
 	<broadcast-groups>
 	   <broadcast-group name="my-broadcast-group">
 		<local-bind-port>5432</local-bind-port>
@@ -73,7 +72,12 @@ under the License.
 	   </cluster-connection>
 	</cluster-connections>
 
+
       <persistence-enabled>true</persistence-enabled>
+
+      <!-- It is recommended to keep this value as 1, maximizing the number of records stored about redeliveries.
+           However if you must preserve state of individual redeliveries, you may increase this value or set it to -1 (infinite). -->
+      <max-redelivery-records>1</max-redelivery-records>
 
       <!-- this could be ASYNCIO, MAPPED, NIO
            ASYNCIO: Linux Libaio
@@ -90,15 +94,18 @@ under the License.
 
       <large-messages-directory>data/large-messages</large-messages-directory>
 
-      <!--
-      if you want to retain your journal uncomment this following configuration.
+      
+      <!-- if you want to retain your journal uncomment this following configuration.
 
       This will allow your system to keep 7 days of your data, up to 10G. Tweak it accordingly to your use case and capacity.
 
       it is recommended to use a separate storage unit from the journal for performance considerations.
 
-      <journal-retention-directory period="7" unit="DAYS" storage-limit="10G">data/retention</journal-retention-directory>>
-      -->
+      <journal-retention-directory period="7" unit="DAYS" storage-limit="10G">data/retention</journal-retention-directory>
+
+      You can also enable retention by using the argument journal-retention on the `artemis create` command -->
+
+
 
       <journal-datasync>true</journal-datasync>
 
@@ -112,9 +119,9 @@ under the License.
       
       <!--
        This value was determined through a calculation.
-       Your system could perform 8.93 writes per millisecond
+       Your system could perform 0.02 writes per millisecond
        on the current journal configuration.
-       That translates as a sync write every 112000 nanoseconds.
+       That translates as a sync write every 62760000 nanoseconds.
 
        Note: If you specify 0 the system will perform writes directly to the disk.
              We recommend this to be 0 if you are using journalType=MAPPED and journal-datasync=false.
@@ -175,15 +182,16 @@ under the License.
       <page-sync-timeout>112000</page-sync-timeout>
 
 
-            <!-- the system will enter into page mode once you hit this limit.
-           This is an estimate in bytes of how much the messages are using in memory
+      <!-- the system will enter into page mode once you hit this limit. This is an estimate in bytes of how much the messages are using in memory
 
-            The system will use half of the available memory (-Xmx) by default for the global-max-size.
-            You may specify a different value here if you need to customize it to your needs.
+      The system will use half of the available memory (-Xmx) by default for the global-max-size.
+      You may specify a different value here if you need to customize it to your needs.
 
-            <global-max-size>100Mb</global-max-size>
+      <global-max-size>100Mb</global-max-size> -->
 
-      -->
+      <!-- the maximum number of messages accepted before entering full address mode.
+           if global-max-size is specified the full address mode will be specified by whatever hits it first. -->
+      <global-max-messages>-1</global-max-messages>
 
       <acceptors>
 
@@ -193,7 +201,7 @@ under the License.
          <!-- amqpDuplicateDetection: If you are not using duplicate detection, set this to false
                                       as duplicate detection requires applicationProperties to be parsed on the server. -->
          <!-- amqpMinLargeMessageSize: Determines how many bytes are considered large, so we start using files to hold their data.
-                                       default: 102400, -1 would mean to disable large mesasge control -->
+                                       default: 102400, -1 would mean to disable large message control -->
 
          <!-- Note: If an acceptor needs to be compatible with HornetQ and/or Artemis 1.x clients add
                     "anycastPrefix=jms.queue.;multicastPrefix=jms.topic." to the acceptor url.
@@ -246,28 +254,38 @@ under the License.
             <address-full-policy>PAGE</address-full-policy>
             <auto-create-queues>true</auto-create-queues>
             <auto-create-addresses>true</auto-create-addresses>
-            <auto-create-jms-queues>true</auto-create-jms-queues>
-            <auto-create-jms-topics>true</auto-create-jms-topics>
          </address-setting>
          <!--default for catch all-->
          <address-setting match="#">
             <dead-letter-address>DLQ</dead-letter-address>
             <expiry-address>ExpiryQueue</expiry-address>
             <redelivery-delay>0</redelivery-delay>
-            <!-- with -1 only the global-max-size is in use for limiting -->
-            <max-size-bytes>-1</max-size-bytes>
+
             <message-counter-history-day-limit>10</message-counter-history-day-limit>
             <address-full-policy>PAGE</address-full-policy>
             <auto-create-queues>true</auto-create-queues>
             <auto-create-addresses>true</auto-create-addresses>
-            <auto-create-jms-queues>true</auto-create-jms-queues>
-            <auto-create-jms-topics>true</auto-create-jms-topics>
             <auto-delete-queues>false</auto-delete-queues>
             <auto-delete-addresses>false</auto-delete-addresses>
-         </address-setting>
-		 <address-setting match="#">
-		    <redistribution-delay>0</redistribution-delay>
-		 </address-setting>
+
+            <!-- The size of each page file -->
+            <page-size-bytes>10M</page-size-bytes>
+
+            <!-- When we start applying the address-full-policy, e.g paging -->
+            <!-- Both are disabled by default, which means we will use the global-max-size/global-max-messages  -->
+            <max-size-bytes>-1</max-size-bytes>
+            <max-size-messages>-1</max-size-messages>
+
+            <!-- When we read from paging into queues (memory) -->
+
+            <max-read-page-messages>-1</max-read-page-messages>
+            <max-read-page-bytes>20M</max-read-page-bytes>
+
+            <!-- Limit on paging capacity before starting to throw errors -->
+
+            <page-limit-bytes>-1</page-limit-bytes>
+            <page-limit-messages>-1</page-limit-messages>
+          </address-setting>
       </address-settings>
 
       <addresses>
