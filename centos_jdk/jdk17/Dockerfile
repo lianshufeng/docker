@@ -54,6 +54,11 @@ RUN sed -i 's/mirrorlist/#mirrorlist/g' /etc/yum.repos.d/CentOS-Linux-* &&\
 RUN yum upgrade -y
 
 
+# 环境变量
+ENV JAVA_HOME /opt/jdk
+ENV PATH $JAVA_HOME/bin:$PATH
+
+
 #安装wget和unzip工具
 #RUN rpm --rebuilddb ,centos8 不需要
 RUN yum install unzip  wget curl fontconfig langpacks-zh_CN jq -y
