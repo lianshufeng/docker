@@ -108,8 +108,18 @@ installHelper(){
 
 	DOCKER_CONFIG=${DOCKER_CONFIG:-$HOME/.docker}
 	mkdir -p $DOCKER_CONFIG/cli-plugins
+	
+	# 获取版本号
+	composeVersion=$(curl -s https://github.jpy.wang/docker/compose/releases/latest | grep apple-itunes-app)
+	composeVersion=${composeVersion%\"*}
+	composeVersion=${composeVersion##*app-argument=}
+	composeVersion=${composeVersion##*/}
+	echo "docker-compose latest: "$composeVersion
+	curl -SL https://github.jpy.wang/docker/compose/releases/download/$composeVersion/docker-compose-linux-$(uname -m) -o $DOCKER_CONFIG/cli-plugins/docker-compose
+
+	
 	# curl -SL https://dl.jpy.wang/docker-compose/2.23.3/docker-compose-linux-$(uname -m) -o $DOCKER_CONFIG/cli-plugins/docker-compose
-	curl -SL https://github.jpy.wang/docker/compose/releases/download/v2.24.7/docker-compose-linux-$(uname -m) -o $DOCKER_CONFIG/cli-plugins/docker-compose
+	# curl -SL https://github.jpy.wang/docker/compose/releases/download/v2.24.7/docker-compose-linux-$(uname -m) -o $DOCKER_CONFIG/cli-plugins/docker-compose
 	chmod +x $DOCKER_CONFIG/cli-plugins/docker-compose
 	ln -s $DOCKER_CONFIG/cli-plugins/docker-compose /usr/bin/docker-compose
 
