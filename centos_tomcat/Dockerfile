@@ -19,7 +19,7 @@ FROM lianshufeng/jdk as builder
 MAINTAINER lianshufeng <251708339@qq.com>
 
 #构建参数 --build-arg
-ARG TOMCAT_URL="https://dlcdn.apache.org/tomcat/tomcat-10/v10.1.19/bin/apache-tomcat-10.1.19.tar.gz"
+ARG TOMCAT_URL="https://dlcdn.apache.org/tomcat/tomcat-10/v10.1.24/bin/apache-tomcat-10.1.24.tar.gz"
 ARG TOMCAT_HOME="/opt/tomcat"
 
 
