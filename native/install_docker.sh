@@ -90,7 +90,7 @@ installDocker(){
 	EOF
 
 	#安装
-	curl -fsSL https://get.docker.com | bash -s docker --mirror Aliyun	
+	curl -fsSL https://proxy.jpy.wang/get.docker.com | bash -s docker --mirror Aliyun	
 	
 	#自动启动
 	systemctl enable docker.service
