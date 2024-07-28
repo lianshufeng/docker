@@ -15,11 +15,11 @@
 # 
 
 
-FROM lianshufeng/jdk as builder
+FROM lianshufeng/jdk:17 as builder
 MAINTAINER lianshufeng <251708339@qq.com>
 
 #构建参数 --build-arg
-ARG TOMCAT_URL="https://dlcdn.apache.org/tomcat/tomcat-10/v10.1.24/bin/apache-tomcat-10.1.24.tar.gz"
+ARG TOMCAT_URL="https://dlcdn.apache.org/tomcat/tomcat-10/v10.1.26/bin/apache-tomcat-10.1.26.tar.gz"
 ARG TOMCAT_HOME="/opt/tomcat"
 
 
@@ -50,7 +50,7 @@ RUN set -xe \
 
 
 
-FROM lianshufeng/jdk as runtime
+FROM lianshufeng/jdk:17 as runtime
 ARG TOMCAT_HOME="/opt/tomcat"
 #编译中拷贝文件
 COPY --from=builder $TOMCAT_HOME $TOMCAT_HOME

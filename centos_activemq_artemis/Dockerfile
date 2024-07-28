@@ -10,7 +10,7 @@ FROM lianshufeng/jdk:17 as builder
 MAINTAINER lianshufeng <251708339@qq.com>
 
 #构建参数 --build-arg
-ARG ACTIVEMQ_URL="https://dlcdn.apache.org/activemq/activemq-artemis/2.33.0/apache-artemis-2.33.0-bin.tar.gz"
+ARG ACTIVEMQ_URL="https://dlcdn.apache.org/activemq/activemq-artemis/2.35.0/apache-artemis-2.35.0-bin.tar.gz"
 ARG ACTIVEMQ_HOME="/opt/activemq"
 
 	
