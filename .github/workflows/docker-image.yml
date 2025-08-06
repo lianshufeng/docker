@@ -24,3 +24,20 @@ jobs:
           IMAGE_NAME=lianshufeng/jdk:21
           docker build -f Dockerfile -t $IMAGE_NAME .
           docker push $IMAGE_NAME
+
+      - name: Build and push springboot:jdk21
+        working-directory: centos_springboot/jdk21
+        run: |
+          IMAGE_NAME=lianshufeng/springboot:jdk21
+          docker build -f Dockerfile -t $IMAGE_NAME .
+          docker push $IMAGE_NAME
+
+
+      - name: Build and push maven:jdk21
+        working-directory: jdk_maven
+        run: |
+          IMAGE_NAME=lianshufeng/maven:jdk21
+          docker build -f Dockerfile.jdk21 -t $IMAGE_NAME .
+          docker push $IMAGE_NAME
+
+          
