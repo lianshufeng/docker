@@ -110,13 +110,15 @@ installHelper(){
 	mkdir -p $DOCKER_CONFIG/cli-plugins
 	
 	# 获取版本号
-	composeVersion=$(
+	composeVersion=v$(
 	  curl -s https://proxy.jpy.wang/api.github.com/repos/docker/compose/releases/latest \
 	  | grep -Po '"tag_name":\s*"\K[^"]+' \
 	  | sed 's/^v//'
 	)
-	echo "docker-compose latest: "$composeVersion
-	curl -SL https://github.jpy.wang/docker/compose/releases/download/$composeVersion/docker-compose-linux-$(uname -m) -o $DOCKER_CONFIG/cli-plugins/docker-compose
+	echo "docker-compose latest: $composeVersion"
+	CMD="curl -SL https://github.jpy.wang/docker/compose/releases/download/$composeVersion/docker-compose-linux-$(uname -m) -o $DOCKER_CONFIG/cli-plugins/docker-compose"
+	echo "$CMD"
+	eval "$CMD"
 
 	
 	# curl -SL https://dl.jpy.wang/docker-compose/2.23.3/docker-compose-linux-$(uname -m) -o $DOCKER_CONFIG/cli-plugins/docker-compose
