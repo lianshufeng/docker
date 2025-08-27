@@ -110,10 +110,11 @@ installHelper(){
 	mkdir -p $DOCKER_CONFIG/cli-plugins
 	
 	# 获取版本号
-	composeVersion=$(curl -s https://github.jpy.wang/docker/compose/releases/latest | grep apple-itunes-app)
-	composeVersion=${composeVersion%\"*}
-	composeVersion=${composeVersion##*app-argument=}
-	composeVersion=${composeVersion##*/}
+	composeVersion=$(
+	  curl -s https://proxy.jpy.wang/api.github.com/repos/docker/compose/releases/latest \
+	  | grep -Po '"tag_name":\s*"\K[^"]+' \
+	  | sed 's/^v//'
+	)
 	echo "docker-compose latest: "$composeVersion
 	curl -SL https://github.jpy.wang/docker/compose/releases/download/$composeVersion/docker-compose-linux-$(uname -m) -o $DOCKER_CONFIG/cli-plugins/docker-compose
 
