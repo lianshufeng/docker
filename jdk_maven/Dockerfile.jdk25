@@ -1,0 +1,42 @@
+FROM lianshufeng/jdk:25 as builder
+
+ARG MAVEN_HOME="/opt/maven"
+
+RUN yum -y update && \
+    yum -y install curl unzip grep && \
+    yum clean all
+
+# 直接提取最新版maven zip下载地址（先取第一个 .zip 链接）
+RUN set -eux; \
+    MAVEN_URL=$(curl -s https://maven.apache.org/download.cgi | grep -oP 'https://dlcdn\.apache\.org/maven/maven-3/[0-9\.]+/binaries/apache-maven-[0-9\.]+-bin\.zip' | head -n1); \
+    echo "Latest Maven URL: $MAVEN_URL"; \
+    curl -fsSL "$MAVEN_URL" -o /tmp/maven.zip; \
+    unzip -q /tmp/maven.zip -d /opt; \
+    rm -f /tmp/maven.zip; \
+    mv /opt/apache-maven-* "$MAVEN_HOME"; \
+    chmod -R 777 "$MAVEN_HOME"
+
+
+FROM lianshufeng/jdk:25 as runtime
+ARG MAVEN_HOME="/opt/maven/"
+#编译中拷贝文件
+COPY --from=builder $MAVEN_HOME $MAVEN_HOME
+
+#向上移动一层
+#RUN set -xe \
+#    && mv $MAVEN_HOME$(ls $MAVEN_HOME)/* $MAVEN_HOME
+
+#设置环境
+RUN set -xe \
+    && echo "" >> /etc/profile \
+    && echo "MAVEN_HOME=$MAVEN_HOME" >> /etc/profile \
+    && echo 'PATH=$MAVEN_HOME/bin:$PATH' >> /etc/profile \
+    && echo "export MAVEN_HOME" >> /etc/profile \
+    && echo "export PATH" >> /etc/profile
+
+# maven 简易工具
+COPY ./mvn_package.sh /mvn_package.sh
+COPY ./mvn_remove_repository.sh /mvn_remove_repository.sh
+
+RUN chmod 777 /mvn_package.sh \
+    && chmod 777 /mvn_remove_repository.sh
