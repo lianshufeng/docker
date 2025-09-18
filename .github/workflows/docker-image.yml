@@ -18,26 +18,26 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Build and push jdk21
-        working-directory: centos_jdk/jdk21
+      - name: Build and push jdk25
+        working-directory: centos_jdk/jdk25
         run: |
-          IMAGE_NAME=lianshufeng/jdk:21
+          IMAGE_NAME=lianshufeng/jdk:25
           docker build -f Dockerfile -t $IMAGE_NAME .
           docker push $IMAGE_NAME
 
-      - name: Build and push springboot:jdk21
-        working-directory: centos_springboot/jdk21
+      - name: Build and push springboot:jdk25
+        working-directory: centos_springboot/jdk25
         run: |
-          IMAGE_NAME=lianshufeng/springboot:jdk21
+          IMAGE_NAME=lianshufeng/springboot:jdk25
           docker build -f Dockerfile -t $IMAGE_NAME .
           docker push $IMAGE_NAME
 
 
-      - name: Build and push maven:jdk21
+      - name: Build and push maven:jdk25
         working-directory: jdk_maven
         run: |
-          IMAGE_NAME=lianshufeng/maven:jdk21
-          docker build -f Dockerfile.jdk21 -t $IMAGE_NAME .
+          IMAGE_NAME=lianshufeng/maven:jdk25
+          docker build -f Dockerfile.jdk25 -t $IMAGE_NAME .
           docker push $IMAGE_NAME
 
           
