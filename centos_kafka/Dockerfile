@@ -4,11 +4,11 @@
 # 例子： docker run -d -p 8822:22 -p 2181:2181 -p 9092:9092 lianshufeng/kafka
 
 
-FROM lianshufeng/jdk:17 as builder
+FROM lianshufeng/jdk:21 as builder
 MAINTAINER lianshufeng <251708339@qq.com>
 
 #构建参数 --build-arg
-ARG KAFKA_URL="https://downloads.apache.org/kafka/3.8.0/kafka_2.13-3.8.0.tgz"
+ARG KAFKA_URL="https://downloads.apache.org/kafka/4.1.0/kafka_2.13-4.1.0.tgz"
 ARG KAFKA_HOME="/opt/kafka"
 
 #下载
@@ -26,7 +26,7 @@ RUN set -xe \
 
 
 
-FROM lianshufeng/jdk:17 as runtime
+FROM lianshufeng/jdk:21 as runtime
 ARG KAFKA_HOME="/opt/kafka"
 #编译中拷贝文件
 COPY --from=builder $KAFKA_HOME $KAFKA_HOME
