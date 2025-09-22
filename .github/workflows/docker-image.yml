@@ -1,4 +1,4 @@
-name: Docker Image CI & Push
+name: Docker Image Jdk & Spring & Maven
 
 on:
   workflow_dispatch:

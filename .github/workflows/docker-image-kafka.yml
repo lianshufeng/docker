@@ -1,4 +1,4 @@
-name: Docker Image CI & Push
+name: Docker Image Kafka
 
 on:
   workflow_dispatch:
