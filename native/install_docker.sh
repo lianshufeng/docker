@@ -116,7 +116,7 @@ installHelper(){
 	  | sed 's/^v//'
 	)
 	echo "docker-compose latest: $composeVersion"
-	CMD="curl -SL https://github.jpy.wang/docker/compose/releases/download/$composeVersion/docker-compose-linux-$(uname -m) -o $DOCKER_CONFIG/cli-plugins/docker-compose"
+	CMD="curl -SL https://proxy.jpy.wang/github.com/docker/compose/releases/download/$composeVersion/docker-compose-linux-$(uname -m) -o $DOCKER_CONFIG/cli-plugins/docker-compose"
 	echo "$CMD"
 	eval "$CMD"
 
