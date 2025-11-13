@@ -1,4 +1,4 @@
-FROM lianshufeng/springboot_fonts:jdk21
+FROM lianshufeng/jdk:21
 
 RUN dnf install -y epel-release \
     && dnf install -y https://download1.rpmfusion.org/free/el/rpmfusion-free-release-10.noarch.rpm \
