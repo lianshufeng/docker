@@ -37,12 +37,17 @@ jobs:
           IMAGE_NAME=lianshufeng/maven:jdk21
           docker build -f Dockerfile.jdk21 -t $IMAGE_NAME .
           docker push $IMAGE_NAME
-
       - name: Build and push springboot_fonts:jdk21
         working-directory: centos_springboot_fonts/jdk21
         run: |
           IMAGE_NAME=lianshufeng/springboot_fonts:jdk21
           docker build -f Dockerfile -t $IMAGE_NAME .
+          docker push $IMAGE_NAME
+      - name: Build and push jdk21-ffmpeg
+        working-directory: centos_jdk/jdk21
+        run: |
+          IMAGE_NAME=lianshufeng/jdk:21-ffmpeg
+          docker build -f Dockerfile-ffmpeg -t $IMAGE_NAME .
           docker push $IMAGE_NAME
 
 
