@@ -1,0 +1,6 @@
+FROM lianshufeng/springboot_fonts:jdk21
+
+RUN dnf install -y epel-release \
+    && dnf install -y https://download1.rpmfusion.org/free/el/rpmfusion-free-release-10.noarch.rpm \
+    && dnf install -y ffmpeg \
+    && dnf clean all && rm -rf /var/cache/dnf /var/cache/yum
