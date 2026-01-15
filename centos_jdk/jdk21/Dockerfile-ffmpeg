@@ -1,6 +1,15 @@
 FROM lianshufeng/jdk:21
 
-RUN dnf install -y epel-release \
-    && dnf install -y https://download1.rpmfusion.org/free/el/rpmfusion-free-release-10.noarch.rpm \
-    && dnf install -y ffmpeg \
-    && dnf clean all && rm -rf /var/cache/dnf /var/cache/yum
+ENV FFMPEG_URL=https://github.com/BtbN/FFmpeg-Builds/releases/download/latest/ffmpeg-master-latest-linux64-gpl.tar.xz
+
+RUN set -eux; \
+    mkdir -p /tmp/ffmpeg && \
+    curl -L "$FFMPEG_URL" -o /tmp/ffmpeg/ffmpeg.tar.xz && \
+    tar -xJf /tmp/ffmpeg/ffmpeg.tar.xz -C /tmp/ffmpeg --strip-components=1 && \
+    \
+    # 只拷贝需要的二进制
+    cp /tmp/ffmpeg/bin/ffmpeg /usr/local/bin/ && \
+    cp /tmp/ffmpeg/bin/ffprobe /usr/local/bin/ && \
+    chmod +x /usr/local/bin/ffmpeg /usr/local/bin/ffprobe && \
+    \
+    rm -rf /tmp/ffmpeg
